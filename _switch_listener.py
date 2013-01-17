@@ -1,6 +1,17 @@
 #
 # Python Macro Language for Dragon NaturallySpeaking
 #
+#TODO: fix or replace kbfunc
+#A function can be used to compare monitors, only performed start-up
+#polling of sleep state if in the car identified by the below monitor
+#wmi can be used to detect device changes, when USB audio detected, run voice
+#recognition restart script (nsrst.bat)
+#output of car screen
+#Found monitor Monitor(-468515699) with geometry Rectangle(0.0, 0.0, 1024.0,
+#                                                          768.0).
+#output of laptop only
+#Found monitor Monitor(-468515699) with geometry Rectangle(0.0, 0.0, 1366.0,
+#                                                          768.0).
 
 import natlink
 import time
@@ -37,6 +48,8 @@ class ThisGrammar(GrammarBase):
         # polling produces a ~68 seconds wait for sleeping mode to activate.
         # TODO: to avoid this delay, need to catch signal from DNS post NatLink
         # init.
+       # Rectangle(0.0, 0.0, 1024.0,
+          #768.0).
         STEP=4
         count=0
         micstate=getMicState()
