@@ -96,7 +96,7 @@ class ThisGrammar(GrammarBase):
 #               and filter(lambda x: x in args[0], winText.split()):
                 # key on unique handle, not text of window
                 args[1].update({hwnd: winText})
-#            elif winText:
+            elif winText:
 #                print("Skipping duplicate handle ({0}) for window \
 #'{1}'".format(str(hwnd),winText))
 

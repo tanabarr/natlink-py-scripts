@@ -16,11 +16,12 @@
 import natlink
 import time
 from natlinkutils import *
-import msvcrt # built-in module
+#import msvcrt # built-in module
+import win32api
 
-def kbfunc():
-    """ Windows specific keyboard polling mechanism (nonblocking) """
-    return ord(msvcrt.getch()) if msvcrt.kbhit() else 0
+#def kbfunc():
+#    """ Windows specific keyboard polling mechanism (nonblocking) """
+#    return ord(msvcrt.getch()) if msvcrt.kbhit() else 0
 
 class ThisGrammar(GrammarBase):
 
@@ -47,36 +48,33 @@ class ThisGrammar(GrammarBase):
         # mode. Waiting in initialisation in natlink delays  Dragon start-up.
         # polling produces a ~68 seconds wait for sleeping mode to activate.
         # TODO: to avoid this delay, need to catch signal from DNS post NatLink
-        # init.
-       # Rectangle(0.0, 0.0, 1024.0,
-          #768.0).
-        STEP=4
-        count=0
-        micstate=getMicState()
-        print "micstate: {0}, {1} sec wait".format(micstate, count)
+        # init. ( temporary solution to test the dimensions of monitor)
+        monitorRects=[mon[2] for mon in win32api.EnumDisplayMonitors(None, None) if
+                      mon[2] == (0,0,1024,768)]
+        if not monitorRects:
+            print("not car monitor")
+            self.activateSet(['normalState'],exclusive=0)
+        else:
+            STEP=4
+            count=0
+            micstate=getMicState()
+            print "micstate: {0}, {1} sec wait".format(micstate, count)
 
-        # poll until Dragon is in sleep state (select "start dragon in sleep
-        # state" option in Dragon options)
-        while micstate not in ['sleeping', 'on']: #'off':
+            # poll until Dragon is in sleep state (select "start dragon in sleep
+            # state" option in Dragon options)
+            while micstate not in ['sleeping', 'on']: #'off':
+                time.sleep(STEP)
+                count+=STEP
+                micstate = getMicState()
+                print "polling micstate: {0}, {1} sec wait".format(micstate, count)
 
-            if kbfunc() != 0:
-                print("Key pressed, aborting poll sequence...")
-                break
-    #        setMicState('sleeping')
-            time.sleep(STEP)
-            count+=STEP
+            setMicState('on')
             micstate = getMicState()
-            print "polling micstate: {0}, {1} sec wait".format(micstate, count)
+            print "micstate: {0}, {1} sec wait".format(micstate, count)
 
-    #    time.sleep(STEP)
-    #    count+=STEP
-        setMicState('on')
-        micstate = getMicState()
-        print "micstate: {0}, {1} sec wait".format(micstate, count)
-
-        # now Dragon is on, put in an exclusive state waiting for "switch
-        # active listener" grammar
-        self.activateSet(['notListening'],exclusive=1)
+            # now Dragon is on, put in an exclusive state waiting for "switch
+            # active listener" grammar
+            self.activateSet(['notListening'],exclusive=1)
 
     # For the rule "stop", we activate the "notListening" rule which
     # contains only one subrule.  We also force exclusive state for this
