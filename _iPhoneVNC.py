@@ -6,13 +6,15 @@
 import natlink
 from natlinkutils import *
 import win32gui as wg
+import os
 
 class AppWindow():
-    def __init__(self, name, rect):
+    def __init__(self, name, rect=None, hwin=None):
         self.winName = name
         self.winRect = rect
-        self.buttons = ['home', 'menu', 'back', 'search', 'call', 'endcall']
-        self.mimicCmds = {}.fromkeys(self.buttons)
+        self.winHandle = hwin
+        buttons = ['home', 'menu', 'back', 'search', 'call', 'endcall']
+        self.mimicCmds = {}.fromkeys(buttons)
 
 class ThisGrammar(GrammarBase, AppWindow):
     """ Class uses application window objects to store grid reference of window
@@ -21,28 +23,40 @@ class ThisGrammar(GrammarBase, AppWindow):
     MouseGrid coordinate utterances. There should be functionality to add
     buttons in real-time, need to be backed up in persistent database."""
 
+    # Todo: embed this list of strings within grammar to save space
+    # mapping of keyboard keys to virtual key code to send as key input
+    # VK_SPACE,VK_UP,VK_DOWN,VK_LEFT,VK_RIGHT,VK_RETURN,VK_BACK
+    kmap = {'space': 0x20, 'up': 0x26, 'down': 0x28, 'left': 0x25, 'right': 0x27,
+            'enter': 0x0d, 'backspace': 0x08, 'delete': 0x2e, 'leftclick': 0x201,
+            'rightclick': 0x204, 'doubleclick': 0x202}
+
+    # dictionary of application objects, preferably read from file
     appDict = {}
     appDict.update({"iphoneWin": AppWindow("tans-iPhone", None)})
     appDict.update({"xbmcChromeWin": AppWindow("XBMC - Google Chrome", None)})
     appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\
     ')'
-
-    appButtonStr = '(' + str(appDict["iphoneWin"].buttons).strip('][').replace(',','|') +\
-    ')'
+    # Todo: embed this list of strings within grammar to save space
+    # list of android screencast buttons
+    # InitialiseMouseGrid coordination commands
+    iphoneCmdDict = appDict["iphoneWin"].mimicCmds
+    print appDict["iphoneWin"].mimicCmds
+    iphoneCmdDict.update({'back': ['1','5','8']})
+    iphoneCmdDict.update({'call': ['7','5','8']})
+    iphoneCmdDict.update({'contacts': ['8','8']})
+    print appDict["iphoneWin"].mimicCmds #iphoneCmdDict
+    # List of buttons
+    appButtonStr = '(' + str(appDict["iphoneWin"].mimicCmds.keys()).strip(']['
+                    ).replace(',','|') + ')'
 
     print(appSelectionStr,appButtonStr)
 
     gramSpec = """
         <winclick> exported = click {0} {1};
-        <iphonetap> exported = tap iphone (home|menu|back|search|call|endcall);
+        <iphonetap> exported = tap iphone {1};
     """.format(appSelectionStr,appButtonStr)
+#        <iphonetap> exported = tap iphone (home|menu|back|search|call|endcall);
 
-    # Todo: embed this list of strings within grammar to save space
-    # list of android screencast buttons
-    iphoneCmdDict = appDict["iphoneWin"].mimicCmds
-    print appDict["iphoneWin"].mimicCmds
-    iphoneCmdDict.update({'home': ['1','5','8']})
-    print iphoneCmdDict
 
     nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
                   'VDct Notifier Window', 'Program Manager',
@@ -66,32 +80,22 @@ class ThisGrammar(GrammarBase, AppWindow):
     #    print 'Entire recognition result: ' + str(fullResults)
     #    print 'Partial recognition result: ' + str(words)
 
-        self.winDiscovery(words, 'tans-iPhone')
-#        # Detect the optional word to specify offset for variable component
-#        if words[1] == 'on':
-#            repeat_modifier_offset = 3
-#        else:
-#            repeat_modifier_offset = 2
-#
-#        # screen dimensions (excluding taskbar)
-#        x, y = getScreenSize()
-#
-#        # number of pixels between bottom of screen and bottom row of QuickStart icons
-#        row_initial = 75
-#
-#        # number of pixels between left side of taskbar and first column of icons
-#        col_initial = 14
-#
-#        # separation between subsequent rows
-#        row_sep = 32
-#
-#        # coordinate calculated, vertical offset is from top
-#        x, y = x + col_initial, row_initial  # initial position
-#
-    def winDiscovery(self, words, wintitle):
+        appWin = 'iphoneWin'
+        retries = 1
+        for i in xrange(retries):
+            if self.winDiscovery(words, appWin)[0]:
+                # we now want to call the window action function with the "tapRelative"
+                print(words)
+                print(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
+                self.winAction(self.iphoneCmdDict[words[2]],'tapRelative')
+            else:
+                print("iphone window not found")
+                #os.
+
+    def winDiscovery(self, words, appWin=None):
         # argument to pass to callback contains words used in voice command
-        # (this is also a recognised top-level window?) And dictionary of
-        # strings: handles. (Window title: window handle)
+        # (this is also a recognised top-level window?) And title of window
+        # to find (optional). Return tuple (handle of appWin, window dict).
         wins = (words, {})
         hwin = None
         # selecting index from bottom window title on taskbar
@@ -102,27 +106,37 @@ class ThisGrammar(GrammarBase, AppWindow):
         # dictionary (second element of wins tuple), we can calculate
         # relative offset from last taskbar title.
         total_windows = len(wins[1])
-        print('Number of taskbar applications: {0};'.format( total_windows))
-        print wins[1]
+        #print('Number of taskbar applications: {0};'.format( total_windows))
+        #print wins[1]
 
-        #print wins
+        # the function called without selecting window to find, just return
+        # window dictionary.
+        if not appWin: return (None, wins[1])
+
+        print appWin
+        # trying to find window title of selected application within window
+        # dictionary
         try:
-            index = wins[1].values().index(wintitle)
+            print self.appDict['iphoneWin']
+            print 'iphoneWin'
+            print str(appWin)
+            app = self.appDict['{1}'.format(str(appWin))]
+            print("looking for '{1}' window title".format(app.name))
+            index = wins[1].values().index(app.name)
         except:
             index = None
 
         if index is not None:
-            print(index)
+            #print(index)
             hwin = (wins[1].keys())[index]
-            print("Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
-            #wg.EnableWindow(hwin,True)
-            # wg.SetFocus(hwin)
+            #print("Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
+            app.winHandle = hwin
             wg.SetForegroundWindow(hwin)
-            print wg.GetWindowRect(hwin)
-            return wg.GetWindowRect(hwin)
-            print mimicCmds
-        print str(hwin)
-        return str(hwin)
+            #print wg.GetWindowRect(hwin)
+            app.winRect = wg.GetWindowRect(hwin)
+            #print str(hwin)
+            return (str(hwin), wins[1])
+        return (None, wins[1])
 
 
 #        if words[4:5]:
@@ -157,51 +171,7 @@ class ThisGrammar(GrammarBase, AppWindow):
     '''
 
 
-#    def gotResults_androidSC(self, words, fullResults):
-#        print 'Screen dimensions: ' + str(getScreenSize())
-#        print 'Mouse cursor position: ' + str(getCursorPos())
-#        print 'Entire recognition result: ' + str(fullResults)
-#        print 'Partial recognition result: ' + str(words)
-#
-#        """  buttons along the bottom of the android screencast window.
-#        to get the coordinates of the buttons, get the bottom left,
-#        increment offsets up and increments of 25 right for each button.
-#        doesn't scale much with screen resolution). Bottom QuickStart item = y
-#        (obtained from screen dimension-getScreenSize())-56."""
-#        """hack to get the bottom left corner is to mimic mousegrid seven
-#        seven, then get cursor position"""
-#
-#        # assuming the correct window is in focus
-#        recognitionMimic(["MouseGrid", "window"] + ["seven" for i in range(4)])
-#        # escape from the MouseGrid, sets cursor position
-#        recognitionMimic(["right", "one"])
-#        #recognitionMimic(["mouse", "click"])
-#        x, y = getCursorPos()
-#        print 'Mouse cursor position: ' + str(getCursorPos())
-#
-#        # Todo: don't like magic numbers, find way to avoid hard coding.
-#        # Note: doesn't work in maximised mode, window edges required
-#        # number of pixels between bottom of android screencast window and
-#        # control buttons
-#        row_initial = 15
-#        # number of pixels between left side of application window and centre
-#        # of the first button
-#        col_initial = 45
-#        # separation in pixels between adjacent buttons (average)
-#        col_sep = 30
-#
-#        # coordinate calculated using initial position of first button
-#        x, y = x + col_initial, y - row_initial
-#
-#        # words array contains a keyword somewhere, we need the index of this
-#        # keyword in our buttons array to work out the horizontal offset
-#        ret = self.buttons.index(filter(lambda x: x in self.buttons, words)[0])
-#        print(ret)
-#        # Only needs increment horizontal value by the index of the button
-#        x += col_sep * ret
-#        self.click('leftclick',x,y)
-#
-    def click(self, clickType, x, y):
+    def click(self, clickType='leftclick', x=None, y=None):
         # get the equivalent event code of the type of mouse event to perform
         # leftclick, rightclick, rightdouble-click (see kmap)
         event = self.kmap[clickType]
@@ -209,7 +179,18 @@ class ThisGrammar(GrammarBase, AppWindow):
         # play events down click and then release (for left double click
         # increment from left button up event which produces no action
         # then when incremented, performs the double-click)
-        natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+        # if coordinates are not supplied, just click
+        if x and y:
+            natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+        else:
+            recognitionMimic(["mouse", "click"])
+
+    def winAction(self, gramList, actionType):
+        # assuming the correct window is in focus
+        print("Grammer list {0} ".format(gramList))
+        recognitionMimic(["MouseGrid"] + gramList)
+        #recognitionMimic(["MouseGrid", "window"] + gramList)
+        self.click()
 
     def initialize(self):
         self.load(self.gramSpec)
