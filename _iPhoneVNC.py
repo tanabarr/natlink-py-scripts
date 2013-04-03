@@ -117,19 +117,21 @@ class ThisGrammar(GrammarBase, AppWindow):
         # trying to find window title of selected application within window
         # dictionary
         try:
-            print self.appDict['iphoneWin']
-            print 'iphoneWin'
-            print str(appWin)
-            app = self.appDict['{1}'.format(str(appWin))]
-            print("looking for '{1}' window title".format(app.name))
-            index = wins[1].values().index(app.name)
+            #print self.appDict['iphoneWin']
+            #print str(appWin)
+            #print str(self.appDict[str(appWin)])
+            app = self.appDict[str(appWin)]
+            #print dir(app)
+            print app.winName
+            #print("looking for '{1}' window title".format(app.winName))
+            index = wins[1].values().index(app.winName)
         except:
             index = None
 
         if index is not None:
-            #print(index)
+            print(index)
             hwin = (wins[1].keys())[index]
-            #print("Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
+            print("Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
             app.winHandle = hwin
             wg.SetForegroundWindow(hwin)
             #print wg.GetWindowRect(hwin)

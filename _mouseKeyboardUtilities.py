@@ -17,8 +17,9 @@ class ThisGrammar(GrammarBase):
             11|12|13|14|15|16|17|18|19|20|30|40|50|100) ];
         <windowFocus> exported = focus [on] window (0|1|2|3|4|5|6|7|8|9|10|
             11|12|13|14|15|16|17|18|19) [from bottom];
-        <androidSC> exported = press [the] button (home|menu|back|search|call|endcall);
+        <androidSC> exported =  show coordinates and screen size;
     """
+##        <androidSC> exported = press [the] button (home|menu|back|search|call|endcall);
 
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
@@ -141,16 +142,18 @@ class ThisGrammar(GrammarBase):
         # screen dimensions (excluding taskbar)
         x, y = getScreenSize()
 
-        # number of pixels between bottom of screen and bottom row of QuickStart icons
-        row_initial = 75
+        # number of pixels between top of screen and top row of taskbar icons
+        row_initial = 30 #75
 
         # number of pixels between left side of taskbar and first column of icons
         col_initial = 14
 
         # separation between subsequent rows
-        row_sep = 32
+        row_sep = 25 #32
 
-        # coordinate calculated, vertical offset is from top
+        # coordinate calculated, vertical offset is from top, horizontal offset
+        # from the left edge of the taskbar (maximum horizontal value of the
+        # screen visible size (which excludes taskbar)) calculated earlier.
         x, y = x + col_initial, row_initial  # initial position
 
         # argument to pass to callback contains words used in voice command
@@ -237,64 +240,64 @@ class ThisGrammar(GrammarBase):
         print 'Entire recognition result: ' + str(fullResults)
         print 'Partial recognition result: ' + str(words)
 
-        """  buttons along the bottom of the android screencast window.
-        to get the coordinates of the buttons, get the bottom left,
-        increment offsets up and increments of 25 right for each button.
-        doesn't scale much with screen resolution). Bottom QuickStart item = y
-        (obtained from screen dimension-getScreenSize())-56."""
-        """hack to get the bottom left corner is to mimic mousegrid seven
-        seven, then get cursor position"""
-
-        # assuming the correct window is in focus
-        recognitionMimic(["MouseGrid", "window"] + ["seven" for i in range(4)])
-        # escape from the MouseGrid, sets cursor position
-        recognitionMimic(["right", "one"])
-        #recognitionMimic(["mouse", "click"])
-        x, y = getCursorPos()
-        print 'Mouse cursor position: ' + str(getCursorPos())
-
-        # Todo: don't like magic numbers, find way to avoid hard coding.
-        # Note: doesn't work in maximised mode, window edges required
-        # number of pixels between bottom of android screencast window and
-        # control buttons
-        row_initial = 15
-        # number of pixels between left side of application window and centre
-        # of the first button
-        col_initial = 45
-        # separation in pixels between adjacent buttons (average)
-        col_sep = 30
-
-        # coordinate calculated using initial position of first button
-        x, y = x + col_initial, y - row_initial
-
-        # words array contains a keyword somewhere, we need the index of this
-        # keyword in our buttons array to work out the horizontal offset
-#        ret = (self.buttons and words)
-#        print(ret)
-#        if ret is not None:
-#            ret = self.buttons.index(ret)
-##        ret = None
-##        for word in words:
-##            try:
-##                ret =  self.buttons.index(word)
-##                if ret: break
-##            except: pass
-#        [ if ret = buttons.index(i) is not None:  break for i in words ]
-#        ret = filter(lambda x: x in self.buttons, words).next()
-#       ret =  self.buttons.index(set(self.buttons).intersect(words))
-        ret = self.buttons.index(filter(lambda x: x in self.buttons, words)[0])
-        print(ret)
-        # Only needs increment horizontal value by the index of the button
-        x += col_sep * ret
-
-        # get the equivalent event code of the type of mouse event to perform
-        # leftclick, rightclick, rightdouble-click
-        event = self.kmap['leftclick']
-
-        # play events down click and then release (for left double click
-        # increment from left button up event which produces no action
-        # then when incremented, performs the double-click)
-        natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+##        """  buttons along the bottom of the android screencast window.
+##        to get the coordinates of the buttons, get the bottom left,
+##        increment offsets up and increments of 25 right for each button.
+##        doesn't scale much with screen resolution). Bottom QuickStart item = y
+##        (obtained from screen dimension-getScreenSize())-56."""
+##        """hack to get the bottom left corner is to mimic mousegrid seven
+##        seven, then get cursor position"""
+##
+##        # assuming the correct window is in focus
+##        recognitionMimic(["MouseGrid", "window"] + ["seven" for i in range(4)])
+##        # escape from the MouseGrid, sets cursor position
+##        recognitionMimic(["right", "one"])
+##        #recognitionMimic(["mouse", "click"])
+##        x, y = getCursorPos()
+##        print 'Mouse cursor position: ' + str(getCursorPos())
+##
+##        # Todo: don't like magic numbers, find way to avoid hard coding.
+##        # Note: doesn't work in maximised mode, window edges required
+##        # number of pixels between bottom of android screencast window and
+##        # control buttons
+##        row_initial = 15
+##        # number of pixels between left side of application window and centre
+##        # of the first button
+##        col_initial = 45
+##        # separation in pixels between adjacent buttons (average)
+##        col_sep = 30
+##
+##        # coordinate calculated using initial position of first button
+##        x, y = x + col_initial, y - row_initial
+##
+##        # words array contains a keyword somewhere, we need the index of this
+##        # keyword in our buttons array to work out the horizontal offset
+###        ret = (self.buttons and words)
+###        print(ret)
+###        if ret is not None:
+###            ret = self.buttons.index(ret)
+####        ret = None
+####        for word in words:
+####            try:
+####                ret =  self.buttons.index(word)
+####                if ret: break
+####            except: pass
+###        [ if ret = buttons.index(i) is not None:  break for i in words ]
+###        ret = filter(lambda x: x in self.buttons, words).next()
+###       ret =  self.buttons.index(set(self.buttons).intersect(words))
+##        ret = self.buttons.index(filter(lambda x: x in self.buttons, words)[0])
+##        print(ret)
+##        # Only needs increment horizontal value by the index of the button
+##        x += col_sep * ret
+##
+##        # get the equivalent event code of the type of mouse event to perform
+##        # leftclick, rightclick, rightdouble-click
+##        event = self.kmap['leftclick']
+##
+##        # play events down click and then release (for left double click
+##        # increment from left button up event which produces no action
+##        # then when incremented, performs the double-click)
+##        natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
 
     def initialize(self):
         self.load(self.gramSpec)
