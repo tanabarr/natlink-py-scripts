@@ -140,26 +140,6 @@ class ThisGrammar(GrammarBase, AppWindow):
             return (str(hwin), wins[1])
         return (None, wins[1])
 
-
-#        if words[4:5]:
-#            # get desired index "from bottom" (negative index)
-#            from_bottom_modifier = int(words[ repeat_modifier_offset])
-#            # maximum number of increments is total_Windows -1
-#            relative_offset = total_windows - from_bottom_modifier - 1
-#        else:
-#            # get the index of window title required, add x vertical offsets
-#            # to get right vertical coordinate(0-based)
-#            relative_offset = int(words[repeat_modifier_offset])
-#
-#        if 0 > relative_offset or relative_offset >= total_windows:
-#            print('Specified taskbar index out of range. '
-#                  '{0} window titles listed.'.format(total_windows))
-#            return 1
-#        y = y + (row_sep *  relative_offset)
-#
-#        event = self.kmap['leftclick']
-#        # move mouse to 00 first, avoids occasional click failure
-#        natlink.playEvents([(wm_mousemove, 0,0),(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
     '''
         natlink.playEvents([ (wm_syskeydown,0x12,1),
                               (wm_keydown,0x09,1),
@@ -172,6 +152,9 @@ class ThisGrammar(GrammarBase, AppWindow):
                             ])
     '''
 
+    def press(self, key='space'):
+        event = self.kmap[key]
+        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
 
     def click(self, clickType='leftclick', x=None, y=None):
         # get the equivalent event code of the type of mouse event to perform
@@ -185,14 +168,18 @@ class ThisGrammar(GrammarBase, AppWindow):
         if x and y:
             natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
         else:
-            recognitionMimic(["mouse", "click"])
+            recognitionMimic(["MouseGrid", "window"])
+            recognitionMimic(["mouse", str(clickType)])
 
     def winAction(self, gramList, actionType):
         # assuming the correct window is in focus
-        print("Grammer list {0} ".format(gramList))
-        recognitionMimic(["MouseGrid"] + gramList)
-        #recognitionMimic(["MouseGrid", "window"] + gramList)
-        self.click()
+        # wake
+        self.press()
+        #self.click(clickType='rightclick')
+        print("Grammer list {0} ".format(['MouseGrid', 'window'] + gramList))
+        recognitionMimic(['MouseGrid', 'window'] + gramList)
+        #recognitionMimic(["MouseGrid"] + gramList)
+        #recognitionMimic(["MouseGrid", "window", "8", "5", "8"]) # ] + gramList)
 
     def initialize(self):
         self.load(self.gramSpec)
