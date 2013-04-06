@@ -176,9 +176,10 @@ class ThisGrammar(GrammarBase, AppWindow):
         # wake
         self.press()
         #self.click(clickType='rightclick')
-        print("Grammer list {0} ".format(['MouseGrid', 'window'] + gramList))
-        recognitionMimic(['MouseGrid', 'window'] + gramList)
-        #recognitionMimic(["MouseGrid"] + gramList)
+        gramList=['MouseGrid', 'window'] + gramList
+        print("Grammer list {0} ".format(gramList))
+        #recognitionMimic(['MouseGrid', 'window'] + gramList)
+        recognitionMimic(gramList)
         #recognitionMimic(["MouseGrid", "window", "8", "5", "8"]) # ] + gramList)
 
     def initialize(self):
