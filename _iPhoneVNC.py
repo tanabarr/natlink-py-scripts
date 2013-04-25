@@ -7,6 +7,7 @@ import natlink
 from natlinkutils import *
 import win32gui as wg
 import os
+from subprocess import Popen
 
 class AppWindow():
     def __init__(self, name, rect=None, hwin=None):
@@ -138,7 +139,11 @@ class ThisGrammar(GrammarBase, AppWindow):
             app.winRect = wg.GetWindowRect(hwin)
             #print str(hwin)
             return (str(hwin), wins[1])
-        return (None, wins[1])
+        else:
+            # window doesn't exist, might need to start USB tunnel application
+            # as well as vnc
+            vnc_p=Popen("C:\Users\tan.000\Desktop\Mobile screen.vnc")
+            stdout, stderr=vnc_p.communicate()
 
     '''
         natlink.playEvents([ (wm_syskeydown,0x12,1),
