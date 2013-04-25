@@ -18,8 +18,10 @@ class ThisGrammar(GrammarBase):
         <windowFocus> exported = focus [on] window (0|1|2|3|4|5|6|7|8|9|10|
             11|12|13|14|15|16|17|18|19) [from bottom];
         <androidSC> exported =  show coordinates and screen size;
+        <abrvPhrase> exported = (normal|spell|insert|escape) [mode];
+        <kbMacro> exported = private|next|previous;
     """
-##        <androidSC> exported = press [the] button (home|menu|back|search|call|endcall);
+##        <androidSC> exported =press [the] button (home|menu|back|search|call|endcall);
 
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
@@ -35,6 +37,25 @@ class ThisGrammar(GrammarBase):
     nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
                   'VDct Notifier Window', 'Program Manager',
                   'Spelling Window', 'Start']
+
+    abrvMap = {'normal': 'switch to normal mode', 'spell': \
+               'switch to spell mode', 'escape': 'press escape',
+               'insert': 'press insert','hash': 'press hash'}
+
+    def gotResults_kbMacro(self, words, fullResults):
+        if words[0] == 'private':
+            playString( 'N',0x05)
+        else:
+            playString({Tab},0x06)
+        #playString( 'a',0x04)
+
+    def gotResults_abrvPhrase(self, words, fullResults):
+        phrase=self.abrvMap[words[0]]
+#        print phrase
+        recognitionMimic(phrase.split())
+
+#        phrase=['switch','to',words[0],'mode']
+#        print phrase
 
     def gotResults_start(self, words, fullResults):
     #    print 'Screen dimensions: ' + str(getScreenSize())
