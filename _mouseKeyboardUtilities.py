@@ -9,6 +9,16 @@ import win32gui as wg
 
 class ThisGrammar(GrammarBase):
 
+    abrvMap = {'normal': 'switch to normal mode', 'spell': \
+               'switch to spell mode', 'escape': 'press escape',
+               'insert': 'press insert','hash': 'press hash'}
+
+    kbMacros = {'next': ('{ctrl+tab}',0x00),
+                'previous': ('{ctrl+shift+tab}',0x00),
+                'private': ('N',0x05), 'new': ('n',0x04),
+                'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
+                'save': ('s',0x04), 'bookmark': ('b',0x04)}
+
     gramSpec = """
         <start> exported = QuickStart (left|right|double) row (1|2|3|4|5)
             column (1|2|3|4|5);
@@ -18,9 +28,10 @@ class ThisGrammar(GrammarBase):
         <windowFocus> exported = focus [on] window (0|1|2|3|4|5|6|7|8|9|10|
             11|12|13|14|15|16|17|18|19) [from bottom];
         <androidSC> exported =  show coordinates and screen size;
-        <abrvPhrase> exported = (normal|spell|insert|escape) [mode];
-        <kbMacro> exported = private|next|previous;
-    """
+        <abrvPhrase> exported = ({1}) [mode];
+        <kbMacro> exported = {0};
+    """.format('|'.join(kbMacros.keys()),'|'.join(abrvMap.keys()))
+##        <androidSC'|'.join(kbMacros.keys()))
 ##        <androidSC> exported =press [the] button (home|menu|back|search|call|endcall);
 
     # Todo: embed this list of strings within grammar to save space
@@ -38,15 +49,11 @@ class ThisGrammar(GrammarBase):
                   'VDct Notifier Window', 'Program Manager',
                   'Spelling Window', 'Start']
 
-    abrvMap = {'normal': 'switch to normal mode', 'spell': \
-               'switch to spell mode', 'escape': 'press escape',
-               'insert': 'press insert','hash': 'press hash'}
 
     def gotResults_kbMacro(self, words, fullResults):
-        if words[0] == 'private':
-            playString( 'N',0x05)
-        else:
-            playString({Tab},0x06)
+        macro=self.kbMacros[words[0]]
+        print macro
+        playString(macro[0],macro[1])
         #playString( 'a',0x04)
 
     def gotResults_abrvPhrase(self, words, fullResults):
