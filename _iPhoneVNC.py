@@ -148,7 +148,7 @@ class ThisGrammar(GrammarBase, AppWindow):
             except: # TimeoutError:
                 print("error")
             vnc_p=Popen('C:\\Program Files (x86)\\TightVNC\\vncviewer.exe' +\
-                        ' localhost:5900')
+                        ' localhost:5904')
             try:
                 stdout, stderr=vnc_p.communicate(timeout=2)
             except: # TimeoutError:
