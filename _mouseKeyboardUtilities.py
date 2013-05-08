@@ -17,7 +17,9 @@ class ThisGrammar(GrammarBase):
                 'previous': ('{ctrl+shift+tab}',0x00),
                 'private': ('N',0x05), 'new': ('n',0x04),
                 'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
-                'save': ('s',0x04), 'bookmark': ('b',0x04)}
+                'save': ('s',0x04), 'bookmark': ('b',0x04),
+                'prompt': ('{space}c',0x02)}
+    # 'prompt 'closes command prompt
 
     gramSpec = """
         <start> exported = QuickStart (left|right|double) row (1|2|3|4|5)

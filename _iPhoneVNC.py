@@ -8,6 +8,9 @@ from natlinkutils import *
 import win32gui as wg
 import os
 from subprocess import Popen
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 class AppWindow():
     def __init__(self, name, rect=None, hwin=None):
@@ -41,16 +44,16 @@ class ThisGrammar(GrammarBase, AppWindow):
     # list of android screencast buttons
     # InitialiseMouseGrid coordination commands
     iphoneCmdDict = appDict["iphoneWin"].mimicCmds
-    print appDict["iphoneWin"].mimicCmds
+    logging.debug(appDict["iphoneWin"].mimicCmds)
     iphoneCmdDict.update({'back': ['1','5','8']})
     iphoneCmdDict.update({'call': ['7','5','8']})
     iphoneCmdDict.update({'contacts': ['8','8']})
-    print appDict["iphoneWin"].mimicCmds #iphoneCmdDict
+    logging.debug(appDict["iphoneWin"].mimicCmds) #iphoneCmdDict)
     # List of buttons
     appButtonStr = '(' + str(appDict["iphoneWin"].mimicCmds.keys()).strip(']['
                     ).replace(',','|') + ')'
 
-    print(appSelectionStr,appButtonStr)
+    logging.debug(appSelectionStr,appButtonStr)
 
     gramSpec = """
         <winclick> exported = click {0} {1};
@@ -86,11 +89,11 @@ class ThisGrammar(GrammarBase, AppWindow):
         for i in xrange(retries):
             if self.winDiscovery(words, appWin)[0]:
                 # we now want to call the window action function with the "tapRelative"
-                print(words)
-                print(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
+                logging.debug(words)
+                logging.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
                 self.winAction(self.iphoneCmdDict[words[2]],'tapRelative')
             else:
-                print("iphone window not found")
+                logging.debug("iphone window not found")
                 #os.
 
     def winDiscovery(self, words, appWin=None):
@@ -114,25 +117,20 @@ class ThisGrammar(GrammarBase, AppWindow):
         # window dictionary.
         if not appWin: return (None, wins[1])
 
-        print appWin
+        logging.debug(appWin)
         # trying to find window title of selected application within window
         # dictionary
         try:
-            #print self.appDict['iphoneWin']
-            #print str(appWin)
-            #print str(self.appDict[str(appWin)])
             app = self.appDict[str(appWin)]
-            #print dir(app)
-            print app.winName
-            #print("looking for '{1}' window title".format(app.winName))
+            logging.debug(app.winName)
             index = wins[1].values().index(app.winName)
         except:
             index = None
 
         if index is not None:
-            print(index)
+            logging.debug(index)
             hwin = (wins[1].keys())[index]
-            print("Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
+            logging.debug("Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
             app.winHandle = hwin
             wg.SetForegroundWindow(hwin)
             #print wg.GetWindowRect(hwin)
@@ -146,32 +144,26 @@ class ThisGrammar(GrammarBase, AppWindow):
             try:
                 stdout, stderr=vnc_p.communicate(timeout=2)
             except: # TimeoutError:
-                print("error")
+                logging.debug("error")
+            # need to supply executable string (so-can locate the Windows
+            # executable, it's not a Python executable) and then the
+            # configuration file which has the password stored (doesn't seem to
+            # support command line supplied password).
+            #vnc_p=Popen('C:\\Program Files (x86)\\TightVNC\\vncviewer.exe' +\
+            #            ' localhost:5904 -password test')
             vnc_p=Popen('C:\\Program Files (x86)\\TightVNC\\vncviewer.exe' +\
-                        ' localhost:5904')
+                        ' -config \"C:\\win scripts\\Mobile screen.vnc\"')
             try:
                 stdout, stderr=vnc_p.communicate(timeout=2)
             except: # TimeoutError:
-                print("error vanc")
-#                vnc_p=Popen("C:\win scripts\Mobile screen.vnc")
-            self.winDiscovery(words)
-#            stdout, stderr=vnc_p.communicate()
+                logging.debug("error vnc")
+            # window should now exist, discover again
+            self.winDiscovery(words, appwin)
 
-    '''
-        natlink.playEvents([ (wm_syskeydown,0x12,1),
-                              (wm_keydown,0x09,1),
-                              (wm_keyup,0x09,1),#(wm_lbuttondown,x,y),
-                              (wm_keydown,0x09,1),
-                              (wm_keyup,0x09,1),#(wm_lbuttondown,x,y),
-                              #(wm_mousemove,x,y+30),
-                              #(wm_lbuttonup,x,y+30),
-                               (wm_syskeyup,0x12,1)
-                            ])
-    '''
-
-    def press(self, key='space'):
-        event = self.kmap[key]
-        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
+# use playstring instead
+#    def press(self, key='space'):
+#        event = self.kmap[key]
+#        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
 
     def click(self, clickType='leftclick', x=None, y=None):
         # get the equivalent event code of the type of mouse event to perform
@@ -191,10 +183,12 @@ class ThisGrammar(GrammarBase, AppWindow):
     def winAction(self, gramList, actionType):
         # assuming the correct window is in focus
         # wake
-        self.press()
+        playString('{space}',0x00)
+        #todo: how to reset state machine, start from home screen without
+        #feedback?
         #self.click(clickType='rightclick')
         gramList=['MouseGrid', 'window'] + gramList
-        print("Grammer list {0} ".format(gramList))
+        logging.info("Grammer list {0} ".format(gramList))
         #recognitionMimic(['MouseGrid', 'window'] + gramList)
         recognitionMimic(gramList)
         #recognitionMimic(["MouseGrid", "window", "8", "5", "8"]) # ] + gramList)
