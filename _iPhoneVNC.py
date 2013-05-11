@@ -9,6 +9,7 @@ import win32gui as wg
 import os
 from subprocess import Popen
 import logging
+import time
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -53,7 +54,7 @@ class ThisGrammar(GrammarBase, AppWindow):
     appButtonStr = '(' + str(appDict["iphoneWin"].mimicCmds.keys()).strip(']['
                     ).replace(',','|') + ')'
 
-    logging.debug(appSelectionStr,appButtonStr)
+    logging.debug(appSelectionStr + appButtonStr)
 
     gramSpec = """
         <winclick> exported = click {0} {1};
@@ -124,6 +125,7 @@ class ThisGrammar(GrammarBase, AppWindow):
             app = self.appDict[str(appWin)]
             logging.debug(app.winName)
             index = wins[1].values().index(app.winName)
+            # need to find a list of Windows again (to refresh)
         except:
             index = None
 
@@ -144,7 +146,7 @@ class ThisGrammar(GrammarBase, AppWindow):
             try:
                 stdout, stderr=vnc_p.communicate(timeout=2)
             except: # TimeoutError:
-                logging.debug("error")
+                logging.debug("error tunnel")
             # need to supply executable string (so-can locate the Windows
             # executable, it's not a Python executable) and then the
             # configuration file which has the password stored (doesn't seem to
@@ -157,8 +159,12 @@ class ThisGrammar(GrammarBase, AppWindow):
                 stdout, stderr=vnc_p.communicate(timeout=2)
             except: # TimeoutError:
                 logging.debug("error vnc")
+            # wait for creation
+            time.sleep(20)
+            # maybe need to check iPhone is plugged in and retry a finite
+            # number of times.
             # window should now exist, discover again
-            self.winDiscovery(words, appwin)
+            self.winDiscovery(words, appWin)
 
 # use playstring instead
 #    def press(self, key='space'):
