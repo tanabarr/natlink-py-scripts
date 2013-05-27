@@ -86,13 +86,14 @@ class ThisGrammar(GrammarBase, AppWindow):
     #    print 'Partial recognition result: ' + str(words)
 
         appWin = 'iphoneWin'
-        retries = 1
+        retries = 3
         for i in xrange(retries):
             if self.winDiscovery(words, appWin)[0]:
                 # we now want to call the window action function with the "tapRelative"
                 logging.debug(words)
                 logging.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
                 self.winAction(self.iphoneCmdDict[words[2]],'tapRelative')
+                break
             else:
                 logging.debug("iphone window not found")
                 #os.
@@ -109,28 +110,28 @@ class ThisGrammar(GrammarBase, AppWindow):
 
         # after visible taskbar application windows have been added to
         # dictionary (second element of wins tuple), we can calculate
-        # relative offset from last taskbar title.
         total_windows = len(wins[1])
         #print('Number of taskbar applications: {0};'.format( total_windows))
-        #print wins[1]
 
         # the function called without selecting window to find, just return
         # window dictionary.
         if not appWin: return (None, wins[1])
 
-        logging.debug(appWin)
+        logging.debug("discover window %s"% appWin)
+
         # trying to find window title of selected application within window
-        # dictionary
+        # dictionary( local application context). Checking that the window
+        # exists and it has a supportive local application context.
         try:
             app = self.appDict[str(appWin)]
-            logging.debug(app.winName)
+            logging.debug("supported application window: %s"% app.winName)
             index = wins[1].values().index(app.winName)
             # need to find a list of Windows again (to refresh)
         except:
             index = None
 
         if index is not None:
-            logging.debug(index)
+            logging.debug("index of application window: %d"% index)
             hwin = (wins[1].keys())[index]
             logging.debug("Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
             app.winHandle = hwin
@@ -160,11 +161,15 @@ class ThisGrammar(GrammarBase, AppWindow):
             except: # TimeoutError:
                 logging.debug("error vnc")
             # wait for creation
-            time.sleep(20)
+            logging.debug("waiting for process creation")
+            time.sleep(2)
             # maybe need to check iPhone is plugged in and retry a finite
             # number of times.
-            # window should now exist, discover again
-            self.winDiscovery(words, appWin)
+            #self.retry_count-=1
+            ## window should now exist, discover again
+            #AppWin=appWin
+            #self.winDiscovery(words, AppWin)
+            return (False, wins[1])
 
 # use playstring instead
 #    def press(self, key='space'):
