@@ -10,6 +10,7 @@ import os
 from subprocess import Popen
 import logging
 import time
+import wmi
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -91,12 +92,12 @@ class ThisGrammar(GrammarBase, AppWindow):
             if self.winDiscovery(words, appWin)[0]:
                 # we now want to call the window action function with the "tapRelative"
                 logging.debug(words)
-                logging.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
+                #logging.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
                 self.winAction(self.iphoneCmdDict[words[2]],'tapRelative')
-                break
+                return 0
             else:
                 logging.debug("iphone window not found")
-                #os.
+        logging.info('could not connect with phone ')
 
     def winDiscovery(self, words, appWin=None):
         # argument to pass to callback contains words used in voice command
@@ -143,11 +144,12 @@ class ThisGrammar(GrammarBase, AppWindow):
         else:
             # window doesn't exist, might need to start USB tunnel application
             # as well as vnc
-            itun_p=Popen(["C:\win scripts\iphone usb.bat", "&"])
-            try:
-                stdout, stderr=vnc_p.communicate(timeout=2)
-            except: # TimeoutError:
-                logging.debug("error tunnel")
+            if 'itunnel_mux.exe' not in [c.Name for c in wmi.WMI().Win32_Process()]:
+                itun_p=Popen(["C:\win scripts\iphone usb.bat", "&"])
+                ##try:
+                ##    stdout, stderr=vnc_p.communicate(timeout=2)
+                ##except: # TimeoutError:
+                ##    logging.debug("error tunnel")
             # need to supply executable string (so-can locate the Windows
             # executable, it's not a Python executable) and then the
             # configuration file which has the password stored (doesn't seem to
@@ -155,11 +157,11 @@ class ThisGrammar(GrammarBase, AppWindow):
             #vnc_p=Popen('C:\\Program Files (x86)\\TightVNC\\vncviewer.exe' +\
             #            ' localhost:5904 -password test')
             vnc_p=Popen('C:\\Program Files (x86)\\TightVNC\\vncviewer.exe' +\
-                        ' -config \"C:\\win scripts\\Mobile screen.vnc\"')
-            try:
-                stdout, stderr=vnc_p.communicate(timeout=2)
-            except: # TimeoutError:
-                logging.debug("error vnc")
+                        ' -config \"C:\\win scripts\\Mobile screen.vnc\" &')
+##            try:
+##                stdout, stderr=vnc_p.communicate(timeout=2)
+##            except: # TimeoutError:
+##                logging.debug("error vnc")
             # wait for creation
             logging.debug("waiting for process creation")
             time.sleep(2)
@@ -176,20 +178,20 @@ class ThisGrammar(GrammarBase, AppWindow):
 #        event = self.kmap[key]
 #        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
 
-    def click(self, clickType='leftclick', x=None, y=None):
-        # get the equivalent event code of the type of mouse event to perform
-        # leftclick, rightclick, rightdouble-click (see kmap)
-        event = self.kmap[clickType]
+    #def click(self, clickType='leftclick', x=None, y=None):
+    #    # get the equivalent event code of the type of mouse event to perform
+    #    # leftclick, rightclick, rightdouble-click (see kmap)
+    #    event = self.kmap[clickType]
 
-        # play events down click and then release (for left double click
-        # increment from left button up event which produces no action
-        # then when incremented, performs the double-click)
-        # if coordinates are not supplied, just click
-        if x and y:
-            natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
-        else:
-            recognitionMimic(["MouseGrid", "window"])
-            recognitionMimic(["mouse", str(clickType)])
+    #    # play events down click and then release (for left double click
+    #    # increment from left button up event which produces no action
+    #    # then when incremented, performs the double-click)
+    #    # if coordinates are not supplied, just click
+    #    if x and y:
+    #        natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+    #    else:
+    #        recognitionMimic(["MouseGrid", "window"])
+    #        recognitionMimic(["mouse", str(clickType)])
 
     def winAction(self, gramList, actionType):
         # assuming the correct window is in focus
@@ -201,7 +203,7 @@ class ThisGrammar(GrammarBase, AppWindow):
         gramList=['MouseGrid', 'window'] + gramList
         logging.info("Grammer list {0} ".format(gramList))
         #recognitionMimic(['MouseGrid', 'window'] + gramList)
-        recognitionMimic(gramList)
+        #recognitionMimic(gramList)
         #recognitionMimic(["MouseGrid", "window", "8", "5", "8"]) # ] + gramList)
 
     def initialize(self):

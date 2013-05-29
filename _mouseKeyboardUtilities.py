@@ -18,7 +18,17 @@ class ThisGrammar(GrammarBase):
                 'private': ('N',0x05), 'new': ('n',0x04),
                 'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
                 'save': ('s',0x04), 'bookmark': ('b',0x04),
-                'prompt': ('{space}c',0x02)}
+                'prompt': ('{space}c',0x02),
+                'history': ('r',0x04),
+                'screen previous': ('ap',0x04),
+                'screen next': ('an',0x04),
+                'screen help': ('a?',0x04),
+                'screen new': ('ac',0x04),
+                'screen attach': ('screen -R{enter}',0x00),
+                'screen detach': ('ad',0x04),
+                'screen list': ('a"',0x04),
+                'screen kill': ('ak',0x04)}
+
     # 'prompt 'closes command prompt
 
     gramSpec = """
@@ -53,9 +63,17 @@ class ThisGrammar(GrammarBase):
 
 
     def gotResults_kbMacro(self, words, fullResults):
-        macro=self.kbMacros[words[0]]
-        print macro
-        playString(macro[0],macro[1])
+        lenWords = len(words)
+        if lenWords == 1:
+            macro=self.kbMacros[words[0]]
+            playString(macro[0],macro[1])
+            #print macro
+        elif lenWords == 2:
+            #print lenWords
+            #print  ' '.join(words[0:2])
+            macro=self.kbMacros[' '.join(words[0:2])]
+            playString(macro[0],macro[1])
+            #print macro
         #playString( 'a',0x04)
 
     def gotResults_abrvPhrase(self, words, fullResults):
