@@ -13,13 +13,15 @@ class ThisGrammar(GrammarBase):
                'switch to spell mode', 'escape': 'press escape',
                'insert': 'press insert','hash': 'press hash'}
 
-    kbMacros = {'next': ('{ctrl+tab}',0x00),
+    kbMacros = {# Google Chrome commands
+                'next': ('{ctrl+tab}',0x00),
                 'previous': ('{ctrl+shift+tab}',0x00),
                 'private': ('N',0x05), 'new': ('n',0x04),
                 'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
                 'save': ('s',0x04), 'bookmark': ('b',0x04),
                 'prompt': ('{space}c',0x02),
                 'history': ('r',0x04),
+                #screen commands
                 'screen previous': ('ap',0x04),
                 'screen next': ('an',0x04),
                 'screen help': ('a?',0x04),
@@ -27,7 +29,14 @@ class ThisGrammar(GrammarBase):
                 'screen attach': ('screen -R{enter}',0x00),
                 'screen detach': ('ad',0x04),
                 'screen list': ('a"',0x04),
-                'screen kill': ('ak',0x04)}
+                'screen kill': ('ak',0x04),
+                'screen title': ('aA',0x04),
+                # window split related
+                'screen switch': ('a{tab}',0x04),
+                'screen split': ('aS',0x04),
+                'screen vertical': ('a|',0x04),
+                'screen crop': ('aQ',0x04),
+                'screen remove': ('aX',0304)}
 
     # 'prompt 'closes command prompt
 

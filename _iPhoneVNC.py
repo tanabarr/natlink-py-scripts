@@ -156,8 +156,12 @@ class ThisGrammar(GrammarBase, AppWindow):
             # support command line supplied password).
             #vnc_p=Popen('C:\\Program Files (x86)\\TightVNC\\vncviewer.exe' +\
             #            ' localhost:5904 -password test')
-            vnc_p=Popen('C:\\Program Files (x86)\\TightVNC\\vncviewer.exe' +\
-                        ' -config \"C:\\win scripts\\Mobile screen.vnc\" &')
+            vnc_p=Popen([r'C:\Program Files (x86)\TightVNC\vncviewer.exe',
+                         '-config', r'C:\win scripts\Mobile screen.vnc']) #, '&'])
+            ## TODO: troubleshoot why vnc keeps crashing? Is this to do with
+            ## other processes interfering (do we need to stop iTunes and iPod
+            ## related services? Or is it related to how VMC Is started or even
+            ## the use of popen?
 ##            try:
 ##                stdout, stderr=vnc_p.communicate(timeout=2)
 ##            except: # TimeoutError:
