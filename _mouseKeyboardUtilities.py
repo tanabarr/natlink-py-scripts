@@ -21,6 +21,13 @@ class ThisGrammar(GrammarBase):
                 'save': ('s',0x04), 'bookmark': ('b',0x04),
                 'prompt': ('{space}c',0x02),
                 'history': ('r',0x04),
+                # vim commands
+                'vim next': ('{esc}:bn',0x00),
+                'vim previous': ('{esc}:bp',0x00),
+                'vim save': ('{esc}:w',0x00),
+                'vim quit': ('{esc}:q',0x00),
+                'vim taglist': ('{esc}{ctrl+p}',0x00),
+                'vim uptade': ('{esc}:!ctags -a .',0x00),
                 #screen commands
                 'screen previous': ('ap',0x04),
                 'screen next': ('an',0x04),
@@ -181,14 +188,16 @@ class ThisGrammar(GrammarBase):
     #    print 'Mouse cursor position: ' + str(getCursorPos())
     #    print 'Entire recognition result: ' + str(fullResults)
     #    print 'Partial recognition result: ' + str(words)
-
         """ Vertical taskbar window titles are spreadstarting from 150 pixels
         from the taskbar. Each subsequent icon is roughly 25 pixels
         between.this is assumed the same between subsequent rows.  If 'from
         bottom'modifier supplied to command string, calculate the offset from
         the first window title. This technique is an alternative to be able to
         determine a phrase that would be recognised as a window title (e.g.
-        explicitly setting each programs window title)"""
+        explicitly setting each programs window title)
+        TODO: need to fix, inaccurate when counting from bottom. Windows not
+        filtered properly? (Extra "Windows" which do not have physical
+        component)"""
 
         # Detect the optional word to specify offset for variable component
         if words[1] == 'on':

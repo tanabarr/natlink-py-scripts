@@ -48,8 +48,12 @@ class ThisGrammar(GrammarBase, AppWindow):
     iphoneCmdDict = appDict["iphoneWin"].mimicCmds
     logging.debug(appDict["iphoneWin"].mimicCmds)
     iphoneCmdDict.update({'back': ['1','5','8']})
-    iphoneCmdDict.update({'call': ['7','5','8']})
+    iphoneCmdDict.update({'call': ['7','5','9','9']})
     iphoneCmdDict.update({'contacts': ['8','8']})
+    iphoneCmdDict.update({'endcall': ['8','5','8']})
+    iphoneCmdDict.update({'messages': ['1','2','8']})
+    iphoneCmdDict.update({'settings': ['6','2']})
+
     logging.debug(appDict["iphoneWin"].mimicCmds) #iphoneCmdDict)
     # List of buttons
     appButtonStr = '(' + str(appDict["iphoneWin"].mimicCmds.keys()).strip(']['
@@ -93,7 +97,8 @@ class ThisGrammar(GrammarBase, AppWindow):
                 # we now want to call the window action function with the "tapRelative"
                 logging.debug(words)
                 #logging.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
-                self.winAction(self.iphoneCmdDict[words[2]],'tapRelative')
+                # supplied the key of the intended window action
+                self.winAction(words[2],'tapRelative')
                 return 0
             else:
                 logging.debug("iphone window not found")
@@ -161,7 +166,8 @@ class ThisGrammar(GrammarBase, AppWindow):
             ## TODO: troubleshoot why vnc keeps crashing? Is this to do with
             ## other processes interfering (do we need to stop iTunes and iPod
             ## related services? Or is it related to how VMC Is started or even
-            ## the use of popen?
+            ## the use of popen? seems to work okay from clean start (Pc cold
+            ## boot)
 ##            try:
 ##                stdout, stderr=vnc_p.communicate(timeout=2)
 ##            except: # TimeoutError:
@@ -182,33 +188,36 @@ class ThisGrammar(GrammarBase, AppWindow):
 #        event = self.kmap[key]
 #        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
 
-    #def click(self, clickType='leftclick', x=None, y=None):
-    #    # get the equivalent event code of the type of mouse event to perform
-    #    # leftclick, rightclick, rightdouble-click (see kmap)
-    #    event = self.kmap[clickType]
+    def click(self, clickType='leftclick', x=None, y=None):
+        # get the equivalent event code of the type of mouse event to perform
+        # leftclick, rightclick, rightdouble-click (see kmap)
+        event = self.kmap[clickType]
 
-    #    # play events down click and then release (for left double click
-    #    # increment from left button up event which produces no action
-    #    # then when incremented, performs the double-click)
-    #    # if coordinates are not supplied, just click
-    #    if x and y:
-    #        natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
-    #    else:
-    #        recognitionMimic(["MouseGrid", "window"])
-    #        recognitionMimic(["mouse", str(clickType)])
+        # play events down click and then release (for left double click
+        # increment from left button up event which produces no action
+        # then when incremented, performs the double-click)
+        # if coordinates are not supplied, just click
+        if x and y:
+            natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+        else:
+            #recognitionMimic(["MouseGrid", "window"])
+            recognitionMimic(["mouse", str(clickType)])
 
-    def winAction(self, gramList, actionType):
+    def winAction(self, actionKey, actionType):
         # assuming the correct window is in focus
         # wake
         playString('{space}',0x00)
         #todo: how to reset state machine, start from home screen without
         #feedback?
-        #self.click(clickType='rightclick')
-        gramList=['MouseGrid', 'window'] + gramList
-        logging.info("Grammer list {0} ".format(gramList))
+        gramList = self.iphoneCmdDict[actionKey]
+        if gramList:
+            gramList=['MouseGrid', 'window'] + gramList
+            logging.info("Grammer list {0} ".format(gramList))
+            recognitionMimic(gramList)
+            self.click(clickType='leftclick')
         #recognitionMimic(['MouseGrid', 'window'] + gramList)
-        #recognitionMimic(gramList)
-        #recognitionMimic(["MouseGrid", "window", "8", "5", "8"]) # ] + gramList)
+        #if actionKey == 'endcall':
+            #recognitionMimic(["MouseGrid", "window", "8", "5", "8"]) # ] + gramList)
 
     def initialize(self):
         self.load(self.gramSpec)
