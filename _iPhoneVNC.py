@@ -40,8 +40,9 @@ class ThisGrammar(GrammarBase, AppWindow):
     appDict = {}
     appDict.update({"iphoneWin": AppWindow("tans-iPhone", None)})
     appDict.update({"xbmcChromeWin": AppWindow("XBMC - Google Chrome", None)})
-    appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\
-    ')'
+    #appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\
+    #')'
+    appSelectionStr=None
     # Todo: embed this list of strings within grammar to save space
     # list of android screencast buttons
     # InitialiseMouseGrid coordination commands
@@ -51,22 +52,20 @@ class ThisGrammar(GrammarBase, AppWindow):
     iphoneCmdDict.update({'call': ['7','5','9','9']})
     iphoneCmdDict.update({'contacts': ['8','8']})
     iphoneCmdDict.update({'endcall': ['8','5','8']})
-    iphoneCmdDict.update({'messages': ['1','2','8']})
+    iphoneCmdDict.update({'messages': ['1','2','8','5']})
     iphoneCmdDict.update({'settings': ['6','2']})
 
-    logging.debug(appDict["iphoneWin"].mimicCmds) #iphoneCmdDict)
+    #logging.debug(appDict["iphoneWin"].mimicCmds) #iphoneCmdDict)
     # List of buttons
-    appButtonStr = '(' + str(appDict["iphoneWin"].mimicCmds.keys()).strip(']['
-                    ).replace(',','|') + ')'
+    appButtonStr = '|'.join(appDict["iphoneWin"].mimicCmds.keys())
 
-    logging.debug(appSelectionStr + appButtonStr)
+    #logging.debug(appSelectionStr + appButtonStr)
 
     gramSpec = """
-        <winclick> exported = click {0} {1};
-        <iphonetap> exported = tap iphone {1};
+        <winclick> exported = click ({0}) ({1});
+        <iphonetap> exported = tap iphone ({1});
     """.format(appSelectionStr,appButtonStr)
-#        <iphonetap> exported = tap iphone (home|menu|back|search|call|endcall);
-
+    print gramSpec
 
     nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
                   'VDct Notifier Window', 'Program Manager',
@@ -201,7 +200,8 @@ class ThisGrammar(GrammarBase, AppWindow):
             natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
         else:
             #recognitionMimic(["MouseGrid", "window"])
-            recognitionMimic(["mouse", str(clickType)])
+            #recognitionMimic(["mouse", str(clickType)])
+            recognitionMimic(["mouse", "click"])
 
     def winAction(self, actionKey, actionType):
         # assuming the correct window is in focus
@@ -211,10 +211,11 @@ class ThisGrammar(GrammarBase, AppWindow):
         #feedback?
         gramList = self.iphoneCmdDict[actionKey]
         if gramList:
-            gramList=['MouseGrid', 'window'] + gramList
+            newgramList=['MouseGrid', 'window'] + gramList
             logging.info("Grammer list {0} ".format(gramList))
-            recognitionMimic(gramList)
-            self.click(clickType='leftclick')
+            recognitionMimic(newgramList)
+            recognitionMimic(["mouse", "click"])
+            #self.click(clickType='leftclick')
         #recognitionMimic(['MouseGrid', 'window'] + gramList)
         #if actionKey == 'endcall':
             #recognitionMimic(["MouseGrid", "window", "8", "5", "8"]) # ] + gramList)
