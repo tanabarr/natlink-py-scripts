@@ -6,6 +6,12 @@
 import natlink
 from natlinkutils import *
 import win32gui as wg
+from collections import defaultdict
+
+class macroObj:
+    def __init__(self, string, flags):
+        self.string = string
+        self.flags = flags
 
 class ThisGrammar(GrammarBase):
 
@@ -18,7 +24,8 @@ class ThisGrammar(GrammarBase):
     # playstring function of nat link uses format:
     # playstring(<keystring>, modifier flags: <ctrl,alt,shift>(bitwise 3 LSBs)
     # modifier applies to first character in string. More information in 'natlink.txt'
-    kbMacros = {# Global commands
+    # Default dictionary extension default  macro object as the value
+    oldDict = {# Global commands
                 'downshift': ('{down}',0x01), 'rightshift': ('{right}',0x01),
                 'leftshift': ('{left}',0x01), 'upshift': ('{up}',0x01),
                 #'select': ('{ctrl+shift}',0x00),#c-s-click requires playevents
@@ -35,13 +42,18 @@ class ThisGrammar(GrammarBase):
                 'vim format': ('Q',0x00), 'vim undo': ('u',0x00),
                 'vim redo': ('{ctrl+r}',0x00), 'vim next': (':bn',0x00),
                 'vim previous': (':bp',0x00), 'vim save': (':w',0x00),
-                'vim quit': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
+                'vim close': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
                 'vim update': (':!ctags -a .',0x00),
+                'vim edit another': (':edit ',0x00),
                 'vim folds': ('{ctrl+f}',0x00),
                 'vim remove': (':bd',0x00), #remove buffer
                 'vim jump back': ('g,',0x00),
                 'vim command last': (':{up},',0x00),
-                #screen commands
+                'vim window up': ('{ctrl+k},',0x00),
+                'vim window down': ('{ctrl+j},',0x00),
+                'vim window left': ('{ctrl+h},',0x00),
+                'vim window right': ('{ctrl+l},',0x00),
+                # screen commands
                 'attach screen ': ('screen -R{enter}',0x00),
                 'screen previous': ('p',0x00), 'screen next': ('n',0x00),
                 'screen help': ('?',0x00), 'screen new': ('c',0x00),
@@ -52,6 +64,16 @@ class ThisGrammar(GrammarBase):
                 'screen vertical': ('|',0x00), 'screen crop': ('Q',0x00),
                 'screen remove': ('X',0x00),
                 }
+
+    # dictionary comprehension, construction of object from value components of
+    # the old dictionary items. Values accessible by attribute name.
+    # Want to try to do this from file ideally.
+    kbMacros={}
+    for k,v in oldDict.iteritems():
+        kbMacros[k]=macroObj(*v)
+
+    # dictionary comprehension is a python 2.7 feature
+    #kbMacros = {k: macroObj(*v) for k,v in oldDict.iteritems()}
 
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
@@ -79,17 +101,20 @@ class ThisGrammar(GrammarBase):
 
     def gotResults_kbMacro(self, words, fullResults):
         lenWords = len(words)
+
+        #print self.kbMacros["non-existent"].string
         # global macros
         if lenWords == 1:
             macro=self.kbMacros[words[0]]
-            playString(macro[0],macro[1])
+            playString(macro.string,macro.flags)
         # terminal application-specific (when ms OS running Dragon is not aware
         # of application context)
         elif lenWords > 1:
-            macro, flags=self.kbMacros[' '.join(words)]
-            # process application specific macro
-            newmacro = macro
-            newflags = flags
+            macro=self.kbMacros[' '.join(words)]
+            #macro, flags=self.kbMacros[' '.join(words)]
+            # process application specific macro, leave dictionary unmodified
+            newmacro = macro.string
+            newflags = macro.flags
             if words[0] == 'screen':
                 # screen command prefix is c-a, 0x04 modifier
                 newflags = 0x00 # specify explicitly instead {ctrl}
@@ -99,7 +124,7 @@ class ThisGrammar(GrammarBase):
                 # commands entered with : prefix and require 'enter' to
                 # complete. No modifier on initial command character.
                 newflags = 0x00
-                if macro.startswith(':'):
+                if macro.string.startswith(':'):
                     newmacro=''.join([str(newmacro),'{enter}'])
                 newmacro = ''.join(['{esc}',str(newmacro)])
             playString(newmacro,newflags)
