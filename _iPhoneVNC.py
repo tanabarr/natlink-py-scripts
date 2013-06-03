@@ -209,10 +209,11 @@ class ThisGrammar(GrammarBase, AppWindow):
         playString('{space}',0x00)
         #todo: how to reset state machine, start from home screen without
         #feedback?
+        gramList = newgramList = []
         gramList = self.iphoneCmdDict[actionKey]
         if gramList:
             newgramList=['MouseGrid', 'window'] + gramList
-            logging.info("Grammer list {0} ".format(gramList))
+            logging.info("Grammer list {0} ".format(newgramList))
             recognitionMimic(newgramList)
             recognitionMimic(["mouse", "click"])
             #self.click(clickType='leftclick')

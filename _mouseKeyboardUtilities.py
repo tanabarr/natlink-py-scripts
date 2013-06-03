@@ -19,10 +19,9 @@ class ThisGrammar(GrammarBase):
     # playstring(<keystring>, modifier flags: <ctrl,alt,shift>(bitwise 3 LSBs)
     # modifier applies to first character in string. More information in 'natlink.txt'
     kbMacros = {# Global commands
-                'downshift': ('{down}',0x01),
-                'rightshift': ('{right}',0x01),
-                'leftshift': ('{left}',0x01),
-                'upshift': ('{up}',0x01),
+                'downshift': ('{down}',0x01), 'rightshift': ('{right}',0x01),
+                'leftshift': ('{left}',0x01), 'upshift': ('{up}',0x01),
+                #'select': ('{ctrl+shift}',0x00),#c-s-click requires playevents
                 # Google Chrome commands
                 'next': ('{ctrl+tab}',0x00),
                 'previous': ('{ctrl+shift+tab}',0x00),
@@ -30,32 +29,27 @@ class ThisGrammar(GrammarBase):
                 'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
                 'save': ('s',0x04), 'bookmark': ('b',0x04),
                 'prompt': ('{space}c',0x02),# 'prompt 'closes command prompt
-                'history': ('r',0x04),
+                'history': ('r',0x04), 'zoom in': ('+',0x04),
+                'zoom out': ('-',0x04),
                 # vim commands
-                'vim redo': ('{esc}r',0x04),
-                'vim next': ('{esc}:bn',0x00),
-                'vim previous': ('{esc}:bp',0x00),
-                'vim save': ('{esc}:w',0x00),
-                'vim quit': ('{esc}:q',0x00),
-                'vim taglist': ('{esc}{ctrl+p}',0x00),
-                'vim uptade': ('{esc}:!ctags -a .',0x00),
-                'vim jump back': ('{esc}g,',0x04),
+                'vim format': ('Q',0x00), 'vim undo': ('u',0x00),
+                'vim redo': ('{ctrl+r}',0x00), 'vim next': (':bn',0x00),
+                'vim previous': (':bp',0x00), 'vim save': (':w',0x00),
+                'vim quit': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
+                'vim uptade': (':!ctags -a .',0x00),
+                'vim jump back': ('g,',0x00),
+                'vim command last': (':{up},',0x00),
                 #screen commands
-                'screen previous': ('ap',0x04),
-                'screen next': ('an',0x04),
-                'screen help': ('a?',0x04),
-                'screen new': ('ac',0x04),
-                'screen attach': ('screen -R{enter}',0x00),
-                'screen detach': ('ad',0x04),
-                'screen list': ('a"',0x04),
-                'screen kill': ('ak',0x04),
-                'screen title': ('aA',0x04),
+                'attach screen ': ('screen -R{enter}',0x00),
+                'screen previous': ('p',0x00), 'screen next': ('n',0x00),
+                'screen help': ('?',0x00), 'screen new': ('c',0x00),
+                'screen detach': ('d',0x00), 'screen list': ('"',0x00),
+                'screen kill': ('k',0x00), 'screen title': ('A',0x00),
                 # window split related
-                'screen switch': ('a{tab}',0x04),
-                'screen split': ('aS',0x04),
-                'screen vertical': ('a|',0x04),
-                'screen crop': ('aQ',0x04),
-                'screen remove': ('aX',0x04)}
+                'screen switch': ('{tab}',0x00), 'screen split': ('S',0x00),
+                'screen vertical': ('|',0x00), 'screen crop': ('Q',0x00),
+                'screen remove': ('X',0x00),
+                }
 
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
@@ -87,12 +81,30 @@ class ThisGrammar(GrammarBase):
 
     def gotResults_kbMacro(self, words, fullResults):
         lenWords = len(words)
+        # global macros
         if lenWords == 1:
             macro=self.kbMacros[words[0]]
             playString(macro[0],macro[1])
+        # terminal application-specific (when ms OS running Dragon is not aware
+        # of application context)
         elif lenWords == 2:
-            macro=self.kbMacros[' '.join(words[0:2])]
-            playString(macro[0],macro[1])
+            macro, flags=self.kbMacros[' '.join(words)]
+            # process application specific macro
+            newmacro = macro
+            newflags = flags
+            if words[0] == 'screen':
+                # screen command prefix is c-a, 0x04 modifier
+                newflags = 0x04
+                newmacro = ''.join('a',str(newmacro))
+            elif words[0] == 'vim':
+                # vim command mode entered with 'esc 'key, command line
+                # commands entered with : prefix and require 'enter' to
+                # complete. No modifier on initial command character.
+                newflags = 0x00
+                if macro.startswith(':'):
+                    newmacro=''.join([str(newmacro),'{enter}'])
+                newmacro = ''.join(['{esc}',str(newmacro)])
+            playString(newmacro,newflags)
 
     def gotResults_abrvPhrase(self, words, fullResults):
         phrase=self.abrvMap[words[0]]
