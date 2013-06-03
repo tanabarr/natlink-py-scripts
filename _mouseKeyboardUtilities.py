@@ -36,8 +36,9 @@ class ThisGrammar(GrammarBase):
                 'vim redo': ('{ctrl+r}',0x00), 'vim next': (':bn',0x00),
                 'vim previous': (':bp',0x00), 'vim save': (':w',0x00),
                 'vim quit': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
-                'vim uptade': (':!ctags -a .',0x00),
+                'vim update': (':!ctags -a .',0x00),
                 'vim folds': ('{ctrl+f}',0x00),
+                'vim remove': (':bd',0x00), #remove buffer
                 'vim jump back': ('g,',0x00),
                 'vim command last': (':{up},',0x00),
                 #screen commands
@@ -91,8 +92,8 @@ class ThisGrammar(GrammarBase):
             newflags = flags
             if words[0] == 'screen':
                 # screen command prefix is c-a, 0x04 modifier
-                newflags = 0x04
-                newmacro = ''.join('a',str(newmacro))
+                newflags = 0x00 # specify explicitly instead {ctrl}
+                newmacro = ''.join(['{ctrl+a}',str(newmacro)])
             elif words[0] == 'vim':
                 # vim command mode entered with 'esc 'key, command line
                 # commands entered with : prefix and require 'enter' to
