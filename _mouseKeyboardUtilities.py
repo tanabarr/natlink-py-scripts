@@ -37,6 +37,7 @@ class ThisGrammar(GrammarBase):
                 'vim previous': (':bp',0x00), 'vim save': (':w',0x00),
                 'vim quit': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
                 'vim uptade': (':!ctags -a .',0x00),
+                'vim folds': ('{ctrl+f}',0x00),
                 'vim jump back': ('g,',0x00),
                 'vim command last': (':{up},',0x00),
                 #screen commands
@@ -57,10 +58,6 @@ class ThisGrammar(GrammarBase):
     kmap = {'space': 0x20, 'up': 0x26, 'down': 0x28, 'left': 0x25, 'right': 0x27,
             'enter': 0x0d, 'backspace': 0x08, 'delete': 0x2e, 'leftclick': 0x201,
             'rightclick': 0x204, 'doubleclick': 0x202}
-
-    # Todo: embed this list of strings within grammar to save space
-    # list of android screencast buttons
-    buttons = ['home', 'menu', 'back', 'search', 'call', 'endcall']
 
     nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
                   'VDct Notifier Window', 'Program Manager',
@@ -87,7 +84,7 @@ class ThisGrammar(GrammarBase):
             playString(macro[0],macro[1])
         # terminal application-specific (when ms OS running Dragon is not aware
         # of application context)
-        elif lenWords == 2:
+        elif lenWords > 1:
             macro, flags=self.kbMacros[' '.join(words)]
             # process application specific macro
             newmacro = macro
