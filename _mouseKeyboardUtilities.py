@@ -77,11 +77,13 @@ class ThisGrammar(GrammarBase):
                 'screen vertical': ('|',0x00), 'screen crop': ('Q',0x00),
                 'screen remove': ('X',0x00),
                 }
+
     #kbMacros = {k: MacroObj(v[0],v[1]) for k, v in self.kbMacros.iteritems()}
-    kbMacros = dict([(k, MacroObj(v[0],v[1])) for k, v in
-        kbMacros.iteritems()])
-    #for k, v in kbMacros.iteritems():
-    #    kbMacros[k] = MacroObj(v[0],v[1])
+    #kbMacros = dict([(k, MacroObj(v[0],v[1])) for k, v in
+    #    kbMacros.iteritems()])
+    # dictionary comprehension not available pre python 2.7
+    for k, v in kbMacros.iteritems():
+        kbMacros[k] = MacroObj(v[0],v[1])
 
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
