@@ -6,12 +6,14 @@
 import natlink
 from natlinkutils import *
 import win32gui as wg
-from collections import defaultdict
+import logging
 
-class macroObj:
-    def __init__(self, string, flags):
-        self.string = string
-        self.flags = flags
+logging.basicConfig(level=logging.DEBUG)
+
+class MacroObj():
+    def __init__(self,string='',flags=0):
+        self.string=string
+        self.flags=flags
 
 class ThisGrammar(GrammarBase):
 
@@ -24,36 +26,47 @@ class ThisGrammar(GrammarBase):
     # playstring function of nat link uses format:
     # playstring(<keystring>, modifier flags: <ctrl,alt,shift>(bitwise 3 LSBs)
     # modifier applies to first character in string. More information in 'natlink.txt'
-    # Default dictionary extension default  macro object as the value
-    oldDict = {# Global commands
+    kbMacros = {# Global commands
                 'downshift': ('{down}',0x01), 'rightshift': ('{right}',0x01),
                 'leftshift': ('{left}',0x01), 'upshift': ('{up}',0x01),
                 #'select': ('{ctrl+shift}',0x00),#c-s-click requires playevents
+                # Generic application commands
+                'save': ('s',0x04),
+                'new': ('n',0x04),
+                'zoom in': ('+',0x04),
+                'zoom out': ('-',0x04),
                 # Google Chrome commands
                 'next': ('{ctrl+tab}',0x00),
                 'previous': ('{ctrl+shift+tab}',0x00),
-                'private': ('N',0x05), 'new': ('n',0x04),
+                'private': ('N',0x05),
                 'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
-                'save': ('s',0x04), 'bookmark': ('b',0x04),
-                'prompt': ('{space}c',0x02),# 'prompt 'closes command prompt
-                'history': ('r',0x04), 'zoom in': ('+',0x04),
-                'zoom out': ('-',0x04),
+                'bookmark': ('b',0x04),
+                # Shell related commands
+                'close prompt': ('{space}c',0x02),# 'prompt 'closes command prompt
+                'bash history': ('r',0x04),
                 # vim commands
                 'vim format': ('Q',0x00), 'vim undo': ('u',0x00),
                 'vim redo': ('{ctrl+r}',0x00), 'vim next': (':bn',0x00),
                 'vim previous': (':bp',0x00), 'vim save': (':w',0x00),
-                'vim close': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
-                'vim update': (':!ctags -a .',0x00),
-                'vim edit another': (':edit ',0x00),
-                'vim folds': ('{ctrl+f}',0x00),
-                'vim remove': (':bd',0x00), #remove buffer
+                'vim quit': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
+                'vim uptade': (':!ctags -a .',0x00),
                 'vim jump back': ('g,',0x00),
-                'vim command last': (':{up},',0x00),
-                'vim window up': ('{ctrl+k},',0x00),
-                'vim window down': ('{ctrl+j},',0x00),
-                'vim window left': ('{ctrl+h},',0x00),
-                'vim window right': ('{ctrl+l},',0x00),
-                # screen commands
+                'vim last command': (':{up}',0x00),
+                'vim edit another': (':edit ',0xff), # no macro processing
+                # re-add navigation using Windows, parentheses/brackets,
+                # copying/removing previous and next lines
+                'vim window up': ('{ctrl}k',0x00),
+                'vim window down': ('{ctrl}j',0x00),
+                'vim window left': ('{ctrl}h',0x00),
+                'vim window right': ('{ctrl}l',0x00),
+                'vim copy previous line': (':-1y',0),
+                'vim copy next line': (':+1y',0),
+                'vim remove previous line': (':-1d',0),
+                'vim remove next line': (':+1d',0),
+                'vim insert space': ('i{space}{esc}',0),
+
+
+                #screen commands
                 'attach screen ': ('screen -R{enter}',0x00),
                 'screen previous': ('p',0x00), 'screen next': ('n',0x00),
                 'screen help': ('?',0x00), 'screen new': ('c',0x00),
@@ -64,16 +77,11 @@ class ThisGrammar(GrammarBase):
                 'screen vertical': ('|',0x00), 'screen crop': ('Q',0x00),
                 'screen remove': ('X',0x00),
                 }
-
-    # dictionary comprehension, construction of object from value components of
-    # the old dictionary items. Values accessible by attribute name.
-    # Want to try to do this from file ideally.
-    kbMacros={}
-    for k,v in oldDict.iteritems():
-        kbMacros[k]=macroObj(*v)
-
-    # dictionary comprehension is a python 2.7 feature
-    #kbMacros = {k: macroObj(*v) for k,v in oldDict.iteritems()}
+    #kbMacros = {k: MacroObj(v[0],v[1]) for k, v in self.kbMacros.iteritems()}
+    kbMacros = dict([(k, MacroObj(v[0],v[1])) for k, v in
+        kbMacros.iteritems()])
+    #for k, v in kbMacros.iteritems():
+    #    kbMacros[k] = MacroObj(v[0],v[1])
 
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
@@ -81,6 +89,10 @@ class ThisGrammar(GrammarBase):
     kmap = {'space': 0x20, 'up': 0x26, 'down': 0x28, 'left': 0x25, 'right': 0x27,
             'enter': 0x0d, 'backspace': 0x08, 'delete': 0x2e, 'leftclick': 0x201,
             'rightclick': 0x204, 'doubleclick': 0x202}
+
+    # Todo: embed this list of strings within grammar to save space
+    # list of android screencast buttons
+    buttons = ['home', 'menu', 'back', 'search', 'call', 'endcall']
 
     nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
                   'VDct Notifier Window', 'Program Manager',
@@ -101,8 +113,6 @@ class ThisGrammar(GrammarBase):
 
     def gotResults_kbMacro(self, words, fullResults):
         lenWords = len(words)
-
-        #print self.kbMacros["non-existent"].string
         # global macros
         if lenWords == 1:
             macro=self.kbMacros[words[0]]
@@ -111,14 +121,13 @@ class ThisGrammar(GrammarBase):
         # of application context)
         elif lenWords > 1:
             macro=self.kbMacros[' '.join(words)]
-            #macro, flags=self.kbMacros[' '.join(words)]
-            # process application specific macro, leave dictionary unmodified
+            # process application specific macro
             newmacro = macro.string
             newflags = macro.flags
             if words[0] == 'screen':
                 # screen command prefix is c-a, 0x04 modifier
-                newflags = 0x00 # specify explicitly instead {ctrl}
-                newmacro = ''.join(['{ctrl+a}',str(newmacro)])
+                newflags = 0x04
+                newmacro = ''.join('a',str(newmacro))
             elif words[0] == 'vim':
                 # vim command mode entered with 'esc 'key, command line
                 # commands entered with : prefix and require 'enter' to
@@ -127,6 +136,7 @@ class ThisGrammar(GrammarBase):
                 if macro.string.startswith(':'):
                     newmacro=''.join([str(newmacro),'{enter}'])
                 newmacro = ''.join(['{esc}',str(newmacro)])
+                logging.debug('vim resultant macro: %s'% newmacro)
             playString(newmacro,newflags)
 
     def gotResults_abrvPhrase(self, words, fullResults):
@@ -167,14 +177,17 @@ class ThisGrammar(GrammarBase):
         application (e.g. not the start button or natlink voice command itself).
         Populate dictionary of window title keys to window handle values. """
         if wg.IsWindowVisible(hwnd):
-            winText = wg.GetWindowText(hwnd).strip()
-            if winText and winText not in self.nullTitles and\
-               winText not in args[1].values():
+            try:
+                winText = wg.GetWindowText(hwnd).strip()
+                if winText and winText not in self.nullTitles and\
+                 winText not in args[1].values():
+                    args[1].update({hwnd: winText})
+            except:
+                logging.error('cannot retrieve window title')
 #                print [self.nullTitles + args[1].values()]
 ##               and args[0] != winText.split():
 #               and filter(lambda x: x in args[0], winText.split()):
                 # key on unique handle, not text of window
-                args[1].update({hwnd: winText})
 #            elif winText:
 #                print("Skipping duplicate handle ({0}) for window \
 #'{1}'".format(str(hwnd),winText))
@@ -214,7 +227,11 @@ class ThisGrammar(GrammarBase):
         wins = (words, {})
         # selecting index from bottom window title on taskbar
         # enumerate all top-level windows and send handles to callback
-        wg.EnumWindows(self.callBack_popWin,wins)
+        try:
+            wg.EnumWindows(self.callBack_popWin,wins)
+        except:
+            logging.error('cannot enumerate Windows')
+
         # after visible taskbar application windows have been added to
         # dictionary (second element of wins tuple), we can calculate
         # relative offset from last taskbar title.
@@ -247,8 +264,10 @@ class ThisGrammar(GrammarBase):
             return 1
         y = y + (row_sep *  relative_offset)
         event = self.kmap['leftclick']
-        # move mouse to 00 first, avoids occasional click failure
-        natlink.playEvents([(wm_mousemove, 0,0),(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+        # move mouse to 00 first then separate mouse movement from click events
+        # this seems to avoid occasional click failure
+        natlink.playEvents([(wm_mousemove, 0,0),(wm_mousemove, x, y)])
+        natlink.playEvents([(event, x, y), (event + 1, x, y)])
 
     def gotResults_repeatKey(self, words, fullResults):
         num = int(words[3])
