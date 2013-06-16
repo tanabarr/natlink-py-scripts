@@ -52,7 +52,7 @@ class ThisGrammar(GrammarBase, AppWindow):
     # InitialiseMouseGrid coordination commands
     appDict["iphoneWin"].mimicCmds.update(
     #log.debug(appDict["iphoneWin"].mimicCmds)
-        {"back": ["1", "5", "8"],
+        {'back': ['1', '5', '8'],
          'call': ['7', '5', '9', '9'],
          'contacts': ['8', '8'],
          'endcall': ['8', '8', '5', '8'],
@@ -184,7 +184,7 @@ class ThisGrammar(GrammarBase, AppWindow):
 # log.debug("error vnc")
             # wait for creation
             log.debug("waiting for process creation")
-            time.sleep(1)
+            time.sleep(2)
             # maybe need to check iPhone is plugged in and retry a finite
             # number of times.
             # self.retry_count-=1
@@ -231,14 +231,16 @@ class ThisGrammar(GrammarBase, AppWindow):
             recognitionMimic(['MouseGrid', 'window'])
             gramList = self.appDict["iphoneWin"].mimicCmds[actionKey]
             if gramList is not None:
-                newgramList = ["MouseGrid", "window"] + gramList
+                newgramList = ['\\MouseGrid', 'window'] + gramList
                 log.info("Grammer list for action '{0}': {1}".format(
                     actionKey, newgramList))
                 recognitionMimic(newgramList)
+                time.sleep(1)
+                recognitionMimic(["mouse", "click"])
             else:
                 #newgramList = ['MouseGrid', 'window', '8', '8', '5', '8'] #, 'click'] #+ gramList
             #newgramList = ['MouseGrid', 'window']  # + gramList
-            recognitionMimic(["mouse", "click"])
+                log.error('grammar list empty')
             # self.click(clickType='leftclick')
             #if actionType == 'tapRelative':
             #    #self.click()
