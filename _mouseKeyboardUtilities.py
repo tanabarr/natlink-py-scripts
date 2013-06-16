@@ -15,13 +15,37 @@ class MacroObj():
         self.string=string
         self.flags=flags
 
+class FileStore():
+    def __init__(self,filename='defaultkbm.txt',preDict={},delim="'"):
+        self.f=open(filename,'a')
+        self.postDict=preDict
+        self.readfile()
+        self.writefile()
+        return postDict
+
+    def readfile(self):
+        for line in self.f.readlines():
+            if (len(line) == 3):
+                gram, macro, flags = line.split("'") #delim)
+                self.postDict[gram] = MacroObj(macro, flags)
+
+    def writefile(self):
+        for gram, macroobj in self.postDict.iteritems():
+            try:
+                self.f.write("'".join([gram, macroobj.string, macroobj.flags]))
+            except:
+                #parse object instead of just string values
+                pass
+
+
 class ThisGrammar(GrammarBase):
 
     # Macros can be repeated with recognitionmimic function which takes list of
     # words as parameter
     abrvMap = {'normal': 'switch to normal mode', 'spell':
                'switch to spell mode', 'escape': 'press escape',
-               'insert': 'press insert','hash': 'press hash'}
+               'insert': 'press insert','hash': 'press hash',
+                }
 
     # playstring function of nat link uses format:
     # playstring(<keystring>, modifier flags: <ctrl,alt,shift>(bitwise 3 LSBs)
@@ -31,6 +55,7 @@ class ThisGrammar(GrammarBase):
                 'leftshift': ('{left}',0x01), 'upshift': ('{up}',0x01),
                 #'select': ('{ctrl+shift}',0x00),#c-s-click requires playevents
                 # Generic application commands
+                'back tab': ('{shift+tab}',0x00),
                 'save': ('s',0x04),
                 'new': ('n',0x04),
                 'zoom in': ('+',0x04),
@@ -41,6 +66,7 @@ class ThisGrammar(GrammarBase):
                 'private': ('N',0x05),
                 'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
                 'bookmark': ('b',0x04),
+                'tools': ('e',0x02),
                 # Shell related commands
                 'close prompt': ('{space}c',0x02),# 'prompt 'closes command prompt
                 'bash history': ('r',0x04),
@@ -55,17 +81,19 @@ class ThisGrammar(GrammarBase):
                 'vim edit another': (':edit ',0xff), # no macro processing
                 # re-add navigation using Windows, parentheses/brackets,
                 # copying/removing previous and next lines
-                'vim window up': ('{ctrl}k',0x00),
-                'vim window down': ('{ctrl}j',0x00),
-                'vim window left': ('{ctrl}h',0x00),
-                'vim window right': ('{ctrl}l',0x00),
+                #'vim scroll top': ('{alt+e}',0),
+                'vim window up': ('{ctrl+k}',0x00),
+                'vim window down': ('{ctrl+j}',0x00),
+                'vim window left': ('{ctrl+h}',0x00),
+                'vim window right': ('{ctrl+l}',0x00),
+                'vim folds': ('{ctrl+f}',0x00),
                 'vim copy previous line': (':-1y',0),
                 'vim copy next line': (':+1y',0),
                 'vim remove previous line': (':-1d',0),
                 'vim remove next line': (':+1d',0),
                 'vim insert space': ('i{space}{esc}',0),
-
-
+                'vim insert blank line next': ('o{up}i',0),
+                'vim insert blank line previous': ('O{down}i',0),
                 #screen commands
                 'attach screen ': ('screen -R{enter}',0x00),
                 'screen previous': ('p',0x00), 'screen next': ('n',0x00),
@@ -81,10 +109,12 @@ class ThisGrammar(GrammarBase):
     #kbMacros = {k: MacroObj(v[0],v[1]) for k, v in self.kbMacros.iteritems()}
     #kbMacros = dict([(k, MacroObj(v[0],v[1])) for k, v in
     #    kbMacros.iteritems()])
+    # we want to be able to reference the macro string as an attribute
     # dictionary comprehension not available pre python 2.7
     for k, v in kbMacros.iteritems():
         kbMacros[k] = MacroObj(v[0],v[1])
 
+    ##result=FileStore()
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
     # VK_SPACE,VK_UP,VK_DOWN,VK_LEFT,VK_RIGHT,VK_RETURN,VK_BACK
@@ -129,13 +159,14 @@ class ThisGrammar(GrammarBase):
             if words[0] == 'screen':
                 # screen command prefix is c-a, 0x04 modifier
                 newflags = 0x04
-                newmacro = ''.join('a',str(newmacro))
+                newmacro = ''.join(['a',str(newmacro)])
             elif words[0] == 'vim':
                 # vim command mode entered with 'esc 'key, command line
                 # commands entered with : prefix and require 'enter' to
                 # complete. No modifier on initial command character.
+                # 0xff signifies partial command, don't append "enter"
                 newflags = 0x00
-                if macro.string.startswith(':'):
+                if macro.string.startswith(':') and macro.flags != 0xff:
                     newmacro=''.join([str(newmacro),'{enter}'])
                 newmacro = ''.join(['{esc}',str(newmacro)])
                 logging.debug('vim resultant macro: %s'% newmacro)

@@ -8,12 +8,11 @@ from natlinkutils import *
 import win32gui as wg
 import os
 from subprocess import Popen
-import logging
+import logging as log
 import time
 import wmi
 
-logging.basicConfig(level=logging.DEBUG)
-
+log.basicConfig(level=log.INFO)
 
 class AppWindow():
 
@@ -51,21 +50,22 @@ class ThisGrammar(GrammarBase, AppWindow):
     # Todo: embed this list of strings within grammar to save space
     # list of android screencast buttons
     # InitialiseMouseGrid coordination commands
-    iphoneCmdDict = appDict["iphoneWin"].mimicCmds
-    logging.debug(appDict["iphoneWin"].mimicCmds)
-    iphoneCmdDict.update({'back': ['1', '5', '8']})
-    iphoneCmdDict.update({'call': ['7', '5', '9', '9']})
-    iphoneCmdDict.update({'contacts': ['8', '8']})
-    iphoneCmdDict.update({'endcall': ['8', '5', '8']})
-    iphoneCmdDict.update({'messages': ['1', '2', '8', '5']})
-    iphoneCmdDict.update({'settings': ['6', '2']})
-    iphoneCmdDict.update({'home': []})
+    appDict["iphoneWin"].mimicCmds.update(
+    #log.debug(appDict["iphoneWin"].mimicCmds)
+        {"back": ["1", "5", "8"],
+         'call': ['7', '5', '9', '9'],
+         'contacts': ['8', '8'],
+         'endcall': ['8', '8', '5', '8'],
+         'messages': ['1', '2', '8', '5'],
+         'settings': ['6', '2'],
+         'home': [],
+         })
+    ##TODO: strangely, in the current configuration, call, contacts, endcall,
+    ## settings seems to work. "Back" and "messages" resulting in mimic failed
 
-    # logging.debug(appDict["iphoneWin"].mimicCmds) #iphoneCmdDict)
+    # log.debug(appDict["iphoneWin"].mimicCmds) #iphoneCmdDict)
     # List of buttons
     appButtonStr = '|'.join(appDict["iphoneWin"].mimicCmds.keys())
-
-    # logging.debug(appSelectionStr + appButtonStr)
 
     gramSpec = """
         <winclick> exported = click ({0}) ({1});
@@ -101,14 +101,14 @@ class ThisGrammar(GrammarBase, AppWindow):
             if self.winDiscovery(words, appWin)[0]:
                 # we now want to call the window action function with the
                 # "tapRelative"
-                logging.debug(words)
-                # logging.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
+                #log.debug(words)
+                # log.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
                 # supplied the key of the intended window action
-                self.winAction(words[2], 'tapRelative')
+                self.winAction(words[2]) #, 'tapRelative')
                 return 0
             else:
-                logging.debug("iphone window not found")
-        logging.info('could not connect with phone ')
+                log.debug("iphone window not found")
+        log.info('could not connect with phone ')
 
     def winDiscovery(self, words, appWin=None):
         # argument to pass to callback contains words used in voice command
@@ -130,23 +130,23 @@ class ThisGrammar(GrammarBase, AppWindow):
         if not appWin:
             return (None, wins[1])
 
-        logging.debug("discover window %s" % appWin)
+        #log.debug("discover window %s" % appWin)
 
         # trying to find window title of selected application within window
         # dictionary( local application context). Checking that the window
         # exists and it has a supportive local application context.
         try:
             app = self.appDict[str(appWin)]
-            logging.debug("supported application window: %s" % app.winName)
+            #log.debug("supported application window: %s" % app.winName)
             index = wins[1].values().index(app.winName)
             # need to find a list of Windows again (to refresh)
         except:
             index = None
 
         if index is not None:
-            logging.debug("index of application window: %d" % index)
+            #log.debug("index of application window: %d" % index)
             hwin = (wins[1].keys())[index]
-            logging.debug(
+            log.debug(
                 "Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
             app.winHandle = hwin
             wg.SetForegroundWindow(hwin)
@@ -162,7 +162,7 @@ class ThisGrammar(GrammarBase, AppWindow):
                 # try:
                 # stdout, stderr=vnc_p.communicate(timeout=2)
                 # except: # TimeoutError:
-                # logging.debug("error tunnel")
+                # log.debug("error tunnel")
             # need to supply executable string (so-can locate the Windows
             # executable, it's not a Python executable) and then the
             # configuration file which has the password stored (doesn't seem to
@@ -181,10 +181,10 @@ class ThisGrammar(GrammarBase, AppWindow):
 # try:
 # stdout, stderr=vnc_p.communicate(timeout=2)
 # except: # TimeoutError:
-# logging.debug("error vnc")
+# log.debug("error vnc")
             # wait for creation
-            logging.debug("waiting for process creation")
-            time.sleep(2)
+            log.debug("waiting for process creation")
+            time.sleep(1)
             # maybe need to check iPhone is plugged in and retry a finite
             # number of times.
             # self.retry_count-=1
@@ -206,34 +206,48 @@ class ThisGrammar(GrammarBase, AppWindow):
         # increment from left button up event which produces no action
         # then when incremented, performs the double-click)
         # if coordinates are not supplied, just click
-        if x and y:
-            natlink.playEvents(
-                [(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
-        else:
-            # recognitionMimic(["MouseGrid", "window"])
-            recognitionMimic(["mouse", str(clickType)])
-            # recognitionMimic(["mouse", "click"])
+        if not (x or y):
+            x, y = getCursorPos()
 
-    def winAction(self, actionKey, actionType):
+        log.debug('clicking at: %d, %d'% (x,y))
+        natlink.playEvents(
+            [(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+       ## else:
+       ##     # recognitionMimic(["MouseGrid", "window"])
+       ##     recognitionMimic(["mouse", str(clickType)])
+       ##     # recognitionMimic(["mouse", "click"])
+
+    def winAction(self, actionKey='', actionType='tapRelative'):
         # assuming the correct window is in focus
-        # wake
+        # wake. Recognition mimic doesn't seem to be a good model. Something to
+        # do with speed ofplayback etc. Grammar not always recognised as a
+        # command.
         playString('{space}', 0x00)
         # todo: how to reset state machine, start from home screen without
         # feedback?
         gramList = newgramList = []
-        gramList = self.iphoneCmdDict[actionKey]
-        if gramList:
-            newgramList = ['MouseGrid', 'window']  # + gramList
-            logging.info("Grammer list {0} ".format(newgramList))
-            recognitionMimic(newgramList)
-        #    recognitionMimic(["mouse", "click"])
-            # self.click(clickType='leftclick')
-            if actionType == 'tapRelative':
-                self.click()
+        if str(actionKey) in self.appDict["iphoneWin"].mimicCmds:
+            #below approach works with hardcoded values
+            recognitionMimic(['MouseGrid', 'window'])
+            gramList = self.appDict["iphoneWin"].mimicCmds[actionKey]
+            if gramList is not None:
+                newgramList = ["MouseGrid", "window"] + gramList
+                log.info("Grammer list for action '{0}': {1}".format(
+                    actionKey, newgramList))
+                recognitionMimic(newgramList)
             else:
-                # for example, "home" just requires central right click
-                self.click(clickType=actionType)
-        # recognitionMimic(['MouseGrid', 'window'] + gramList)
+                #newgramList = ['MouseGrid', 'window', '8', '8', '5', '8'] #, 'click'] #+ gramList
+            #newgramList = ['MouseGrid', 'window']  # + gramList
+            recognitionMimic(["mouse", "click"])
+            # self.click(clickType='leftclick')
+            #if actionType == 'tapRelative':
+            #    #self.click()
+            #    log.info("Grammer list {0} ".format(newgramList))
+            #    newgramList += ['click',]
+            #    recognitionMimic(newgramList)
+            #else:
+            #    # for example, "home" just requires central right click
+            #    self.click(clickType=actionType)
         # if actionKey == 'endcall':
             # recognitionMimic(["MouseGrid", "window", "8", "5", "8"]) # ] +
             # gramList)
