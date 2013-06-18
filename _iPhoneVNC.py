@@ -231,7 +231,8 @@ class ThisGrammar(GrammarBase, AppWindow):
             recognitionMimic(['MouseGrid', 'window'])
             gramList = self.appDict["iphoneWin"].mimicCmds[actionKey]
             if gramList is not None:
-                newgramList = ['\\MouseGrid', 'window'] + gramList
+                newgramList = gramList
+                #newgramList = ['\\MouseGrid', 'window'] + gramList
                 log.info("Grammer list for action '{0}': {1}".format(
                     actionKey, newgramList))
                 recognitionMimic(newgramList)
