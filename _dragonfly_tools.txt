@@ -1,0 +1,26 @@
+#
+                    # Dragonfly config for config manager
+#
+
+#--- Language section ------------------------------------------------------
+
+lang.list_configs = 'list configs'
+                    # Command to ...
+                    # Default: 'list configs'
+
+lang.edit_config = 'edit <config> (config | configuration)'
+                    # Command to ...
+                    # Default: 'edit <config> (config |
+                    #  configuration)'
+
+lang.show_dragonfly_version = 'show dragonfly version'
+                    # Command to ...
+                    # Default: 'show dragonfly version'
+
+lang.update_dragonfly = 'update dragonfly version'
+                    # Command to ...
+                    # Default: 'update dragonfly version'
+
+lang.reload_natlink = 'reload natlink'
+                    # Command to ...
+                    # Default: 'reload natlink'
