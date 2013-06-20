@@ -73,11 +73,12 @@ class ThisGrammar(GrammarBase):
                 # vim commands
                 'vim format': ('Q',0x00), 'vim undo': ('u',0x00),
                 'vim redo': ('{ctrl+r}',0x00), 'vim next': (':bn',0x00),
+                'vim remove buffer': (':bd',0x00),
                 'vim previous': (':bp',0x00), 'vim save': (':w',0x00),
-                'vim quit': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
-                'vim uptade': (':!ctags -a .',0x00),
+                'vim close': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
+                'vim updade': (':!ctags -a .',0x00),
                 'vim jump back': ('g,',0x00),
-                'vim last command': (':{up}',0x00),
+                'vim last command': (':{up}',0xff),
                 'vim edit another': (':edit ',0xff), # no macro processing
                 # re-add navigation using Windows, parentheses/brackets,
                 # copying/removing previous and next lines
@@ -94,8 +95,12 @@ class ThisGrammar(GrammarBase):
                 'vim insert space': ('i{space}{esc}',0),
                 'vim insert blank line next': ('o{up}i',0),
                 'vim insert blank line previous': ('O{down}i',0),
+                'vim set mark': ('mz',0),
+                'vim goto mark': ("'z",0),
                 #screen commands
                 'attach screen ': ('screen -R{enter}',0x00),
+                'screen scrollback mode': ('[',0x00),
+                'screen scrollback paste': (']',0x00),
                 'screen previous': ('p',0x00), 'screen next': ('n',0x00),
                 'screen help': ('?',0x00), 'screen new': ('c',0x00),
                 'screen detach': ('d',0x00), 'screen list': ('"',0x00),

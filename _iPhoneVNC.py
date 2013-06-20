@@ -20,7 +20,7 @@ class AppWindow():
         self.winName = name
         self.winRect = rect
         self.winHandle = hwin
-        buttons = ['home', 'menu', 'back', 'search', 'call', 'endcall']
+        buttons = ['home', 'menu', 'back', 'search', 'call', 'end']
         self.mimicCmds = {}.fromkeys(buttons)
 
 
@@ -47,21 +47,48 @@ class ThisGrammar(GrammarBase, AppWindow):
     # appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\
     #')'
     appSelectionStr = None
+
+    def selectEntry(self, num_entries, offset_index, select_index):
+        """ Gives coordinates of an entry in a list on the iPhone. Receives the
+        number of entries in the list (actually how many entries, given the
+        size on the screen, would fit into the screen dimensions), the offset
+        index of the first usable entry from top (how many entries Could fit
+        above the first usable entry, give the index of the first usable entry)
+        and the index of the desired entry. """
+        x,y = getWindowSize()
+        #res = setCursorPos()
+        return
+
     # Todo: embed this list of strings within grammar to save space
     # list of android screencast buttons
     # InitialiseMouseGrid coordination commands
     appDict["iphoneWin"].mimicCmds.update(
     #log.debug(appDict["iphoneWin"].mimicCmds)
-        {'back': ['1', '5', '8'],
-         'call': ['7', '5', '9', '9'],
-         'contacts': ['8', '8'],
-         'endcall': ['8', '8', '5', '8'],
-         'messages': ['1', '2', '8', '5'],
-         'settings': ['6', '2'],
+        {'back': ['one', 'five', 'eight'],
          'home': [],
+         'end': ['seven', 'nine'],
+         'answer': ['nine', 'seven'],
+         'call': ['seven', 'five', 'eight'],
+         'messages': ['one', 'five', 'eight'],
+         'settings': ['six', 'two'],
+         # call context
+         'contacts': ['eight', 'eight'],
+         'recent': ['seven', 'nine'],
+         'keypad': ['nine', 'seven'],
+         # messages context
+         'new message': ['three', 'six'],
+         'send message': ['nine', 'eight'],
+         'message text': ['five', 'eight'],
+         # recent context
+         'view all': ['two', 'four'],
+         'view missed': ['two', 'six'],
+         # contacts context
+         'search': ['two','eight','two'],
+         'first number': ['five','two'],
          })
-    ##TODO: strangely, in the current configuration, call, contacts, endcall,
-    ## settings seems to work. "Back" and "messages" resulting in mimic failed
+    ## Note: recognition seems to be dependent on the numbers being spelt out in
+    # words. Button location macros/strings should be persisted in file or
+    # database.
 
     # log.debug(appDict["iphoneWin"].mimicCmds) #iphoneCmdDict)
     # List of buttons
@@ -90,10 +117,6 @@ class ThisGrammar(GrammarBase, AppWindow):
                 args[1].update({hwin: winText})
 
     def gotResults_iphonetap(self, words, fullResults):
-    #    print 'Screen dimensions: ' + str(getScreenSize())
-    #    print 'Mouse cursor position: ' + str(getCursorPos())
-    #    print 'Entire recognition result: ' + str(fullResults)
-    #    print 'Partial recognition result: ' + str(words)
 
         appWin = 'iphoneWin'
         retries = 3
@@ -104,7 +127,7 @@ class ThisGrammar(GrammarBase, AppWindow):
                 #log.debug(words)
                 # log.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
                 # supplied the key of the intended window action
-                self.winAction(words[2]) #, 'tapRelative')
+                self.winAction(words[2:]) #, 'tapRelative')
                 return 0
             else:
                 log.debug("iphone window not found")
@@ -119,19 +142,15 @@ class ThisGrammar(GrammarBase, AppWindow):
         # selecting index from bottom window title on taskbar
         # enumerate all top-level windows and send handles to callback
         wg.EnumWindows(self.callBack_popWin, wins)
-
         # after visible taskbar application windows have been added to
         # dictionary (second element of wins tuple), we can calculate
         total_windows = len(wins[1])
         # print('Number of taskbar applications: {0};'.format( total_windows))
-
         # the function called without selecting window to find, just return
         # window dictionary.
         if not appWin:
             return (None, wins[1])
-
         #log.debug("discover window %s" % appWin)
-
         # trying to find window title of selected application within window
         # dictionary( local application context). Checking that the window
         # exists and it has a supportive local application context.
@@ -142,7 +161,6 @@ class ThisGrammar(GrammarBase, AppWindow):
             # need to find a list of Windows again (to refresh)
         except:
             index = None
-
         if index is not None:
             #log.debug("index of application window: %d" % index)
             hwin = (wins[1].keys())[index]
@@ -159,10 +177,6 @@ class ThisGrammar(GrammarBase, AppWindow):
             # as well as vnc
             if 'itunnel_mux.exe' not in [c.Name for c in wmi.WMI().Win32_Process()]:
                 itun_p = Popen(["C:\win scripts\iphone usb.bat", "&"])
-                # try:
-                # stdout, stderr=vnc_p.communicate(timeout=2)
-                # except: # TimeoutError:
-                # log.debug("error tunnel")
             # need to supply executable string (so-can locate the Windows
             # executable, it's not a Python executable) and then the
             # configuration file which has the password stored (doesn't seem to
@@ -171,26 +185,11 @@ class ThisGrammar(GrammarBase, AppWindow):
             #            ' localhost:5904 -password test')
             vnc_p = Popen([r'C:\Program Files (x86)\TightVNC\vncviewer.exe',
                            '-config', r'C:\win scripts\localhost-5904.vnc'])
-#            vnc_p=Popen([r'C:\Program Files (x86)\TightVNC\vncviewer.exe',
-# '-config', r'C:\win scripts\Mobile screen.vnc']) #, '&'])
-            # TODO: troubleshoot why vnc keeps crashing? Is this to do with
-            # other processes interfering (do we need to stop iTunes and iPod
-            # related services? Or is it related to how VMC Is started or even
-            # the use of popen? seems to work okay from clean start (Pc cold
-            # boot)
-# try:
-# stdout, stderr=vnc_p.communicate(timeout=2)
-# except: # TimeoutError:
-# log.debug("error vnc")
+            # vncwas crashing due to budget dodgy cable
             # wait for creation
             log.debug("waiting for process creation")
             time.sleep(2)
-            # maybe need to check iPhone is plugged in and retry a finite
-            # number of times.
-            # self.retry_count-=1
             # window should now exist, discover again
-            # AppWin=appWin
-            # self.winDiscovery(words, AppWin)
             return (False, wins[1])
 
 # use playstring instead
@@ -206,18 +205,23 @@ class ThisGrammar(GrammarBase, AppWindow):
         # increment from left button up event which produces no action
         # then when incremented, performs the double-click)
         # if coordinates are not supplied, just click
-        if not (x or y):
-            x, y = getCursorPos()
-
-        log.debug('clicking at: %d, %d'% (x,y))
-        natlink.playEvents(
-            [(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
-       ## else:
-       ##     # recognitionMimic(["MouseGrid", "window"])
-       ##     recognitionMimic(["mouse", str(clickType)])
-       ##     # recognitionMimic(["mouse", "click"])
+        #log.debug(dir(event))
+        if getattr(event, 'conjugate'):
+            if not (x or y):
+                x, y = getCursorPos()
+            log.debug('clicking at: %d, %d'% (x,y))
+            natlink.playEvents(
+                [(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+        else:
+            log.error(' incorrect click look up for the event %s'% str(clickType))
+            # default to
+            recognitionMimic(['mouse', 'click'])
 
     def winAction(self, actionKey='', actionType='tapRelative'):
+        # concatenate actionKey
+        if getattr(actionKey, 'insert'):
+            actionKey = ' '.join(actionKey)
+            log.debug("action Key of command concatenated: %s"% actionKey)
         # assuming the correct window is in focus
         # wake. Recognition mimic doesn't seem to be a good model. Something to
         # do with speed ofplayback etc. Grammar not always recognised as a
@@ -227,33 +231,29 @@ class ThisGrammar(GrammarBase, AppWindow):
         # feedback?
         gramList = newgramList = []
         if str(actionKey) in self.appDict["iphoneWin"].mimicCmds:
-            #below approach works with hardcoded values
-            recognitionMimic(['MouseGrid', 'window'])
+            recognitionMimic(['mouse', 'window'])
             gramList = self.appDict["iphoneWin"].mimicCmds[actionKey]
+            # we want to get out of grid mode aftermouse positioning
             if gramList is not None:
-                newgramList = gramList
-                #newgramList = ['\\MouseGrid', 'window'] + gramList
-                log.info("Grammer list for action '{0}': {1}".format(
-                    actionKey, newgramList))
-                recognitionMimic(newgramList)
-                time.sleep(1)
-                recognitionMimic(["mouse", "click"])
+                # remember empty list is not evaluated as "None"
+                if str(actionKey) == 'home':
+                    # special case
+                    #recognitionMimic(['mouse', 'right', 'click'])
+                    recognitionMimic(['go'])
+                    self.click('rightclick')
+                else:
+                    newgramList = gramList
+                    log.info("Grammer list for action '{0}': {1}".format(
+                        actionKey, newgramList))
+                    recognitionMimic(newgramList)
+                    recognitionMimic(['go'])
+                    #time.sleep(1)
+                    #recognitionMimic(['mouse', 'click'])
+                    self.click('leftclick')
             else:
-                #newgramList = ['MouseGrid', 'window', '8', '8', '5', '8'] #, 'click'] #+ gramList
-            #newgramList = ['MouseGrid', 'window']  # + gramList
-                log.error('grammar list empty')
-            # self.click(clickType='leftclick')
-            #if actionType == 'tapRelative':
-            #    #self.click()
-            #    log.info("Grammer list {0} ".format(newgramList))
-            #    newgramList += ['click',]
-            #    recognitionMimic(newgramList)
-            #else:
-            #    # for example, "home" just requires central right click
-            #    self.click(clickType=actionType)
-        # if actionKey == 'endcall':
-            # recognitionMimic(["MouseGrid", "window", "8", "5", "8"]) # ] +
-            # gramList)
+                log.error('grammar list missing')
+        else:
+            log.error('unknown actionKey')
 
     def initialize(self):
         self.load(self.gramSpec)
