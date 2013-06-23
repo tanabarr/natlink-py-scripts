@@ -55,6 +55,7 @@ class ThisGrammar(GrammarBase, AppWindow):
         index of the first usable entry from top (how many entries Could fit
         above the first usable entry, give the index of the first usable entry)
         and the index of the desired entry. """
+        ## TODO ##
         x,y = getWindowSize()
         #res = setCursorPos()
         return
@@ -65,30 +66,36 @@ class ThisGrammar(GrammarBase, AppWindow):
     appDict["iphoneWin"].mimicCmds.update(
     #log.debug(appDict["iphoneWin"].mimicCmds)
         {'back': ['one', 'five', 'eight'],
+         'cancel': ['three', 'five', 'eight'],
          'home': [],
          'end': ['seven', 'nine'],
          'answer': ['nine', 'seven'],
          'call': ['seven', 'five', 'eight'],
          'messages': ['one', 'five', 'eight'],
-         'settings': ['six', 'two'],
+         'settings': ['seven', 'two'],
+         'message ok': ['five', 'eight'],
          # call context
          'contacts': ['eight', 'eight'],
          'recent': ['seven', 'nine'],
          'keypad': ['nine', 'seven'],
          # messages context
          'new message': ['three', 'six'],
-         'send message': ['nine', 'eight'],
-         'message text': ['five', 'eight'],
+         'send message': ['six', 'eight'],
+         'message text middle': ['five', 'eight'],
+         'message text bottom': ['eight', 'eight'], #five', 'eight'],
          # recent context
          'view all': ['two', 'four'],
          'view missed': ['two', 'six'],
          # contacts context
-         'search': ['two','eight','two'],
+         'search text': ['two','eight','two'],
          'first number': ['five','two'],
          })
     ## Note: recognition seems to be dependent on the numbers being spelt out in
     # words. Button location macros/strings should be persisted in file or
     # database.
+    ## Todo: button presses can be executed using assistive touch (transparent
+    #white circle, for example device >>  lock screen long press can be used to
+    #turn off (needs slide motion macro as well)
 
     # log.debug(appDict["iphoneWin"].mimicCmds) #iphoneCmdDict)
     # List of buttons
@@ -96,9 +103,9 @@ class ThisGrammar(GrammarBase, AppWindow):
 
     gramSpec = """
         <winclick> exported = click ({0}) ({1});
-        <iphonetap> exported = tap iphone ({1});
+        <iphonetap> exported = iphone ({1});
     """.format(appSelectionStr, appButtonStr)
-    print gramSpec
+    #print gramSpec
 
     nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
                   'VDct Notifier Window', 'Program Manager',
@@ -127,7 +134,7 @@ class ThisGrammar(GrammarBase, AppWindow):
                 #log.debug(words)
                 # log.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
                 # supplied the key of the intended window action
-                self.winAction(words[2:]) #, 'tapRelative')
+                self.winAction(words[1:]) #, 'tapRelative')
                 return 0
             else:
                 log.debug("iphone window not found")
