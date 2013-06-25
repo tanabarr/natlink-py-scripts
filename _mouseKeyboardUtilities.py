@@ -42,7 +42,7 @@ class ThisGrammar(GrammarBase):
 
     # Macros can be repeated with recognitionmimic function which takes list of
     # words as parameter
-    abrvMap = {'normal': 'switch to normal mode', 'spell':
+    abrvMap = {'norm': 'switch to normal mode', 'spell':
                'switch to spell mode', 'escape': 'press escape',
                'insert': 'press insert','hash': 'press hash',
                 }
@@ -62,7 +62,7 @@ class ThisGrammar(GrammarBase):
                 'zoom out': ('-',0x04),
                 # Google Chrome commands
                 'next': ('{ctrl+tab}',0x00),
-                'previous': ('{ctrl+shift+tab}',0x00),
+                'previous': ('{ctrl+shift+tab}',0x01),
                 'private': ('N',0x05),
                 'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
                 'bookmark': ('b',0x04),
@@ -78,7 +78,7 @@ class ThisGrammar(GrammarBase):
                 'vim repeat macro': ('@z',0),
                 'vim previous': (':bp',0x00), 'vim save': (':w',0x00),
                 'vim close': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
-                'vim updade': (':!ctags -a .',0x00),
+                'vim update': (':!ctags -a .',0x01),
                 'vim last change': ('g,',0x00),
                 'vim return': ("''",0x00),
                 'vim matching': ('%',0x00),
@@ -87,12 +87,23 @@ class ThisGrammar(GrammarBase):
                 'vim hash': ('i#{esc}',0),
                 'vim insert blank line next': ('o{up}i',0),
                 'vim insert blank line previous': ('O{down}i',0),
+                'vim last command': (':{up}',0xff),
+                'vim copy previous line': (':-1y',0),
+                'vim copy next line': (':+1y',0),
+                'vim remove previous line': (':-1d',0),
+                'vim remove next line': (':+1d',0),
                 'vim set mark': ('mz',0),
                 'vim goto mark': ("'z",0),
                 'vim scroll to top': ('zt',0),
                 'vim scroll to bottom': ('zb',0),
+                'vim edit another': (':edit ',0xff),
+                'vim folds': ('{ctrl+f}',0x00),
+                'vim window up': ('{ctrl+k}',0x00),
+                'vim window down': ('{ctrl+j}',0x00),
+                'vim window left': ('{ctrl+h}',0x00),
+                'vim window right': ('{ctrl+l}',0x00),
                 #screen commands
-                'attach screen ': ('screen -R{enter}',0x00),
+                'attach screen ': ('screen -R{enter}',0x01),
                 'screen scrollback mode': ('[',0x00),
                 'screen scrollback paste': (']',0x00),
                 'screen previous': ('p',0x00), 'screen next': ('n',0x00),

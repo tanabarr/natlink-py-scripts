@@ -20,6 +20,7 @@ class AppWindow():
         self.winName = name
         self.winRect = rect
         self.winHandle = hwin
+        self.vert_offset = 0
         buttons = ['home', 'menu', 'back', 'search', 'call', 'end']
         self.mimicCmds = {}.fromkeys(buttons)
 
@@ -67,6 +68,7 @@ class ThisGrammar(GrammarBase, AppWindow):
     #log.debug(appDict["iphoneWin"].mimicCmds)
         {'back': ['one', 'five', 'eight'],
          'cancel': ['three', 'five', 'eight'],
+         'personal hotspot toggle': [],
          'home': [],
          'end': ['seven', 'nine'],
          'answer': ['nine', 'seven'],
@@ -125,25 +127,25 @@ class ThisGrammar(GrammarBase, AppWindow):
 
     def gotResults_iphonetap(self, words, fullResults):
 
-        appWin = 'iphoneWin'
+        appName = 'iphoneWin'
         retries = 3
         for i in xrange(retries):
-            if self.winDiscovery(words, appWin)[0]:
+            if self.winDiscovery(words, appName)[0]:
                 # we now want to call the window action function with the
                 # "tapRelative"
                 #log.debug(words)
-                # log.debug(self.appDict[appWin].mimicCmds[words[2]],'tapRelative')
+                # log.debug(self.appDict[appName].mimicCmds[words[2]],'tapRelative')
                 # supplied the key of the intended window action
-                self.winAction(words[1:]) #, 'tapRelative')
+                self.winAction(words[1:], appName) #, 'tapRelative')
                 return 0
             else:
                 log.debug("iphone window not found")
         log.info('could not connect with phone ')
 
-    def winDiscovery(self, words, appWin=None):
+    def winDiscovery(self, words, appName=None):
         # argument to pass to callback contains words used in voice command
         # (this is also a recognised top-level window?) And title of window
-        # to find (optional). Return tuple (handle of appWin, window dict).
+        # to find (optional). Return tuple (handle of appName, window dict).
         wins = (words, {})
         hwin = None
         # selecting index from bottom window title on taskbar
@@ -155,14 +157,14 @@ class ThisGrammar(GrammarBase, AppWindow):
         # print('Number of taskbar applications: {0};'.format( total_windows))
         # the function called without selecting window to find, just return
         # window dictionary.
-        if not appWin:
+        if not appName:
             return (None, wins[1])
-        #log.debug("discover window %s" % appWin)
+        #log.debug("discover window %s" % appName)
         # trying to find window title of selected application within window
         # dictionary( local application context). Checking that the window
         # exists and it has a supportive local application context.
         try:
-            app = self.appDict[str(appWin)]
+            app = self.appDict[str(appName)]
             #log.debug("supported application window: %s" % app.winName)
             index = wins[1].values().index(app.winName)
             # need to find a list of Windows again (to refresh)
@@ -204,7 +206,7 @@ class ThisGrammar(GrammarBase, AppWindow):
 #        event = self.kmap[key]
 #        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
 
-    def click(self, clickType='leftclick', x=None, y=None):
+    def click(self, clickType='leftclick', x=None, y=None, appName='iphoneWin'):
         # get the equivalent event code of the type of mouse event to perform
         # leftclick, rightclick, rightdouble-click (see kmap)
         event = self.kmap[clickType]
@@ -216,6 +218,9 @@ class ThisGrammar(GrammarBase, AppWindow):
         if getattr(event, 'conjugate'):
             if not (x or y):
                 x, y = getCursorPos()
+            # apply vertical offset dependent on presence of "personal hotspot"
+            # bar across the top of the screen
+            y += self.appDict[appName].vert_offset
             log.debug('clicking at: %d, %d'% (x,y))
             natlink.playEvents(
                 [(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
@@ -224,7 +229,7 @@ class ThisGrammar(GrammarBase, AppWindow):
             # default to
             recognitionMimic(['mouse', 'click'])
 
-    def winAction(self, actionKey='', actionType='tapRelative'):
+    def winAction(self, actionKey='', appName='iphoneWin'):
         # concatenate actionKey
         if getattr(actionKey, 'insert'):
             actionKey = ' '.join(actionKey)
@@ -236,10 +241,11 @@ class ThisGrammar(GrammarBase, AppWindow):
         playString('{space}', 0x00)
         # todo: how to reset state machine, start from home screen without
         # feedback?
+        app = self.appDict[str(appName)]
         gramList = newgramList = []
-        if str(actionKey) in self.appDict["iphoneWin"].mimicCmds:
+        if str(actionKey) in app.mimicCmds:
             recognitionMimic(['mouse', 'window'])
-            gramList = self.appDict["iphoneWin"].mimicCmds[actionKey]
+            gramList = app.mimicCmds[actionKey]
             # we want to get out of grid mode aftermouse positioning
             if gramList is not None:
                 # remember empty list is not evaluated as "None"
@@ -247,7 +253,10 @@ class ThisGrammar(GrammarBase, AppWindow):
                     # special case
                     #recognitionMimic(['mouse', 'right', 'click'])
                     recognitionMimic(['go'])
-                    self.click('rightclick')
+                    self.click('rightclick',appName=appName)
+                elif str(actionKey) == 'personal hotspot toggle':
+                    if app.vert_offset == 0: app.vert_offset = 6
+                    log.info("Toggled vertical offset: %d"% app.vert_offset)
                 else:
                     newgramList = gramList
                     log.info("Grammer list for action '{0}': {1}".format(
@@ -256,7 +265,7 @@ class ThisGrammar(GrammarBase, AppWindow):
                     recognitionMimic(['go'])
                     #time.sleep(1)
                     #recognitionMimic(['mouse', 'click'])
-                    self.click('leftclick')
+                    self.click('leftclick',appName=appName)
             else:
                 log.error('grammar list missing')
         else:
