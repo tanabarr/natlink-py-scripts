@@ -46,6 +46,7 @@ class ThisGrammar(GrammarBase):
     abrvMap = {'norm': 'switch to normal mode', 'spell':
                'switch to spell mode', 'escape': 'press escape',
                'insert': 'press insert','hash': 'press hash',
+               'sleep': 'go to sleep',
                 }
 
     # playstring function of nat link uses format:
@@ -71,6 +72,15 @@ class ThisGrammar(GrammarBase):
                 # Shell related commands
                 'close prompt': ('{space}c',0x02),# 'prompt 'closes command prompt
                 'bash history': ('r',0x04),
+                # c-style programming abbreviations
+                'vim begin comment': ('i/* ',0),
+                'vim end comment': ('i */{enter}',0),
+                'vim begin long comment': ('i#{esc}ib{space}',0),
+                'vim end long comment': ('i#{esc}ie{enter}',0),
+                'vim line comment': ('i#{esc}il{enter}',0),
+                'vim define': ('i#{esc}id{space}',0),
+                'vim include': ('i#{esc}ii{space}',0),
+                'vim equals': ('i = ',0),
                 # vim commands
                 'vim format': ('Q',0x00), 'vim undo': ('u',0x00),
                 'vim redo': ('{ctrl+r}',0x00), 'vim next': (':bn',0x00),
@@ -86,15 +96,15 @@ class ThisGrammar(GrammarBase):
                 'vim undo jump': ('``',0x00),
                 'vim insert space': ('i{space}{esc}',0),
                 'vim hash': ('i#{esc}',0),
-                'vim insert blank line next': ('o{up}i',0),
-                'vim insert blank line previous': ('O{down}i',0),
+                'vim insert blank line next': ('o{up}',0),
+                'vim insert blank line previous': ('O{down}',0),
                 'vim last command': (':{up}',0xff),
                 'vim copy previous line': (':-1y',0),
                 'vim copy next line': (':+1y',0),
                 'vim remove previous line': (':-1d',0),
                 'vim remove next line': (':+1d',0),
                 'vim set mark': ('mz',0),
-                'vim goto mark': ("'z",0),
+                'vim goto mark': ("'zi",0),
                 'vim scroll to top': ('zt',0),
                 'vim scroll to bottom': ('zb',0),
                 'vim edit another': (':edit ',0xff),
@@ -103,8 +113,10 @@ class ThisGrammar(GrammarBase):
                 'vim window down': ('{ctrl+j}',0x00),
                 'vim window left': ('{ctrl+h}',0x00),
                 'vim window right': ('{ctrl+l}',0x00),
+                'vim split vertical': (':vsp',0x00),
                 #screen commands
                 'attach screen ': ('screen -R{enter}',0x20000),
+                'attach screen existing': ('screen -x{enter}',0x20000),
                 'screen scrollback mode': ('[',0x00),
                 'screen scrollback paste': (']',0x00),
                 'screen previous': ('p',0x00), 'screen next': ('n',0x00),
@@ -117,9 +129,9 @@ class ThisGrammar(GrammarBase):
                 'screen remove': ('X',0x00),
                 # Windows live mail shortcuts
                 'live moved to folder': ('{ctrl+shift+v}',0),
-                # todo: sort by date/flag
                 'live sort by date': ('{alt}vb{down}{enter}',0),
                 'live sort by flag': ('{alt}vb' + 6*'{down}' + '{enter}',0),
+                # todo: fix
                 'live emails': ('{esc}{tab}',0x100),
                 }
 
@@ -154,11 +166,22 @@ class ThisGrammar(GrammarBase):
         <androidSC> exported =  show coordinates and screen size;
         <abrvPhrase> exported = ({1}) [mode];
         <kbMacro> exported = ({0});
+        <kbMacroPrint> exported = show macros;
+        <reloadEverything> exported = reload everything;
     """.format(' | '.join(kbMacros.keys()),'|'.join(abrvMap.keys()),
                '|'.join(kmap.keys()),
                 str(range(6)).strip('[]').replace(', ','|'),
                 str(range(20)).strip('[]').replace(', ','|'),
                 str(range(20,50,10)).strip('[]').replace(', ','|'))
+
+    def gotResults_reloadEverything(self, words, fullResults):
+        # todo: bring window to front
+        #[log.info(k) for k in self.kbMacros.keys()]
+        pass
+
+    def gotResults_kbMacroPrint(self, words, fullResults):
+        # todo: bring window to front
+        [log.info(k) for k in self.kbMacros.keys()]
 
     def gotResults_kbMacro(self, words, fullResults):
         lenWords = len(words)
@@ -330,6 +353,47 @@ class ThisGrammar(GrammarBase):
         print 'Mouse cursor position: ' + str(getCursorPos())
         print 'Entire recognition result: ' + str(fullResults)
         print 'Partial recognition result: ' + str(words)
+
+    #def winDiscovery(self, words, appName=None):
+    #    # argument to pass to callback contains words used in voice command
+    #    # (this is also a recognised top-level window?) And title of window
+    #    # to find (optional). Return tuple (handle of appName, window dict).
+    #    wins = (words, {})
+    #    hwin = None
+    #    # selecting index from bottom window title on taskbar
+    #    # enumerate all top-level windows and send handles to callback
+    #    wg.EnumWindows(self.callBack_popWin, wins)
+    #    # after visible taskbar application windows have been added to
+    #    # dictionary (second element of wins tuple), we can calculate
+    #    total_windows = len(wins[1])
+    #    # print('Number of taskbar applications: {0};'.format( total_windows))
+    #    # the function called without selecting window to find, just return
+    #    # window dictionary.
+    #    if not appName:
+    #        return (None, wins[1])
+    #    #log.debug("discover window %s" % appName)
+    #    # trying to find window title of selected application within window
+    #    # dictionary( local application context). Checking that the window
+    #    # exists and it has a supportive local application context.
+    #    try:
+    #        app = self.appDict[str(appName)]
+    #        #log.debug("supported application window: %s" % app.winName)
+    #        index = wins[1].values().index(app.winName)
+    #        # need to find a list of Windows again (to refresh)
+    #    except:
+    #        index = None
+
+    #    if index is not None:
+    #        #log.debug("index of application window: %d" % index)
+    #        hwin = (wins[1].keys())[index]
+    #        log.debug(
+    #            "Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
+    #        app.winHandle = hwin
+    #        wg.SetForegroundWindow(hwin)
+    #        # print wg.GetWindowRect(hwin)
+    #        app.winRect = wg.GetWindowRect(hwin)
+    #        # print str(hwin)
+    #        return (str(hwin), wins[1])
 
     def initialize(self):
         self.load(self.gramSpec)
