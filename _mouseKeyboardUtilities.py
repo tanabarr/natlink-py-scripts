@@ -6,37 +6,38 @@
 import natlink
 from natlinkutils import *
 import win32gui as wg
-import logging
+import logging as log
 
-logging.basicConfig(level=logging.DEBUG)
+log.basicConfig(level=log.DEBUG)
 
 class MacroObj():
     def __init__(self,string='',flags=0):
         self.string=string
         self.flags=flags
 
-class FileStore():
-    def __init__(self,filename='defaultkbm.txt',preDict={},delim="'"):
-        self.f=open(filename,'a')
-        self.postDict=preDict
-        self.readfile()
-        self.writefile()
-        return postDict
-
-    def readfile(self):
-        for line in self.f.readlines():
-            if (len(line) == 3):
-                gram, macro, flags = line.split("'") #delim)
-                self.postDict[gram] = MacroObj(macro, flags)
-
-    def writefile(self):
-        for gram, macroobj in self.postDict.iteritems():
-            try:
-                self.f.write("'".join([gram, macroobj.string, macroobj.flags]))
-            except:
-                #parse object instead of just string values
-                pass
-
+## unfinished
+#class FileStore():
+#    def __init__(self,filename='defaultkbm.txt',preDict={},delim="'"):
+#        self.f=open(filename,'a')
+#        self.postDict=preDict
+#        self.readfile()
+#        self.writefile()
+#        return postDict
+#
+#    def readfile(self):
+#        for line in self.f.readlines():
+#            if (len(line) == 3):
+#                gram, macro, flags = line.split("'") #delim)
+#                self.postDict[gram] = MacroObj(macro, flags)
+#
+#    def writefile(self):
+#        for gram, macroobj in self.postDict.iteritems():
+#            try:
+#                self.f.write("'".join([gram, macroobj.string, macroobj.flags]))
+#            except:
+#                #parse object instead of just string values
+#                pass
+#
 
 class ThisGrammar(GrammarBase):
 
@@ -103,7 +104,7 @@ class ThisGrammar(GrammarBase):
                 'vim window left': ('{ctrl+h}',0x00),
                 'vim window right': ('{ctrl+l}',0x00),
                 #screen commands
-                'attach screen ': ('screen -R{enter}',0x01),
+                'attach screen ': ('screen -R{enter}',0x20000),
                 'screen scrollback mode': ('[',0x00),
                 'screen scrollback paste': (']',0x00),
                 'screen previous': ('p',0x00), 'screen next': ('n',0x00),
@@ -114,6 +115,12 @@ class ThisGrammar(GrammarBase):
                 'screen switch': ('{tab}',0x00), 'screen split': ('S',0x00),
                 'screen vertical': ('|',0x00), 'screen crop': ('Q',0x00),
                 'screen remove': ('X',0x00),
+                # Windows live mail shortcuts
+                'live moved to folder': ('{ctrl+shift+v}',0),
+                # todo: sort by date/flag
+                'live sort by date': ('{alt}vb{down}{enter}',0),
+                'live sort by flag': ('{alt}vb' + 6*'{down}' + '{enter}',0),
+                'live emails': ('{esc}{tab}',0x100),
                 }
 
     #kbMacros = {k: MacroObj(v[0],v[1]) for k, v in self.kbMacros.iteritems()}
@@ -147,7 +154,7 @@ class ThisGrammar(GrammarBase):
         <androidSC> exported =  show coordinates and screen size;
         <abrvPhrase> exported = ({1}) [mode];
         <kbMacro> exported = ({0});
-    """.format('|'.join(kbMacros.keys()),'|'.join(abrvMap.keys()),
+    """.format(' | '.join(kbMacros.keys()),'|'.join(abrvMap.keys()),
                '|'.join(kmap.keys()),
                 str(range(6)).strip('[]').replace(', ','|'),
                 str(range(20)).strip('[]').replace(', ','|'),
@@ -179,7 +186,7 @@ class ThisGrammar(GrammarBase):
                 if macro.string.startswith(':') and macro.flags != 0xff:
                     newmacro=''.join([str(newmacro),'{enter}'])
                 newmacro = ''.join(['{esc}',str(newmacro)])
-                logging.debug('vim resultant macro: %s'% newmacro)
+            log.debug('vim resultant macro: %s'% newmacro)
             playString(newmacro,newflags)
 
     def gotResults_abrvPhrase(self, words, fullResults):
@@ -193,6 +200,8 @@ class ThisGrammar(GrammarBase):
         obtained from screen dimension-getScreenSize())-56. when selecting an
         icon to operate on the QuickStart corneriterate from bottom left (row
         1:1) """
+
+        self.nullTitles.append(' '.join(words))
 
         # screen dimensions (excluding taskbar)
         x, y = getScreenSize()
@@ -226,14 +235,8 @@ class ThisGrammar(GrammarBase):
                  winText not in args[1].values():
                     args[1].update({hwnd: winText})
             except:
-                logging.error('cannot retrieve window title')
-#                print [self.nullTitles + args[1].values()]
-##               and args[0] != winText.split():
+                log.error('cannot retrieve window title')
 #               and filter(lambda x: x in args[0], winText.split()):
-                # key on unique handle, not text of window
-#            elif winText:
-#                print("Skipping duplicate handle ({0}) for window \
-#'{1}'".format(str(hwnd),winText))
 
     def gotResults_windowFocus(self, words, fullResults):
         """ Vertical taskbar window titles are spreadstarting from 150 pixels
@@ -272,8 +275,9 @@ class ThisGrammar(GrammarBase):
         # enumerate all top-level windows and send handles to callback
         try:
             wg.EnumWindows(self.callBack_popWin,wins)
+            log.debug('enumerate Windows: %s'% wins[1])
         except:
-            logging.error('cannot enumerate Windows')
+            log.error('cannot enumerate Windows')
 
         # after visible taskbar application windows have been added to
         # dictionary (second element of wins tuple), we can calculate
@@ -284,14 +288,14 @@ class ThisGrammar(GrammarBase):
         # enumerate child windows of visible desktop top-level windows.
         # we want to use the dictionary component of wins and create a map of
         # parent to child Window handles.
-        win_map= {}
-#        for hwin in wins[1].iterkeys():
-        ch_wins= []
-        hwin=wins[1].keys()[0]
-        #hwin=wins[1][wins[1].keys()[0]]
-        #print wg.GetWindowRect(hwin)
-        #wg.EnumChildWindows(hwin,self.callBack_popChWin,ch_wins)
-        win_map[hwin]=ch_wins
+        #/win_map= {}
+#       #/ for hwin in wins[1].iterkeys():
+        #/ch_wins= []
+        #/hwin=wins[1].keys()[0]
+        #/#hwin=wins[1][wins[1].keys()[0]]
+        #/#print wg.GetWindowRect(hwin)
+        #/#wg.EnumChildWindows(hwin,self.callBack_popChWin,ch_wins)
+        #/win_map[hwin]=ch_wins
         if words[4:5]:
             # get desired index "from bottom" (negative index)
             from_bottom_modifier = int(words[ repeat_modifier_offset])
@@ -300,7 +304,7 @@ class ThisGrammar(GrammarBase):
         else:
             # get the index of window title required, add x vertical offsets
             # to get right vertical coordinate(0-based)
-            relative_offset = int(words[repeat_modifier_offset])
+            relative_offset = int(words[repeat_modifier_offset]) - 1
         if 0 > relative_offset or relative_offset >= total_windows:
             print('Specified taskbar index out of range. '
                   '{0} window titles listed.'.format(total_windows))
@@ -309,7 +313,8 @@ class ThisGrammar(GrammarBase):
         event = self.kmap['leftclick']
         # move mouse to 00 first then separate mouse movement from click events
         # this seems to avoid occasional click failure
-        natlink.playEvents([(wm_mousemove, 0,0),(wm_mousemove, x, y)])
+        natlink.playEvents([(wm_mousemove, x, y),])
+        #natlink.playEvents([(wm_mousemove, 0,0),(wm_mousemove, x, y)])
         natlink.playEvents([(event, x, y), (event + 1, x, y)])
 
     def gotResults_repeatKey(self, words, fullResults):

@@ -70,8 +70,8 @@ class ThisGrammar(GrammarBase, AppWindow):
          'cancel': ['three', 'five', 'eight'],
          'personal hotspot toggle': [],
          'home': [],
-         'end': ['seven', 'nine'],
-         'answer': ['nine', 'seven'],
+         'end': ['seven', 'nine', 'two'],
+         'answer': ['nine', 'seven', 'two'],
          'call': ['seven', 'five', 'eight'],
          'messages': ['one', 'five', 'eight'],
          'settings': ['seven', 'two'],
@@ -255,8 +255,14 @@ class ThisGrammar(GrammarBase, AppWindow):
                     recognitionMimic(['go'])
                     self.click('rightclick',appName=appName)
                 elif str(actionKey) == 'personal hotspot toggle':
-                    if app.vert_offset == 0: app.vert_offset = 6
-                    log.info("Toggled vertical offset: %d"% app.vert_offset)
+                    old = app.vert_offset
+                    if old:
+                        app.vert_offset = 0
+                    else:
+                        app.vert_offset = 6
+                    log.info("Toggled vertical offset, before: %d, after: %d"%
+                             (old, app.vert_offset))
+#                              self.appDict[appName].vert_offset))
                 else:
                     newgramList = gramList
                     log.info("Grammer list for action '{0}': {1}".format(
