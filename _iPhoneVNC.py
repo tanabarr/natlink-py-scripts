@@ -171,6 +171,7 @@ class ThisGrammar(GrammarBase, AppWindow):
             # need to find a list of Windows again (to refresh)
         except:
             index = None
+
         if index is not None:
             #log.debug("index of application window: %d" % index)
             hwin = (wins[1].keys())[index]

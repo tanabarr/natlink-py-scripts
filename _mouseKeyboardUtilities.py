@@ -46,7 +46,8 @@ class ThisGrammar(GrammarBase):
     abrvMap = {'norm': 'switch to normal mode', 'spell':
                'switch to spell mode', 'escape': 'press escape',
                'insert': 'press insert','hash': 'press hash',
-               'sleep': 'go to sleep',
+               'sleep': 'go to sleep','window left': 'press control left',
+               'window right': 'press control right',
                 }
 
     # playstring function of nat link uses format:
@@ -55,6 +56,10 @@ class ThisGrammar(GrammarBase):
     kbMacros = {# Global commands
                 'downshift': ('{down}',0x01), 'rightshift': ('{right}',0x01),
                 'leftshift': ('{left}',0x01), 'upshift': ('{up}',0x01),
+                'word up': ('{ctrl+up}',0x00),
+                'word down': ('{ctrl+down}',0x00),
+                'word left': ('{ctrl+left}',0x00),
+                'word right': ('{ctrl+right}',0x00),
                 #'select': ('{ctrl+shift}',0x00),#c-s-click requires playevents
                 # Generic application commands
                 'back tab': ('{shift+tab}',0x00),
@@ -166,7 +171,7 @@ class ThisGrammar(GrammarBase):
         <androidSC> exported =  show coordinates and screen size;
         <abrvPhrase> exported = ({1}) [mode];
         <kbMacro> exported = ({0});
-        <kbMacroPrint> exported = show macros;
+        <kbMacroPrint> exported = show macros [(vim|screen)];
         <reloadEverything> exported = reload everything;
     """.format(' | '.join(kbMacros.keys()),'|'.join(abrvMap.keys()),
                '|'.join(kmap.keys()),
@@ -174,14 +179,26 @@ class ThisGrammar(GrammarBase):
                 str(range(20)).strip('[]').replace(', ','|'),
                 str(range(20,50,10)).strip('[]').replace(', ','|'))
 
+    msgPy = 'Messages from Python Macros'
     def gotResults_reloadEverything(self, words, fullResults):
         # todo: bring window to front
-        #[log.info(k) for k in self.kbMacros.keys()]
-        pass
+        #[log.info(k) for k in self.kbMacros.keys)]
+        self.winDiscovery(words, self.msgPy)
+        playString('{alt}{down}',0)
+        #playString('{down}',0)
+        #playString('{enter}',0)
 
     def gotResults_kbMacroPrint(self, words, fullResults):
         # todo: bring window to front
-        [log.info(k) for k in self.kbMacros.keys()]
+        for k in sorted(self.kbMacros):
+            try:
+                if not k.startswith(words[2]):
+                    continue
+            except:
+                pass
+            log.info(k) #, v.string)
+            #[log.info(k) for k in self.kbMacros.keys().sort()]
+        self.winDiscovery(words, self.msgPy)
 
     def gotResults_kbMacro(self, words, fullResults):
         lenWords = len(words)
@@ -354,46 +371,17 @@ class ThisGrammar(GrammarBase):
         print 'Entire recognition result: ' + str(fullResults)
         print 'Partial recognition result: ' + str(words)
 
-    #def winDiscovery(self, words, appName=None):
-    #    # argument to pass to callback contains words used in voice command
-    #    # (this is also a recognised top-level window?) And title of window
-    #    # to find (optional). Return tuple (handle of appName, window dict).
-    #    wins = (words, {})
-    #    hwin = None
-    #    # selecting index from bottom window title on taskbar
-    #    # enumerate all top-level windows and send handles to callback
-    #    wg.EnumWindows(self.callBack_popWin, wins)
-    #    # after visible taskbar application windows have been added to
-    #    # dictionary (second element of wins tuple), we can calculate
-    #    total_windows = len(wins[1])
-    #    # print('Number of taskbar applications: {0};'.format( total_windows))
-    #    # the function called without selecting window to find, just return
-    #    # window dictionary.
-    #    if not appName:
-    #        return (None, wins[1])
-    #    #log.debug("discover window %s" % appName)
-    #    # trying to find window title of selected application within window
-    #    # dictionary( local application context). Checking that the window
-    #    # exists and it has a supportive local application context.
-    #    try:
-    #        app = self.appDict[str(appName)]
-    #        #log.debug("supported application window: %s" % app.winName)
-    #        index = wins[1].values().index(app.winName)
-    #        # need to find a list of Windows again (to refresh)
-    #    except:
-    #        index = None
-
-    #    if index is not None:
-    #        #log.debug("index of application window: %d" % index)
-    #        hwin = (wins[1].keys())[index]
-    #        log.debug(
-    #            "Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
-    #        app.winHandle = hwin
-    #        wg.SetForegroundWindow(hwin)
-    #        # print wg.GetWindowRect(hwin)
-    #        app.winRect = wg.GetWindowRect(hwin)
-    #        # print str(hwin)
-    #        return (str(hwin), wins[1])
+    def winDiscovery(self, words, winName=None):
+        wins = (words, {})
+        hwin = None
+        wg.EnumWindows(self.callBack_popWin, wins)
+        try:
+            # reverse lookup
+            index = wins[1].values().index(winName)
+            hwin = (wins[1].keys())[index]
+            wg.SetForegroundWindow(hwin)
+        except:
+            index = None
 
     def initialize(self):
         self.load(self.gramSpec)
