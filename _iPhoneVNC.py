@@ -50,7 +50,7 @@ class ThisGrammar(GrammarBase, AppWindow):
     appSelectionStr = None
 
     # Todo:
-    def selectEntry(self, num_entries, offset_index, select_index):
+    def selectEntry(self, num_entries = 13, offset_index = 2, select_index = 1):
         """ Gives coordinates of an entry in a list on the iPhone. Receives the
         number of entries in the list (actually how many entries, given the
         size on the screen, would fit into the screen dimensions), the offset
@@ -58,8 +58,9 @@ class ThisGrammar(GrammarBase, AppWindow):
         above the first usable entry, give the index of the first usable entry)
         and the index of the desired entry. """
         ## TODO ##
-        x,y = getWindowSize()
-        #res = setCursorPos()
+        x,y = wg.getWindowSize()
+        log.debug('window size: %d,%d'% (x,y))
+        #s = setCursorPos()
         return
 
     # Todo: embed this list of strings within grammar to save space
@@ -91,6 +92,7 @@ class ThisGrammar(GrammarBase, AppWindow):
          'view missed': ['two', 'six'],
          # contacts context
          'search text': ['two','eight','two'],
+         'select entry': [],
          'first number': ['five','two'],
          })
     ## Note: recognition seems to be dependent on the numbers being spelt out in
@@ -127,7 +129,6 @@ class ThisGrammar(GrammarBase, AppWindow):
                 args[1].update({hwin: winText})
 
     def gotResults_iphonetap(self, words, fullResults):
-
         appName = 'iphoneWin'
         retries = 3
         for i in xrange(retries):
@@ -246,6 +247,8 @@ class ThisGrammar(GrammarBase, AppWindow):
         app = self.appDict[str(appName)]
         gramList = newgramList = []
         if str(actionKey) in app.mimicCmds:
+            if str(actionKey).startswith("select"):
+                self.selectEntry()
             recognitionMimic(['mouse', 'window'])
             gramList = app.mimicCmds[actionKey]
             # we want to get out of grid mode aftermouse positioning

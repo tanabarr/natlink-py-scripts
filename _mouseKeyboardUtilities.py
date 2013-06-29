@@ -85,7 +85,7 @@ class ThisGrammar(GrammarBase):
                 'vim line comment': ('i#{esc}il{enter}',0),
                 'vim define': ('i#{esc}id{space}',0),
                 'vim include': ('i#{esc}ii{space}',0),
-                'vim equals': ('i = ',0),
+                'vim equals': ('i{right} = ',0),
                 # vim commands
                 'vim format': ('Q',0x00), 'vim undo': ('u',0x00),
                 'vim redo': ('{ctrl+r}',0x00), 'vim next': (':bn',0x00),
@@ -185,7 +185,7 @@ class ThisGrammar(GrammarBase):
         #[log.info(k) for k in self.kbMacros.keys)]
         self.winDiscovery(words, self.msgPy)
         playString('{alt}{down}',0)
-        #playString('{down}',0)
+        # seems to close unexpectedlywhen issuing the following
         #playString('{enter}',0)
 
     def gotResults_kbMacroPrint(self, words, fullResults):
@@ -302,7 +302,7 @@ class ThisGrammar(GrammarBase):
         # number of pixels between left side of taskbar and first column of icons
         col_initial = 14
         # separation between subsequent rows
-        row_sep = 25 #32
+        row_sep = 23 #32
         # coordinate calculated, vertical offset is from top, horizontal offset
         # from the left edge of the taskbar (maximum horizontal value of the
         # screen visible size (which excludes taskbar)) calculated earlier.
