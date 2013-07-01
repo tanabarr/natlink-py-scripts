@@ -95,7 +95,9 @@ class ThisGrammar(GrammarBase):
                 'vim previous': (':bp',0x00), 'vim save': (':w',0x00),
                 'vim close': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
                 'vim update': (':!ctags -a .',0x01),
-                'vim last change': ('g,',0x00),
+                'vim list changes': (':changes',0),
+                'vim last change': ('g;',0x00),
+                'vim next change': ('g,',0x00),
                 'vim return': ("''",0x00),
                 'vim matching': ('%',0x00),
                 'vim undo jump': ('``',0x00),
@@ -112,7 +114,8 @@ class ThisGrammar(GrammarBase):
                 'vim goto mark': ("'zi",0),
                 'vim scroll to top': ('zt',0),
                 'vim scroll to bottom': ('zb',0),
-                'vim edit another': (':edit ',0xff),
+                'vim edit another': (':e ',0xff),
+                'vim file browser': (':e.',0),
                 'vim folds': ('{ctrl+f}',0x00),
                 'vim window up': ('{ctrl+k}',0x00),
                 'vim window down': ('{ctrl+j}',0x00),
@@ -298,7 +301,7 @@ class ThisGrammar(GrammarBase):
         # screen dimensions (excluding taskbar)
         x, y = getScreenSize()
         # number of pixels between top of screen and top row of taskbar icons
-        row_initial = 30 #75
+        row_initial = 35 #75
         # number of pixels between left side of taskbar and first column of icons
         col_initial = 14
         # separation between subsequent rows
