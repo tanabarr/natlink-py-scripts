@@ -181,7 +181,7 @@ class ThisGrammar(GrammarBase, AppWindow):
             app.winHandle = hwin
             wg.SetForegroundWindow(hwin)
             # print wg.GetWindowRect(hwin)
-            app.winRect = wg.GetWindowRect(hwin)
+            #app.winRect = wg.GetWindowRect(hwin)
             # print str(hwin)
             return (str(hwin), wins[1])
         else:

@@ -39,7 +39,21 @@ class MacroObj():
 #                pass
 #
 
+# Windows GUI\ parameters
+QS_ROW_INITIAL =56
+# number of pixels between left side of taskbar and first column of icons
+QS_COL_INITIAL =14
+# separation between subsequent QuickStart rows andcolumns
+QS_COL_ROW_SEP =25
+# number of pixels between top of screen and top row of taskbar icons
+TB_ROW_INITIAL =35 #75
+# number of pixels between left side of taskbar and first column of icons
+TB_COL_INITIAL =13
+# separation between subsequent rows
+TB_ROW_SEP =24 #32
+
 class ThisGrammar(GrammarBase):
+
 
     # Macros can be repeated with recognitionmimic function which takes list of
     # words as parameter
@@ -249,11 +263,11 @@ class ThisGrammar(GrammarBase):
         # screen dimensions (excluding taskbar)
         x, y = getScreenSize()
         # number of pixels between bottom of screen and bottom row of QuickStart icons
-        row_initial = 56
+        row_initial = QS_ROW_INITIAL #56g
         # number of pixels between left side of taskbar and first column of icons
-        col_initial = 14
+        col_initial = QS_COL_INITIAL #14
         # separation between subsequent QuickStart rows andcolumns
-        col_sep = row_sep = 25
+        col_sep = row_sep = QS_COL_ROW_SEP #25
         # coordinate calculated using row and column numbers ofpress QuickStart icon
         x, y = x + col_initial, y - row_initial
         x, y = x + (col_sep * (int(words[5]) - 1)), y - (row_sep * (int(words[3]) - 1))
@@ -301,11 +315,11 @@ class ThisGrammar(GrammarBase):
         # screen dimensions (excluding taskbar)
         x, y = getScreenSize()
         # number of pixels between top of screen and top row of taskbar icons
-        row_initial = 35 #75
+        row_initial = TB_ROW_INITIAL #35 #75
         # number of pixels between left side of taskbar and first column of icons
-        col_initial = 14
+        col_initial = TB_COL_INITIAL #14
         # separation between subsequent rows
-        row_sep = 23 #32
+        row_sep = TB_ROW_SEP #23 #32
         # coordinate calculated, vertical offset is from top, horizontal offset
         # from the left edge of the taskbar (maximum horizontal value of the
         # screen visible size (which excludes taskbar)) calculated earlier.
