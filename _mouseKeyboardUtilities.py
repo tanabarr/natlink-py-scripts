@@ -89,6 +89,7 @@ class ThisGrammar(GrammarBase):
                 'bookmark': ('b',0x04),
                 'tools': ('e',0x02),
                 # Shell related commands
+                'double backslash': ('\\\\',0),
                 'close prompt': ('{space}c',0x02),# 'prompt 'closes command prompt
                 'bash history': ('r',0x04),
                 # c-style programming abbreviations

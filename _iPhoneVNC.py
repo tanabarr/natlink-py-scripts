@@ -50,7 +50,7 @@ class ThisGrammar(GrammarBase, AppWindow):
     appSelectionStr = None
 
     # Todo:
-    def selectEntry(self, num_entries = 13, offset_index = 2, select_index = 1):
+    def selectEntry(self, appName = "iphoneWin", num_entries = 13, offset_index = 2, select_index = 1):
         """ Gives coordinates of an entry in a list on the iPhone. Receives the
         number of entries in the list (actually how many entries, given the
         size on the screen, would fit into the screen dimensions), the offset
@@ -58,8 +58,10 @@ class ThisGrammar(GrammarBase, AppWindow):
         above the first usable entry, give the index of the first usable entry)
         and the index of the desired entry. """
         ## TODO ##
-        x,y = wg.getWindowSize()
-        log.debug('window size: %d,%d'% (x,y))
+        hwin = self.appDict[appName].winHandle
+        if hwin:
+            x,y,x1,y2 = wg.GetWindowRect(hwin)
+            log.debug('window Rect: %d,%d,%d,%d'% (x,y,x1,y2))
         #s = setCursorPos()
         return
 
@@ -84,7 +86,8 @@ class ThisGrammar(GrammarBase, AppWindow):
          'keypad': ['nine', 'seven'],
          # messages context
          'new message': ['three', 'six'],
-         'send message': ['six', 'eight'],
+         'send message middle': ['six', 'eight'],
+         'send message bottom': ['nine', 'eight'],
          'message text middle': ['five', 'eight'],
          'message text bottom': ['eight', 'eight'], #five', 'eight'],
          # recent context
@@ -94,6 +97,8 @@ class ThisGrammar(GrammarBase, AppWindow):
          'search text': ['two','eight','two'],
          'select entry': [],
          'first number': ['five','two'],
+         # keypad context
+         'keypad call': ['eight',],
          })
     ## Note: recognition seems to be dependent on the numbers being spelt out in
     # words. Button location macros/strings should be persisted in file or
@@ -179,7 +184,8 @@ class ThisGrammar(GrammarBase, AppWindow):
             log.debug(
                 "Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
             app.winHandle = hwin
-            wg.SetForegroundWindow(hwin)
+            wg.BringWindowToTop(int(hwin))
+            wg.SetForegroundWindow(int(hwin))
             # print wg.GetWindowRect(hwin)
             #app.winRect = wg.GetWindowRect(hwin)
             # print str(hwin)
@@ -248,7 +254,7 @@ class ThisGrammar(GrammarBase, AppWindow):
         gramList = newgramList = []
         if str(actionKey) in app.mimicCmds:
             if str(actionKey).startswith("select"):
-                self.selectEntry()
+                self.selectEntry(appName=appName)
             recognitionMimic(['mouse', 'window'])
             gramList = app.mimicCmds[actionKey]
             # we want to get out of grid mode aftermouse positioning
