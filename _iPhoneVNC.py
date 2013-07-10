@@ -49,21 +49,6 @@ class ThisGrammar(GrammarBase, AppWindow):
     #')'
     appSelectionStr = None
 
-    # Todo:
-    def selectEntry(self, appName = "iphoneWin", num_entries = 13, offset_index = 2, select_index = 1):
-        """ Gives coordinates of an entry in a list on the iPhone. Receives the
-        number of entries in the list (actually how many entries, given the
-        size on the screen, would fit into the screen dimensions), the offset
-        index of the first usable entry from top (how many entries Could fit
-        above the first usable entry, give the index of the first usable entry)
-        and the index of the desired entry. """
-        ## TODO ##
-        hwin = self.appDict[appName].winHandle
-        if hwin:
-            x,y,x1,y2 = wg.GetWindowRect(hwin)
-            log.debug('window Rect: %d,%d,%d,%d'% (x,y,x1,y2))
-        #s = setCursorPos()
-        return
 
     # Todo: embed this list of strings within grammar to save space
     # list of android screencast buttons
@@ -107,19 +92,18 @@ class ThisGrammar(GrammarBase, AppWindow):
     #white circle, for example device >>  lock screen long press can be used to
     #turn off (needs slide motion macro as well)
 
-    # log.debug(appDict["iphoneWin"].mimicCmds) #iphoneCmdDict)
     # List of buttons
     appButtonStr = '|'.join(appDict["iphoneWin"].mimicCmds.keys())
 
     gramSpec = """
-        <winclick> exported = click ({0}) ({1});
+        <iphoneselect> exported = iphone select entry ({0});
         <iphonetap> exported = iphone ({1});
-    """.format(appSelectionStr, appButtonStr)
-    #print gramSpec
+    """.format(str(range(20)).strip('[]').replace(', ','|'),appButtonStr)
 
     nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
                   'VDct Notifier Window', 'Program Manager',
                   'Spelling Window', 'Start']
+
 
     def callBack_popWin(self, hwin, args):
         """ this callback function is called with handle of each top-level
@@ -143,11 +127,37 @@ class ThisGrammar(GrammarBase, AppWindow):
                 #log.debug(words)
                 # log.debug(self.appDict[appName].mimicCmds[words[2]],'tapRelative')
                 # supplied the key of the intended window action
-                self.winAction(words[1:], appName) #, 'tapRelative')
-                return 0
+                return self.winAction(words[1:], appName) #, 'tapRelative')
             else:
                 log.debug("iphone window not found")
         log.info('could not connect with phone ')
+
+    def gotResults_iphoneselect(self, words, fullResults):
+        """ Gives coordinates of an entry in a list on the iPhone. Receives the
+        number of entries in the list (actually how many entries, given the
+        size on the screen, would fit into the screen dimensions), the offset
+        index of the first usable entry from top (how many entries Could fit
+        above the first usable entry, give the index of the first usable entry)
+        and the index of the desired entry. """
+        cmdwords= words[:3]
+        self.gotResults_iphonetap(cmdwords, fullResults)
+        # now target window should be in focus and ready
+        # static variables:
+        appName = "iphoneWin"; num_entries = 13; offset_index = 2; select_index = 1
+        # can use global variables populated by iphonetap
+        hwin = self.appDict[appName].winHandle
+        if hwin:
+            x,y,x1,y2 = wg.GetWindowRect(hwin)
+            log.debug('window Rect: %d,%d,%d,%d'% (x,y,x1,y2))
+            x_ofs = x + (x1 - x)/2
+            y_inc = (y2 - y)/num_entries
+            y_ofs = y2 - (select_index + offset_index)*y_inc
+            self.click('leftclick',x=x_ofs,y=y_ofs,appName=appName)
+            #self.click(appName=
+            #recognitionMimic(['mouse', 'window'])
+            #recognitionMimic(['go'])
+        #s = setCursorPos()
+        return
 
     def winDiscovery(self, words, appName=None):
         # argument to pass to callback contains words used in voice command
@@ -223,7 +233,6 @@ class ThisGrammar(GrammarBase, AppWindow):
         # increment from left button up event which produces no action
         # then when incremented, performs the double-click)
         # if coordinates are not supplied, just click
-        #log.debug(dir(event))
         if getattr(event, 'conjugate'):
             if not (x or y):
                 x, y = getCursorPos()
@@ -248,46 +257,38 @@ class ThisGrammar(GrammarBase, AppWindow):
         # do with speed ofplayback etc. Grammar not always recognised as a
         # command.
         playString('{space}', 0x00)
-        # todo: how to reset state machine, start from home screen without
-        # feedback?
         app = self.appDict[str(appName)]
-        gramList = newgramList = []
+        gramList = []
         if str(actionKey) in app.mimicCmds:
-            if str(actionKey).startswith("select"):
-                self.selectEntry(appName=appName)
-            recognitionMimic(['mouse', 'window'])
-            gramList = app.mimicCmds[actionKey]
             # we want to get out of grid mode aftermouse positioning
-            if gramList is not None:
-                # remember empty list is not evaluated as "None"
-                if str(actionKey) == 'home':
-                    # special case
-                    #recognitionMimic(['mouse', 'right', 'click'])
-                    recognitionMimic(['go'])
-                    self.click('rightclick',appName=appName)
-                elif str(actionKey) == 'personal hotspot toggle':
-                    old = app.vert_offset
-                    if old:
-                        app.vert_offset = 0
-                    else:
-                        app.vert_offset = 6
-                    log.info("Toggled vertical offset, before: %d, after: %d"%
-                             (old, app.vert_offset))
-#                              self.appDict[appName].vert_offset))
+            # special cases first.
+            if str(actionKey) == 'home':
+                recognitionMimic(['mouse', 'window'])
+                recognitionMimic(['go'])
+                self.click('rightclick',appName=appName)
+            elif str(actionKey) == 'personal hotspot toggle':
+                old = app.vert_offset
+                if old:
+                    app.vert_offset = 0
                 else:
-                    newgramList = gramList
-                    log.info("Grammer list for action '{0}': {1}".format(
-                        actionKey, newgramList))
-                    recognitionMimic(newgramList)
-                    recognitionMimic(['go'])
-                    #time.sleep(1)
-                    #recognitionMimic(['mouse', 'click'])
-                    self.click('leftclick',appName=appName)
+                    app.vert_offset = 6
+                log.info("Toggled vertical offset, before: %d, after: %d"%
+                            (old, app.vert_offset))
+            elif str(actionKey).startswith("select"):
+                pass # function continued in its own handler
+                #self.selectEntry(appName=appName)
             else:
-                log.error('grammar list missing')
+                recognitionMimic(['mouse', 'window'])
+                gramList = app.mimicCmds[actionKey]
+                log.info("Grammer list for action '{0}': {1}".format(
+                    actionKey, gramList))
+                recognitionMimic(gramList)
+                recognitionMimic(['go'])
+                self.click('leftclick',appName=appName)
+            return 0
         else:
             log.error('unknown actionKey')
-
+            return 1
     def initialize(self):
         self.load(self.gramSpec)
         self.activateAll()
