@@ -81,6 +81,7 @@ class ThisGrammar(GrammarBase, AppWindow):
          # contacts context
          'search text': ['two','eight','two'],
          'select entry': [],
+         'show': [],
          'first number': ['five','two'],
          # keypad context
          'keypad call': ['eight',],
@@ -143,16 +144,20 @@ class ThisGrammar(GrammarBase, AppWindow):
         self.gotResults_iphonetap(cmdwords, fullResults)
         # now target window should be in focus and ready
         # static variables:
-        appName = "iphoneWin"; num_entries = 13; offset_index = 2; select_index = 1
+        appName = "iphoneWin"; num_entries = 14; offset_index = 3; select_int = 1
+        select_int=(int(words[3]))
         # can use global variables populated by iphonetap
         hwin = self.appDict[appName].winHandle
         if hwin:
-            x,y,x1,y2 = wg.GetWindowRect(hwin)
-            log.debug('window Rect: %d,%d,%d,%d'% (x,y,x1,y2))
+            x,y,x1,y1 = wg.GetWindowRect(hwin)
+            log.debug('window Rect: %d,%d,%d,%d'% (x,y,x1,y1))
             x_ofs = x + (x1 - x)/2
-            y_inc = (y2 - y)/num_entries
-            y_ofs = y2 - (select_index + offset_index)*y_inc
-            self.click('leftclick',x=x_ofs,y=y_ofs,appName=appName)
+            y_inc = (y1 - y)/num_entries
+            y_ofs = y + y_inc/2 + (select_int + offset_index - 1)*y_inc
+            log.debug('horizontal: %d, vertical: %d, vertical increments: %d'%
+                      (x_ofs,y_ofs,y_inc))
+            if (select_int + offset_index - num_entries - 1) <= 0:
+                self.click('leftclick',x=x_ofs,y=y_ofs,appName=appName)
             #self.click(appName=
             #recognitionMimic(['mouse', 'window'])
             #recognitionMimic(['go'])
@@ -225,6 +230,10 @@ class ThisGrammar(GrammarBase, AppWindow):
 #        event = self.kmap[key]
 #        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
 
+    def drag(self, scrollDirection='up', startPos=None, dist=None):
+        opDir='down'
+        recognitionMimic(['mouse', 'drag', opDir])
+
     def click(self, clickType='leftclick', x=None, y=None, appName='iphoneWin'):
         # get the equivalent event code of the type of mouse event to perform
         # leftclick, rightclick, rightdouble-click (see kmap)
@@ -276,7 +285,8 @@ class ThisGrammar(GrammarBase, AppWindow):
                             (old, app.vert_offset))
             elif str(actionKey).startswith("select"):
                 pass # function continued in its own handler
-                #self.selectEntry(appName=appName)
+            elif str(actionKey).startswith("show"):
+                pass
             else:
                 recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]

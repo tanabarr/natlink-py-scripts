@@ -137,6 +137,11 @@ class ThisGrammar(GrammarBase):
                 'vim window left': ('{ctrl+h}',0x00),
                 'vim window right': ('{ctrl+l}',0x00),
                 'vim split vertical': (':vsp',0x00),
+                'vim replace': ('R',0x20000),
+                'vim make': (':make',0x00),
+                'vim next error': (':cn',0x00),
+                'vim previous error': (':cp',0x00),
+                'vim list errors': (':clist',0x00),
                 #screen commands
                 'attach screen ': ('screen -R{enter}',0x20000),
                 'attach screen existing': ('screen -x{enter}',0x20000),
