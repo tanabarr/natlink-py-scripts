@@ -88,6 +88,9 @@ class ThisGrammar(GrammarBase):
                 'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
                 'bookmark': ('b',0x04),
                 'tools': ('e',0x02),
+                # Foxit pdf reader
+                'reading mode': ('{ctrl+H}',0x00),
+                'previous page': ('{ctrl+pagedown}',0x00),
                 # Shell related commands
                 'double backslash': ('\\\\',0),
                 'close prompt': ('{space}c',0x02),# 'prompt 'closes command prompt

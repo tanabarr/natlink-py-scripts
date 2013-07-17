@@ -58,6 +58,7 @@ class ThisGrammar(GrammarBase, AppWindow):
         {'back': ['one', 'five', 'eight'],
          'cancel': ['three', 'five', 'eight'],
          'personal hotspot toggle': [],
+         'show': [],
          'home': [],
          'end': ['seven', 'nine', 'two'],
          'answer': ['nine', 'seven', 'two'],
@@ -65,6 +66,11 @@ class ThisGrammar(GrammarBase, AppWindow):
          'messages': ['one', 'five', 'eight'],
          'settings': ['seven', 'two'],
          'message ok': ['five', 'eight'],
+         'dismiss': ['five', 'eight'],
+         'bluetooth on': ['three', 'eight'],
+         # drag context
+         'drag up': ['eight','two','eight'],
+         'drag down': ['two','eight', 'two'],
          # call context
          'contacts': ['eight', 'eight'],
          'recent': ['seven', 'nine'],
@@ -81,8 +87,8 @@ class ThisGrammar(GrammarBase, AppWindow):
          # contacts context
          'search text': ['two','eight','two'],
          'select entry': [],
-         'show': [],
          'first number': ['five','two'],
+         'delete contact': ['eight',],
          # keypad context
          'keypad call': ['eight',],
          })
@@ -157,11 +163,9 @@ class ThisGrammar(GrammarBase, AppWindow):
             log.debug('horizontal: %d, vertical: %d, vertical increments: %d'%
                       (x_ofs,y_ofs,y_inc))
             if (select_int + offset_index - num_entries - 1) <= 0:
+                # if entering search text,hide keypad
+                playString('{enter}',0)
                 self.click('leftclick',x=x_ofs,y=y_ofs,appName=appName)
-            #self.click(appName=
-            #recognitionMimic(['mouse', 'window'])
-            #recognitionMimic(['go'])
-        #s = setCursorPos()
         return
 
     def winDiscovery(self, words, appName=None):
@@ -230,9 +234,9 @@ class ThisGrammar(GrammarBase, AppWindow):
 #        event = self.kmap[key]
 #        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
 
-    def drag(self, scrollDirection='up', startPos=None, dist=None):
-        opDir='down'
-        recognitionMimic(['mouse', 'drag', opDir])
+    def drag(self, dragDirection='up', startPos=None, dist=None):
+        recognitionMimic(['mouse', 'drag', dragDirection])
+        # let the user stop as normal with voice...
 
     def click(self, clickType='leftclick', x=None, y=None, appName='iphoneWin'):
         # get the equivalent event code of the type of mouse event to perform
@@ -287,6 +291,14 @@ class ThisGrammar(GrammarBase, AppWindow):
                 pass # function continued in its own handler
             elif str(actionKey).startswith("show"):
                 pass
+            elif str(actionKey).startswith("drag"):
+                recognitionMimic(['mouse', 'window'])
+                gramList = app.mimicCmds[actionKey]
+                log.info("Grammer list for action '{0}': {1}".format(
+                    actionKey, gramList))
+                recognitionMimic(gramList)
+                recognitionMimic(['go'])
+                self.drag(dragDirection=actionKey.split()[1])
             else:
                 recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
