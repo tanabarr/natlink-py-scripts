@@ -21,6 +21,7 @@ class AppWindow():
         self.winRect = rect
         self.winHandle = hwin
         self.vert_offset = 0
+        self.TOGGLE_VOFFSET = 9
         buttons = ['home', 'menu', 'back', 'search', 'call', 'end']
         self.mimicCmds = {}.fromkeys(buttons)
 
@@ -55,8 +56,8 @@ class ThisGrammar(GrammarBase, AppWindow):
     # InitialiseMouseGrid coordination commands
     appDict["iphoneWin"].mimicCmds.update(
     #log.debug(appDict["iphoneWin"].mimicCmds)
-        {'back': ['one', 'five', 'eight'],
-         'cancel': ['three', 'five', 'eight'],
+        {'back': ['one'],
+         'cancel': ['three'],
          'personal hotspot toggle': [],
          'show': [],
          'home': [],
@@ -280,11 +281,10 @@ class ThisGrammar(GrammarBase, AppWindow):
                 recognitionMimic(['go'])
                 self.click('rightclick',appName=appName)
             elif str(actionKey) == 'personal hotspot toggle':
-                old = app.vert_offset
-                if old:
+                if app.vert_offset:
                     app.vert_offset = 0
                 else:
-                    app.vert_offset = 6
+                    app.vert_offset = app.TOGGLE_VOFFSET
                 log.info("Toggled vertical offset, before: %d, after: %d"%
                             (old, app.vert_offset))
             elif str(actionKey).startswith("select"):
