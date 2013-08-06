@@ -8,17 +8,17 @@
 Command-module for cursor movement and **editing**
 ============================================================================
 
-This module allows the user to control the cursor and 
-efficiently perform multiple text editing actions within a 
+This module allows the user to control the cursor and
+efficiently perform multiple text editing actions within a
 single phrase.
 
 
 Example commands
 ----------------------------------------------------------------------------
 
-*Note the "/" characters in the examples below are simply 
-to help the reader see the different parts of each voice 
-command.  They are not present in the actual command and 
+*Note the "/" characters in the examples below are simply
+to help the reader see the different parts of each voice
+command.  They are not present in the actual command and
 should not be spoken.*
 
 Example: **"up 4 / down 1 page / home / space 2"**
@@ -31,31 +31,31 @@ Example: **"left 7 words / backspace 3 / insert hello Cap world"**
    the text "hello World".
 
 Example: **"home / space 4 / down / 43 times"**
-   This command will insert 4 spaces at the beginning of 
-   of this and the next 42 lines.  The final "43 times" 
+   This command will insert 4 spaces at the beginning of
+   of this and the next 42 lines.  The final "43 times"
    repeats everything in front of it that many times.
 
 
 Discussion of this module
 ----------------------------------------------------------------------------
 
-This command-module creates a powerful voice command for 
-editing and cursor movement.  This command's structure can 
+This command-module creates a powerful voice command for
+editing and cursor movement.  This command's structure can
 be represented by the following simplified language model:
 
  - *CommandRule* -- top-level rule which the user can say
     - *repetition* -- sequence of actions (name = "sequence")
-       - *KeystrokeRule* -- rule that maps a single 
+       - *KeystrokeRule* -- rule that maps a single
          spoken-form to an action
     - *optional* -- optional specification of repeat count
        - *integer* -- repeat count (name = "n")
        - *literal* -- "times"
 
-The top-level command rule has a callback method which is 
-called when this voice command is recognized.  The logic 
+The top-level command rule has a callback method which is
+called when this voice command is recognized.  The logic
 within this callback is very simple:
 
-1. Retrieve the sequence of actions from the element with 
+1. Retrieve the sequence of actions from the element with
    the name "sequence".
 2. Retrieve the repeat count from the element with the name
    "n".
@@ -177,12 +177,12 @@ else:
 #---------------------------------------------------------------------------
 # Here we define the keystroke rule.
 
-# This rule maps spoken-forms to actions.  Some of these 
-#  include special elements like the number with name "n" 
-#  or the dictation with name "text".  This rule is not 
+# This rule maps spoken-forms to actions.  Some of these
+#  include special elements like the number with name "n"
+#  or the dictation with name "text".  This rule is not
 #  exported, but is referenced by other elements later on.
-#  It is derived from MappingRule, so that its "value" when 
-#  processing a recognition will be the right side of the 
+#  It is derived from MappingRule, so that its "value" when
+#  processing a recognition will be the right side of the
 #  mapping: an action.
 # Note that this rule does not execute these actions, it
 #  simply returns them when it's value() method is called.
@@ -202,10 +202,10 @@ class KeystrokeRule(MappingRule):
     defaults = {
                 "n": 1,
                }
-    # Note: when processing a recognition, the *value* of 
-    #  this rule will be an action object from the right side 
-    #  of the mapping given above.  This is default behavior 
-    #  of the MappingRule class' value() method.  It also 
+    # Note: when processing a recognition, the *value* of
+    #  this rule will be an action object from the right side
+    #  of the mapping given above.  This is default behavior
+    #  of the MappingRule class' value() method.  It also
     #  substitutes any "%(...)." within the action spec
     #  with the appropriate spoken values.
 
@@ -236,10 +236,10 @@ sequence = Repetition(single_action, min=1, max=16, name="sequence")
 #---------------------------------------------------------------------------
 # Here we define the top-level rule which the user can say.
 
-# This is the rule that actually handles recognitions. 
-#  When a recognition occurs, it's _process_recognition() 
-#  method will be called.  It receives information about the 
-#  recognition in the "extras" argument: the sequence of 
+# This is the rule that actually handles recognitions.
+#  When a recognition occurs, it's _process_recognition()
+#  method will be called.  It receives information about the
+#  recognition in the "extras" argument: the sequence of
 #  actions and the number of times to repeat them.
 class RepeatRule(CompoundRule):
 
