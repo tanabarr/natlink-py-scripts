@@ -78,9 +78,9 @@ class ThisGrammar(GrammarBase):
                 # Generic application commands
                 'back tab': ('{shift+tab}',0x00),
                 'save': ('s',0x04),
-                'new': ('n',0x04),
-                'zoom in': ('+',0x04),
-                'zoom out': ('-',0x04),
+#                'new': ('n',0x04),
+#                'zoom in': ('+',0x04),
+#                'zoom out': ('-',0x04),
 #                # Google Chrome commands
 #                'next': ('{ctrl+tab}',0x00),
 #                'previous': ('{ctrl+shift+tab}',0x01),

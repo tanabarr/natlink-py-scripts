@@ -63,6 +63,16 @@ class CommandRule(MappingRule):
                 "print setup":              Key("a-f, r"),
                 "reading mode":             Key("c-H"),
                 "previous page":              Key("c-pgdown"),
+                # awkward method of switching between bookmark view and reading
+                # pane. creates new bookmark, delete it,then can navigate to
+                # bookmark.when wanting to return to Reading window, create and/or
+                # focuses start tab. Then switch to tab next (assume is only one tab
+                # open)
+                "bookmark navigation":      Key("c-b, enter, del"),
+                "reading window":           Key("ca-s/20:2/20"),
+                'next': Key("c-tab"),
+                'previous': Key("cs-tab"),
+                'close': Key('c-w'),
                }
     extras   = [
                 IntegerRef("n", 1, 10),
@@ -77,7 +87,7 @@ class CommandRule(MappingRule):
 #---------------------------------------------------------------------------
 # Create and load this module's grammar.
 
-context = AppContext(executable="foxitr")
+context = AppContext(executable="Foxit Reader")
 grammar = Grammar("foxit reader", context=context)
 grammar.add_rule(CommandRule())
 grammar.load()

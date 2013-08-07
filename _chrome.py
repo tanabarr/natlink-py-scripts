@@ -52,6 +52,10 @@ example_rule = MappingRule(
     name="example",    # The name of the rule.
     mapping={          # The mapping dict: spec -> action.
                 # Google Chrome commands
+                "zoom in":            Key("c-plus"),
+                "zoom out":           Key("c-minus"),
+                'new': Key("c-t"),
+                'new window': Key("c-n"),
                 'next': Key("c-tab"),
                 'previous': Key("cs-tab"),
                 'private': Key("a-e, i/20"),
