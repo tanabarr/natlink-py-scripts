@@ -183,6 +183,7 @@ class GoToFolderRule(CompoundRule):
     extras = [DictListRef("folder", grammar.folders)]
 
     def _process_recognition(self, node, extras):
+        self._log.warning("**%s",grammar.folders.keys())
         folder = extras["folder"]
 
         # Get the currently active explorer.

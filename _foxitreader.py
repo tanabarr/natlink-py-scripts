@@ -57,7 +57,7 @@ class CommandRule(MappingRule):
            	                                 + Key("f3"),
                 "find next":                Key("f3"),
 
-                "[go to] page <int>":       Key("cs-n") + Text("%(int)d\n"),
+                "[go to] page <int>":       Key("c-g") + Text("%(int)d\n"),
 
                 "print file":               Key("c-p"),
                 "print setup":              Key("a-f, r"),
@@ -70,9 +70,10 @@ class CommandRule(MappingRule):
                 # open)
                 "bookmark navigation":      Key("c-b, enter, del"),
                 "reading window":           Key("ca-s/20:2/20"),
-                'next': Key("c-tab"),
-                'previous': Key("cs-tab"),
-                'close': Key('c-w'),
+                "close navigation window":  Key("f4"),
+                'next':                     Key("c-tab"),
+                'previous':                 Key("cs-tab"),
+                'close':                    Key('c-w'),
                }
     extras   = [
                 IntegerRef("n", 1, 10),

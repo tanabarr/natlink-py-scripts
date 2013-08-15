@@ -43,7 +43,8 @@ cmd.map = {
 
            "apostrophe":                       Key("apostrophe"),
            "asterisk":                         Key("asterisk"),
-           "at":                               Key("at"),
+           "at-sign":                          Key("at"),
+           "hat":                              Key("caret"),
            "colon":                            Key("colon"),
            "comma":                            Key("comma"),
            "dot":                              Key("dot"),
@@ -62,7 +63,7 @@ cmd.map = {
            "space [<n>]":                      release + Key("space:%(n)d"),
            "enter [<n>]":                      release + Key("enter:%(n)d"),
            "escape [<n>]":                     release + Key("escape:%(n)d"),
-           "tab [<n>]":                        Key("tab:%(n)d"),
+           "tab [<n>]":                        release + Key("tab:%(n)d"),
            "delete [<n>]":                     release + Key("del:%(n)d"),
            "delete [<n> | this] (line|lines)": release + Key("home, s-down:%(n)d, del"),
            "backspace [<n>]":                  release + Key("backspace:%(n)d"),

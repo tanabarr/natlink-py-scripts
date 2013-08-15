@@ -57,19 +57,22 @@ class ThisGrammar(GrammarBase):
 
     # Macros can be repeated with recognitionmimic function which takes list of
     # words as parameter
-    abrvMap = {'norm': 'switch to normal mode', 'spell':
+    abrvMap = {'norm': 'switch to normal mode', 'spell mode':
                'switch to spell mode', 'escape': 'press escape',
                'insert': 'press insert', #'hash': 'press hash',
                'sleep': 'go to sleep','window left': 'press control left',
                'window right': 'press control right',
+               'page': 'page down',
                 }
 
     # playstring function of nat link uses format:
     # playstring(<keystring>, modifier flags: <ctrl,alt,shift>(bitwise 3 LSBs)
     # modifier applies to first character in string. More information in 'natlink.txt'
     kbMacros = {# Global commands
-                'downshift': ('{down}',0x01), 'rightshift': ('{right}',0x01),
-                'leftshift': ('{left}',0x01), 'upshift': ('{up}',0x01),
+                'downshift': ('{down}',0x01),
+				'rightshift': ('{right}',0x01),
+                'leftshift': ('{left}',0x01),
+				'upshift': ('{up}',0x01),
                 'word up': ('{ctrl+up}',0x00),
                 'word down': ('{ctrl+down}',0x00),
                 'word left': ('{ctrl+left}',0x00),
@@ -85,7 +88,8 @@ class ThisGrammar(GrammarBase):
 #                'next': ('{ctrl+tab}',0x00),
 #                'previous': ('{ctrl+shift+tab}',0x01),
 #                'private': ('N',0x05),
-#                'close': ('w',0x04), 'flag': ('{alt}aa',0x00),
+#                'close': ('w',0x04),
+				'flag': ('{alt}aa',0x00),
 #                'bookmark': ('b',0x04),
 #                'tools': ('e',0x02),
 #                # Foxit pdf reader
@@ -105,15 +109,19 @@ class ThisGrammar(GrammarBase):
                 'vim include': ('i#{esc}ii{space}',0),
                 'vim equals': ('i{right} = ',0),
                 # vim commands
-                'vim format': ('Q',0x00), 'vim undo': ('u',0x00),
-                'vim redo': ('{ctrl+r}',0x00), 'vim next': (':bn',0x00),
+                'vim format': ('Q',0x00),
+				'vim undo': ('u',0x00),
+                'vim redo': ('{ctrl+r}',0x00),
+				'vim next': (':bn',0x00),
                 'vim remove buffer': (':bd',0x00),
                 'vim list buffers': (':buffers{enter}:b',0x00),
                 'vim previous buffer': (':b#',0x00),
                 'vim start macro': ('qz',0),
                 'vim repeat macro': ('@z',0),
-                'vim previous': (':bp',0x00), 'vim save': (':w',0x00),
-                'vim close': (':q',0x00), 'vim taglist': ('{ctrl+p}',0x00),
+                'vim previous': (':bp',0x00),
+				'vim save': (':w',0x00),
+                'vim close': (':q',0x00),
+				'vim taglist': ('{ctrl+p}',0x00),
                 'vim update': (':!ctags -a .',0x01),
                 'vim list changes': (':changes',0),
                 'vim previous change': ('g;',0x00),
@@ -157,13 +165,19 @@ class ThisGrammar(GrammarBase):
                 'attach screen existing': ('screen -x{enter}',0x20000),
                 'screen scrollback mode': ('[',0x00),
                 'screen scrollback paste': (']',0x00),
-                'screen previous': ('p',0x00), 'screen next': ('n',0x00),
-                'screen help': ('?',0x00), 'screen new': ('c',0x00),
-                'screen detach': ('d',0x00), 'screen list': ('"',0x00),
-                'screen kill': ('k',0x00), 'screen title': ('A',0x00),
+                'screen previous': ('p',0x00),
+				'screen next': ('n',0x00),
+                'screen help': ('?',0x00),
+				'screen new': ('c',0x00),
+                'screen detach': ('d',0x00),
+				'screen list': ('"',0x00),
+                'screen kill': ('k',0x00),
+				'screen title': ('A',0x00),
                 # window split related
-                'screen switch': ('{tab}',0x00), 'screen split': ('S',0x00),
-                'screen vertical': ('|',0x00), 'screen crop': ('Q',0x00),
+                'screen switch': ('{tab}',0x00),
+				'screen split': ('S',0x00),
+                'screen vertical': ('|',0x00),
+				'screen crop': ('Q',0x00),
                 'screen remove': ('X',0x00),
 #                # Windows live mail shortcuts
 #                'live moved to folder': ('{ctrl+shift+v}',0),
