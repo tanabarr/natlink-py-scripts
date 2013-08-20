@@ -11,7 +11,10 @@ from dragonfly import *
 
 targets.mapping = {
    "[my] favorite website": website("http://code.google.com/p/dragonfly"),
-   "my local folder":       folder("C:\\"),
+   "my local folder":       folder(r"C:\\"),
+    "vnc client":           open(r"C:\Program Files (x86)\TightVNC\vncviewer.exe"),
+    "win SCP client":           open(r"C:\Program Files (x86)\WinSCP3\WinSCP3.exe"),
+#todo: sash entries
 }
 
 
