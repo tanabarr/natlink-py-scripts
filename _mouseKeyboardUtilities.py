@@ -58,9 +58,11 @@ class ThisGrammar(GrammarBase):
     # Macros can be repeated with recognitionmimic function which takes list of
     # words as parameter
     abrvMap = {'norm': 'switch to normal mode', 'spell mode':
-               'switch to spell mode', 'escape': 'press escape',
+               'switch to spell mode',
+               'escape': 'press escape',
                'insert': 'press insert', #'hash': 'press hash',
-               'sleep': 'go to sleep','window left': 'press control left',
+               'sleep': 'go to sleep',
+               'window left': 'press control left',
                'window right': 'press control right',
                'page': 'page down',
                 }
@@ -130,6 +132,7 @@ class ThisGrammar(GrammarBase):
                 'vim matching': ('%',0x00),
                 'vim undo jump': ('``',0x00),
                 'vim insert space': ('i{space}{esc}',0),
+                'vim insert line break': ('i{enter}',0),
                 'vim hash': ('i#{esc}',0),
                 'vim insert blank line next': ('o{up}',0),
                 'vim insert blank line previous': ('O{down}',0),

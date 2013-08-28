@@ -16,8 +16,8 @@ log.basicConfig(level=log.INFO)
 
 class AppWindow():
 
-    def __init__(self, name, rect=None, hwin=None):
-        self.winName = name
+    def __init__(self, names, rect=None, hwin=None):
+        self.winNames = names
         self.winRect = rect
         self.winHandle = hwin
         self.vert_offset = 0
@@ -44,8 +44,9 @@ class ThisGrammar(GrammarBase, AppWindow):
 
     # dictionary of application objects, preferably read from file
     appDict = {}
-    appDict.update({"iphoneWin": AppWindow("tans-iPhone", None)})
-    appDict.update({"xbmcChromeWin": AppWindow("XBMC - Google Chrome", None)})
+    appDict.update({"iphoneWin": AppWindow(["tans-iPhone",
+                                            "host210.msm.che.vodafone"], None)})
+    appDict.update({"xbmcChromeWin": AppWindow(["XBMC - Google Chrome",], None)})
     # appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\
     #')'
     appSelectionStr = None
@@ -190,13 +191,19 @@ class ThisGrammar(GrammarBase, AppWindow):
         # trying to find window title of selected application within window
         # dictionary( local application context). Checking that the window
         # exists and it has a supportive local application context.
-        try:
-            app = self.appDict[str(appName)]
-            #log.debug("supported application window: %s" % app.winName)
-            index = wins[1].values().index(app.winName)
-            # need to find a list of Windows again (to refresh)
-        except:
-            index = None
+        app = self.appDict[str(appName)]
+        namelist=[]
+        # checking the window names is a list, handle string occurrence
+        if getattr(app.winNames, 'append'):
+            namelist=app.winNames
+        else:
+            namelist.append(app.winNames)
+        for name in namelist:
+            try:
+                index = wins[1].values().index(name)
+                break
+            except:
+                index = None
 
         if index is not None:
             #log.debug("index of application window: %d" % index)
