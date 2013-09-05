@@ -69,7 +69,7 @@ class ThisGrammar(GrammarBase, AppWindow):
          'settings': ['six', 'eight'],
          'message ok': ['five', 'eight'],
          'dismiss': ['five', 'eight'],
-         'bluetooth on': ['three', 'eight'],
+         'bluetooth on': ['three', 'eight', 'two', 'eight'],
          # drag context
          'drag up': ['eight','two','eight'],
          'drag down': ['two','eight', 'two'],
@@ -93,6 +93,20 @@ class ThisGrammar(GrammarBase, AppWindow):
          'delete contact': ['eight',],
          # keypad context
          'keypad call': ['eight',],
+         # in call keypad context
+         'incall keypad': ['five',],
+         'keypad zero': [ 'eight', 'two',],
+         'keypad one': [ 'four', 'three', 'eight',],
+         'keypad two': ['five', 'two', 'eight',],
+         'keypad tree': ['six', 'one', 'eight',],
+         'keypad four': ['four', 'six',],
+         'keypad five': ['five', 'five',],
+         'keypad six': ['six', 'four',],
+         'keypad seven': ['four', 'nine',],
+         'keypad eight': ['five', 'eight',],
+         'keypad nine': ['six', 'seven',],
+         'keypad star': [ 'seven', 'three',],
+         'keypad hash': ['nine', 'one',],
          })
     ## Note: recognition seems to be dependent on the numbers being spelt out in
     # words. Button location macros/strings should be persisted in file or
