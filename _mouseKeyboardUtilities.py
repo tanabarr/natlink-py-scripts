@@ -7,37 +7,10 @@ import natlink
 from natlinkutils import *
 import win32gui as wg
 import logging as log
+import macroutils as mu
 
 log.basicConfig(level=log.DEBUG)
 
-class MacroObj():
-    def __init__(self,string='',flags=0):
-        self.string=string
-        self.flags=flags
-
-## unfinished
-#class FileStore():
-#    def __init__(self,filename='defaultkbm.txt',preDict={},delim="'"):
-#        self.f=open(filename,'a')
-#        self.postDict=preDict
-#        self.readfile()
-#        self.writefile()
-#        return postDict
-#
-#    def readfile(self):
-#        for line in self.f.readlines():
-#            if (len(line) == 3):
-#                gram, macro, flags = line.split("'") #delim)
-#                self.postDict[gram] = MacroObj(macro, flags)
-#
-#    def writefile(self):
-#        for gram, macroobj in self.postDict.iteritems():
-#            try:
-#                self.f.write("'".join([gram, macroobj.string, macroobj.flags]))
-#            except:
-#                #parse object instead of just string values
-#                pass
-#
 
 # Windows GUI\ parameters
 QS_ROW_INITIAL =56
@@ -204,8 +177,15 @@ class ThisGrammar(GrammarBase):
     # we want to be able to reference the macro string as an attribute
     # dictionary comprehension not available pre python 2.7
     for k, v in kbMacros.iteritems():
-        kbMacros[k] = MacroObj(v[0],v[1])
+        kbMacros[k] =mu.MacroObj(v[0],v[1])
 
+    try:
+        fs = mu.FileStore(preDict=kbMacros)
+        kbMacros=fs.postDict
+        #fs.writefile(output_filename='defaults.conf')
+    except:
+        log.debug('error with reading macros from file')
+        pass
     ##result=FileStore()
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input

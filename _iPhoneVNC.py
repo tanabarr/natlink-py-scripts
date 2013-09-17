@@ -67,6 +67,8 @@ class ThisGrammar(GrammarBase, AppWindow):
          'call': ['seven', 'five', 'eight'],
          'messages': ['one', 'five', 'eight'],
          'settings': ['six', 'eight'],
+         'maps': ['five','one', 'two'],
+         'maps search': ['two'],
          'message ok': ['five', 'eight'],
          'dismiss': ['five', 'eight'],
          'bluetooth on': ['three', 'eight', 'two', 'eight'],
