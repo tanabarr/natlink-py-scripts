@@ -8,25 +8,14 @@ from natlinkutils import *
 import win32gui as wg
 import os
 from subprocess import Popen
-import logging as log
+import macroutils as mu
+import logging
 import time
 import wmi
 
-log.basicConfig(level=log.INFO)
+logging.basicConfig(level=logging.INFO)
 
-class AppWindow():
-
-    def __init__(self, names, rect=None, hwin=None):
-        self.winNames = names
-        self.winRect = rect
-        self.winHandle = hwin
-        self.vert_offset = 0
-        self.TOGGLE_VOFFSET = 9
-        buttons = ['home', 'menu', 'back', 'search', 'call', 'end']
-        self.mimicCmds = {}.fromkeys(buttons)
-
-
-class ThisGrammar(GrammarBase, AppWindow):
+class ThisGrammar(GrammarBase):
 
     """ Class uses application window objects to store grid reference of window
     buttons on Windows without "say what you see" Dragon NaturallySpeaking
@@ -42,21 +31,26 @@ class ThisGrammar(GrammarBase, AppWindow):
         'enter': 0x0d, 'backspace': 0x08, 'delete': 0x2e, 'leftclick': 0x201,
         'rightclick': 0x204, 'doubleclick': 0x202}
 
+    nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
+                  'VDct Notifier Window', 'Program Manager',
+                  'Spelling Window', 'Start']
+
     # dictionary of application objects, preferably read from file
     appDict = {}
-    appDict.update({"iphoneWin": AppWindow(["tans-iPhone",
+    appDict.update({"iphoneWin": mu.AppWindow(["tans-iPhone",
                                             "host210.msm.che.vodafone"], None)})
-    appDict.update({"xbmcChromeWin": AppWindow(["XBMC - Google Chrome",], None)})
+    appDict.update({"xbmcChromeWin": mu.AppWindow(["XBMC - Google Chrome",], None)})
     # appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\
     #')'
     appSelectionStr = None
 
+    windows = mu.Windows(appDict=appDict, nullTitles=nullTitles)
 
     # Todo: embed this list of strings within grammar to save space
     # list of android screencast buttons
     # InitialiseMouseGrid coordination commands
-    appDict["iphoneWin"].mimicCmds.update(
-    #log.debug(appDict["iphoneWin"].mimicCmds)
+    windows.appDict["iphoneWin"].mimicCmds.update(
+    #logging.debug(appDict["iphoneWin"].mimicCmds)
         {'back': ['one'],
          'cancel': ['three'],
          'personal hotspot toggle': [],
@@ -125,37 +119,32 @@ class ThisGrammar(GrammarBase, AppWindow):
         <iphonetap> exported = iphone ({1});
     """.format(str(range(20)).strip('[]').replace(', ','|'),appButtonStr)
 
-    nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
-                  'VDct Notifier Window', 'Program Manager',
-                  'Spelling Window', 'Start']
-
-
-    def callBack_popWin(self, hwin, args):
-        """ this callback function is called with handle of each top-level
-        window. Window handles are used to check the of window in question is
-        visible and if so it's title strings checked to see if it is a standard
-        application (e.g. not the start button or natlink voice command itself).
-        Populate dictionary of window title keys to window handle values. """
-        if wg.IsWindowVisible(hwin):
-            winText = wg.GetWindowText(hwin).strip()
-            if winText and winText not in self.nullTitles and\
-               winText not in args[1].values():
-                args[1].update({hwin: winText})
-
     def gotResults_iphonetap(self, words, fullResults):
         appName = 'iphoneWin'
         retries = 3
         for i in xrange(retries):
-            if self.winDiscovery(words, appName)[0]:
-                # we now want to call the window action function with the
-                # "tapRelative"
-                #log.debug(words)
-                # log.debug(self.appDict[appName].mimicCmds[words[2]],'tapRelative')
-                # supplied the key of the intended window action
-                return self.winAction(words[1:], appName) #, 'tapRelative')
+            if mu.Windows().winDiscovery(appName)[0]:
+                # supplied the key of the intended window name
+                return self.winAction(words[1:], appName)
             else:
-                log.debug("iphone window not found")
-        log.info('could not connect with phone ')
+                logging.debug("iphone window not found")
+                # window doesn't exist, might need to start USB tunnel application
+                # as well as vnc
+                if 'itunnel_mux.exe' not in [c.Name for c in wmi.WMI().Win32_Process()]:
+                    itun_p = Popen(["C:\win scripts\iphone usb.bat", "&"])
+                # need to supply executable string (so-can locate the Windows
+                # executable, it's not a Python executable) and then the
+                # configuration file which has the password stored (doesn't seem to
+                # support command line supplied password).
+                # vnc_p=Popen('C:\\Program Files (x86)\\TightVNC\\vncviewer.exe' +\
+                #            ' localhost:5904 -password test')
+                vnc_p = Popen([r'C:\Program Files (x86)\TightVNC\vncviewer.exe',
+                            '-config', r'C:\win scripts\localhost-5904.vnc'])
+                # wait for creation
+                logging.debug("waiting for process creation")
+                time.sleep(2)
+                # window should now exist, discover again
+        logging.info('could not connect with phone ')
 
     def gotResults_iphoneselect(self, words, fullResults):
         """ Gives coordinates of an entry in a list on the iPhone. Receives the
@@ -171,87 +160,20 @@ class ThisGrammar(GrammarBase, AppWindow):
         appName = "iphoneWin"; num_entries = 14; offset_index = 3; select_int = 1
         select_int=(int(words[3]))
         # can use global variables populated by iphonetap
-        hwin = self.appDict[appName].winHandle
+        hwin = windows.appDict[appName].winHandle
         if hwin:
             x,y,x1,y1 = wg.GetWindowRect(hwin)
-            log.debug('window Rect: %d,%d,%d,%d'% (x,y,x1,y1))
+            logging.debug('window Rect: %d,%d,%d,%d'% (x,y,x1,y1))
             x_ofs = x + (x1 - x)/2
             y_inc = (y1 - y)/num_entries
             y_ofs = y + y_inc/2 + (select_int + offset_index - 1)*y_inc
-            log.debug('horizontal: %d, vertical: %d, vertical increments: %d'%
+            logging.debug('horizontal: %d, vertical: %d, vertical increments: %d'%
                       (x_ofs,y_ofs,y_inc))
             if (select_int + offset_index - num_entries - 1) <= 0:
                 # if entering search text,hide keypad
                 playString('{enter}',0)
                 self.click('leftclick',x=x_ofs,y=y_ofs,appName=appName)
         return
-
-    def winDiscovery(self, words, appName=None):
-        # argument to pass to callback contains words used in voice command
-        # (this is also a recognised top-level window?) And title of window
-        # to find (optional). Return tuple (handle of appName, window dict).
-        wins = (words, {})
-        hwin = None
-        # selecting index from bottom window title on taskbar
-        # enumerate all top-level windows and send handles to callback
-        wg.EnumWindows(self.callBack_popWin, wins)
-        # after visible taskbar application windows have been added to
-        # dictionary (second element of wins tuple), we can calculate
-        total_windows = len(wins[1])
-        # print('Number of taskbar applications: {0};'.format( total_windows))
-        # the function called without selecting window to find, just return
-        # window dictionary.
-        if not appName:
-            return (None, wins[1])
-        #log.debug("discover window %s" % appName)
-        # trying to find window title of selected application within window
-        # dictionary( local application context). Checking that the window
-        # exists and it has a supportive local application context.
-        app = self.appDict[str(appName)]
-        namelist=[]
-        # checking the window names is a list, handle string occurrence
-        if getattr(app.winNames, 'append'):
-            namelist=app.winNames
-        else:
-            namelist.append(app.winNames)
-        for name in namelist:
-            try:
-                index = wins[1].values().index(name)
-                break
-            except:
-                index = None
-
-        if index is not None:
-            #log.debug("index of application window: %d" % index)
-            hwin = (wins[1].keys())[index]
-            log.debug(
-                "Name: {0}, Handle: {1}".format(wins[1][hwin], str(hwin)))
-            app.winHandle = hwin
-            wg.BringWindowToTop(int(hwin))
-            wg.SetForegroundWindow(int(hwin))
-            # print wg.GetWindowRect(hwin)
-            #app.winRect = wg.GetWindowRect(hwin)
-            # print str(hwin)
-            return (str(hwin), wins[1])
-        else:
-            # window doesn't exist, might need to start USB tunnel application
-            # as well as vnc
-            if 'itunnel_mux.exe' not in [c.Name for c in wmi.WMI().Win32_Process()]:
-                itun_p = Popen(["C:\win scripts\iphone usb.bat", "&"])
-            # need to supply executable string (so-can locate the Windows
-            # executable, it's not a Python executable) and then the
-            # configuration file which has the password stored (doesn't seem to
-            # support command line supplied password).
-            # vnc_p=Popen('C:\\Program Files (x86)\\TightVNC\\vncviewer.exe' +\
-            #            ' localhost:5904 -password test')
-            vnc_p = Popen([r'C:\Program Files (x86)\TightVNC\vncviewer.exe',
-                           '-config', r'C:\win scripts\localhost-5904.vnc'])
-            # vncwas crashing due to budget dodgy cable
-            # wait for creation
-            log.debug("waiting for process creation")
-            time.sleep(2)
-            # window should now exist, discover again
-            return (False, wins[1])
 
 # use playstring instead
 #    def press(self, key='space'):
@@ -275,12 +197,12 @@ class ThisGrammar(GrammarBase, AppWindow):
                 x, y = getCursorPos()
             # apply vertical offset dependent on presence of "personal hotspot"
             # bar across the top of the screen
-            y += self.appDict[appName].vert_offset
-            log.debug('clicking at: %d, %d'% (x,y))
+            y += windows.appDict[appName].vert_offset
+            logging.debug('clicking at: %d, %d'% (x,y))
             natlink.playEvents(
                 [(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
         else:
-            log.error(' incorrect click look up for the event %s'% str(clickType))
+            logging.error(' incorrect click look up for the event %s'% str(clickType))
             # default to
             recognitionMimic(['mouse', 'click'])
 
@@ -288,13 +210,13 @@ class ThisGrammar(GrammarBase, AppWindow):
         # concatenate actionKey
         if getattr(actionKey, 'insert'):
             actionKey = ' '.join(actionKey)
-            log.debug("action Key of command concatenated: %s"% actionKey)
+            logging.debug("action Key of command concatenated: %s"% actionKey)
         # assuming the correct window is in focus
         # wake. Recognition mimic doesn't seem to be a good model. Something to
         # do with speed ofplayback etc. Grammar not always recognised as a
         # command.
         playString('{space}', 0x00)
-        app = self.appDict[str(appName)]
+        app = windows.appDict[str(appName)]
         gramList = []
         if str(actionKey) in app.mimicCmds:
             # we want to get out of grid mode aftermouse positioning
@@ -308,7 +230,7 @@ class ThisGrammar(GrammarBase, AppWindow):
                     app.vert_offset = 0
                 else:
                     app.vert_offset = app.TOGGLE_VOFFSET
-                log.info("Toggled vertical offset, before: %d, after: %d"%
+                logging.info("Toggled vertical offset, before: %d, after: %d"%
                             (old, app.vert_offset))
             elif str(actionKey).startswith("select"):
                 pass # function continued in its own handler
@@ -317,7 +239,7 @@ class ThisGrammar(GrammarBase, AppWindow):
             elif str(actionKey).startswith("drag"):
                 recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
-                log.info("Grammer list for action '{0}': {1}".format(
+                logging.info("Grammer list for action '{0}': {1}".format(
                     actionKey, gramList))
                 recognitionMimic(gramList)
                 recognitionMimic(['go'])
@@ -325,14 +247,14 @@ class ThisGrammar(GrammarBase, AppWindow):
             else:
                 recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
-                log.info("Grammer list for action '{0}': {1}".format(
+                logging.info("Grammer list for action '{0}': {1}".format(
                     actionKey, gramList))
                 recognitionMimic(gramList)
                 recognitionMimic(['go'])
                 self.click('leftclick',appName=appName)
             return 0
         else:
-            log.error('unknown actionKey')
+            logging.error('unknown actionKey')
             return 1
     def initialize(self):
         self.load(self.gramSpec)

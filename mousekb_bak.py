@@ -6,10 +6,11 @@
 import natlink
 from natlinkutils import *
 import win32gui as wg
-import logging
+import logging as log
 import macroutils as mu
 
-logging.basicConfig(level=logging.DEBUG)
+log.basicConfig(level=log.DEBUG)
+
 
 # Windows GUI\ parameters
 QS_ROW_INITIAL =56
@@ -39,6 +40,149 @@ class ThisGrammar(GrammarBase):
                'page': 'page down',
                 }
 
+#    # playstring function of nat link uses format:
+#    # playstring(<keystring>, modifier flags: <ctrl,alt,shift>(bitwise 3 LSBs)
+#    # modifier applies to first character in string. More information in 'natlink.txt'
+#    kbMacros = {# Global commands
+#                'downshift': ('{down}',0x01),
+#				'rightshift': ('{right}',0x01),
+#                'leftshift': ('{left}',0x01),
+#				'upshift': ('{up}',0x01),
+#                'word up': ('{ctrl+up}',0x00),
+#                'word down': ('{ctrl+down}',0x00),
+#                'word left': ('{ctrl+left}',0x00),
+#                'word right': ('{ctrl+right}',0x00),
+#                #'select': ('{ctrl+shift}',0x00),#c-s-click requires playevents
+#                # Generic application commands
+#                'back tab': ('{shift+tab}',0x00),
+#                'save': ('s',0x04),
+##                'new': ('n',0x04),
+##                'zoom in': ('+',0x04),
+##                'zoom out': ('-',0x04),
+##                # Google Chrome commands
+##                'next': ('{ctrl+tab}',0x00),
+##                'previous': ('{ctrl+shift+tab}',0x01),
+##                'private': ('N',0x05),
+##                'close': ('w',0x04),
+#				'flag': ('{alt}aa',0x00),
+##                'bookmark': ('b',0x04),
+##                'tools': ('e',0x02),
+##                # Foxit pdf reader
+##                'reading mode': ('{ctrl+H}',0x00),
+##                'previous page': ('{ctrl+pagedown}',0x00),
+#                # Shell related commands
+#                'double backslash': ('\\\\',0),
+#                'close prompt': ('{space}c',0x02),# 'prompt 'closes command prompt
+#                'bash history': ('r',0x04),
+#                # c-style programming abbreviations
+#                'vim begin comment': ('i/* ',0),
+#                'vim end comment': ('i */{enter}',0),
+#                'vim begin long comment': ('i#{esc}ib{space}',0),
+#                'vim end long comment': ('i#{esc}ie{enter}',0),
+#                'vim line comment': ('i#{esc}il{enter}',0),
+#                'vim define': ('i#{esc}id{space}',0),
+#                'vim include': ('i#{esc}ii{space}',0),
+#                'vim equals': ('i{right} = ',0),
+#                # vim commands
+#                'vim format': ('Q',0x00),
+#				'vim undo': ('u',0x00),
+#                'vim redo': ('{ctrl+r}',0x00),
+#				'vim next': (':bn',0x00),
+#                'vim remove buffer': (':bd',0x00),
+#                'vim list buffers': (':buffers{enter}:b',0x00),
+#                'vim previous buffer': (':b#',0x00),
+#                'vim start macro': ('qz',0),
+#                'vim repeat macro': ('@z',0),
+#                'vim previous': (':bp',0x00),
+#				'vim save': (':w',0x00),
+#                'vim close': (':q',0x00),
+#				'vim taglist': ('{ctrl+p}',0x00),
+#                'vim update': (':!ctags -a .',0x01),
+#                'vim list changes': (':changes',0),
+#                'vim previous change': ('g;',0x00),
+#                'vim next change': ('g,',0x00),
+#                'vim return': ("''",0x00),
+#                'vim matching': ('%',0x00),
+#                'vim undo jump': ('``',0x00),
+#                'vim insert space': ('i{space}{esc}',0),
+#                'vim insert line break': ('i{enter}',0),
+#                'vim hash': ('i#{esc}',0),
+#                'vim insert blank line next': ('o{up}',0),
+#                'vim insert blank line previous': ('O{down}',0),
+#                'vim previous command': (':{up}',0xff),
+#                'vim copy previous line': (':-1y',0),
+#                'vim copy next line': (':+1y',0),
+#                'vim copy current line': ('yy',0),
+#                'vim remove previous line': (':-1d',0),
+#                'vim remove next line': (':+1d',0),
+#                'vim set mark': ('mz',0),
+#                'vim goto mark': ("'zi",0),
+#                'vim scroll to top': ('zt',0),
+#                'vim scroll to bottom': ('zb',0),
+#                'vim edit another': (':e ',0xff),
+#                'vim file browser': (':e.',0),
+#                'vim folds': ('{ctrl+f}',0x00),
+#                'vim window up': ('{ctrl+k}',0x00),
+#                'vim window down': ('{ctrl+j}',0x00),
+#                'vim window left': ('{ctrl+h}',0x00),
+#                'vim window right': ('{ctrl+l}',0x00),
+#                'vim split vertical': (':vsp',0x00),
+#                'vim replace': ('R',0x20000),
+#                'vim make': (':make',0x00),
+#                'vim next error': (':cn',0x00),
+#                'vim previous error': (':cp',0x00),
+#                'vim list errors': (':clist',0x00),
+#                'vim match bracket': ('%',0x00),
+#                'vim change character case': ('~',0),
+#                'vim beginning previous': ('-',0),
+#                'vim beginning next': ('+',0),
+#                #screen commands
+#                'attach screen ': ('screen -R{enter}',0x20000),
+#                'attach screen existing': ('screen -x{enter}',0x20000),
+#                'screen scrollback mode': ('[',0x00),
+#                'screen scrollback paste': (']',0x00),
+#                'screen previous': ('p',0x00),
+#				'screen next': ('n',0x00),
+#                'screen help': ('?',0x00),
+#				'screen new': ('c',0x00),
+#                'screen detach': ('d',0x00),
+#				'screen list': ('"',0x00),
+#                'screen kill': ('k',0x00),
+#				'screen title': ('A',0x00),
+#                # window split related
+#                'screen switch': ('{tab}',0x00),
+#				'screen split': ('S',0x00),
+#                'screen vertical': ('|',0x00),
+#				'screen crop': ('Q',0x00),
+#                'screen remove': ('X',0x00),
+##                # Windows live mail shortcuts
+##                'live moved to folder': ('{ctrl+shift+v}',0),
+##                'live sort by date': ('{alt}vb{down}{enter}',0),
+##                'live sort by flag': ('{alt}vb' + 6*'{down}' + '{enter}',0),
+##                # todo: fix
+##                'live emails': ('{esc}{tab}',0x100),
+#                }
+## converting from dictionary to dragonfly key syntax
+##    319  s/'/"/g
+##    320  s/(\(.\+"\).*/Key(\1),/gc
+##    321  s/{ctrl+/c-
+##    322  s/-shift/s
+##    323  s/+/-
+##    324  s/}//
+##>   326  history
+#
+#    #kbMacros = {k: MacroObj(v[0],v[1]) for k, v in self.kbMacros.iteritems()}
+#    #kbMacros = dict([(k, MacroObj(v[0],v[1])) for k, v in
+#    #    kbMacros.iteritems()])
+#    # we want to be able to reference the macro string as an attribute
+#    # dictionary comprehension not available pre python 2.7
+#    for k, v in kbMacros.iteritems():
+#        kbMacros[k] =mu.MacroObj(v[0],v[1])
+
+    fs = mu.FileStore() #preDict=kbMacros)
+    kbMacros = fs.postDict
+    fs.writefile() #output_filename='defaults.conf')
+
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
     # VK_SPACE,VK_UP,VK_DOWN,VK_LEFT,VK_RIGHT,VK_RETURN,VK_BACK
@@ -46,17 +190,13 @@ class ThisGrammar(GrammarBase):
             'enter': 0x0d, 'backspace': 0x08, 'delete': 0x2e, 'leftclick': 0x201,
             'rightclick': 0x204, 'doubleclick': 0x202}
 
+    # Todo: embed this list of strings within grammar to save space
+    # list of android screencast buttons
+    buttons = ['home', 'menu', 'back', 'search', 'call', 'endcall']
+
     nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
                   'VDct Notifier Window', 'Program Manager',
                   'Spelling Window', 'Start']
-
-    # window handler
-    windows = mu.Windows(nullTitles=nullTitles)
-
-    # load default macros from file
-    fs = mu.FileStore() #preDict=kbMacros)
-    kbMacros = fs.postDict
-    fs.writefile() #output_filename='output.conf')
 
     gramSpec = """
         <quickStart> exported = QuickStart (left|right|double) row ({3}) column ({3});
@@ -75,9 +215,9 @@ class ThisGrammar(GrammarBase):
 
     msgPy = 'Messages from Python Macros'
     def gotResults_reloadEverything(self, words, fullResults):
-        # bring window to front
-        #[logging.info(k) for k in self.kbMacros.keys)]
-        self.windows.winDiscovery(self.msgPy)
+        # todo: bring window to front
+        #[log.info(k) for k in self.kbMacros.keys)]
+        self.winDiscovery(words, self.msgPy)
         playString('{alt}{down}',0)
         # seems to close unexpectedlywhen issuing the following
         #playString('{enter}',0)
@@ -90,9 +230,9 @@ class ThisGrammar(GrammarBase):
                     continue
             except:
                 pass
-            logging.info(k) #, v.string)
-            #[logging.info(k) for k in self.kbMacros.keys().sort()]
-        self.windows.winDiscovery(self.msgPy)
+            log.info(k) #, v.string)
+            #[log.info(k) for k in self.kbMacros.keys().sort()]
+        self.winDiscovery(words, self.msgPy)
 
     def gotResults_kbMacro(self, words, fullResults):
         lenWords = len(words)
@@ -120,7 +260,7 @@ class ThisGrammar(GrammarBase):
                 if macro.string.startswith(':') and macro.flags != 0xff:
                     newmacro=''.join([str(newmacro),'{enter}'])
                 newmacro = ''.join(['{esc}',str(newmacro)])
-            logging.debug('vim resultant macro: %s'% newmacro)
+            log.debug('vim resultant macro: %s'% newmacro)
             playString(newmacro,newflags)
 
     def gotResults_abrvPhrase(self, words, fullResults):
@@ -135,7 +275,7 @@ class ThisGrammar(GrammarBase):
         icon to operate on the QuickStart corneriterate from bottom left (row
         1:1) """
 
-        self.windows.nullTitles.append(' '.join(words))
+        self.nullTitles.append(' '.join(words))
 
         # screen dimensions (excluding taskbar)
         x, y = getScreenSize()
@@ -156,6 +296,21 @@ class ThisGrammar(GrammarBase):
         # then when incremented, performs the double-click)
         natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
 
+    def callBack_popWin(self, hwnd, args):
+        """ this callback function is called with handle of each top-level
+        window. Window handles are used to check the of window in question is
+        visible and if so it's title strings checked to see if it is a standard
+        application (e.g. not the start button or natlink voice command itself).
+        Populate dictionary of window title keys to window handle values. """
+        if wg.IsWindowVisible(hwnd):
+            try:
+                winText = wg.GetWindowText(hwnd).strip()
+                if winText and winText not in self.nullTitles and\
+                 winText not in args[1].values():
+                    args[1].update({hwnd: winText})
+            except:
+                log.error('cannot retrieve window title')
+#               and filter(lambda x: x in args[0], winText.split()):
 
     def gotResults_windowFocus(self, words, fullResults):
         """ Vertical taskbar window titles are spreadstarting from 150 pixels
@@ -189,31 +344,29 @@ class ThisGrammar(GrammarBase):
         # argument to pass to callback contains words used in voice command
         # (this is also a recognised top-level window?) And dictionary of
         # strings: handles. (Window title: window handle)
+        wins = (words, {})
         # selecting index from bottom window title on taskbar
         # enumerate all top-level windows and send handles to callback
-        wins={}
         try:
-            # Windows dictionary returned assecond element of tuple
-            wins=self.windows.winDiscovery()[1]
-            logging.debug('enumerate Windows: %s'% wins)
+            wg.EnumWindows(self.callBack_popWin,wins)
+            log.debug('enumerate Windows: %s'% wins[1])
         except:
-            logging.error('cannot enumerate Windows')
-            return
+            log.error('cannot enumerate Windows')
 
         # after visible taskbar application windows have been added to
         # dictionary (second element of wins tuple), we can calculate
         # relative offset from last taskbar title.
-        total_windows = len(wins)
+        total_windows = len(wins[1])
         # print('Number of taskbar applications: {0};'.format( total_windows))
-        # print wins.keys()
+        # print wins[1].keys()
         # enumerate child windows of visible desktop top-level windows.
         # we want to use the dictionary component of wins and create a map of
         # parent to child Window handles.
         #/win_map= {}
-#       #/ for hwin in wins.iterkeys():
+#       #/ for hwin in wins[1].iterkeys():
         #/ch_wins= []
-        #/hwin=wins.keys()[0]
-        #/#hwin=wins[wins.keys()[0]]
+        #/hwin=wins[1].keys()[0]
+        #/#hwin=wins[1][wins[1].keys()[0]]
         #/#print wg.GetWindowRect(hwin)
         #/#wg.EnumChildWindows(hwin,self.callBack_popChWin,ch_wins)
         #/win_map[hwin]=ch_wins
@@ -251,6 +404,18 @@ class ThisGrammar(GrammarBase):
         print 'Mouse cursor position: ' + str(getCursorPos())
         print 'Entire recognition result: ' + str(fullResults)
         print 'Partial recognition result: ' + str(words)
+
+    def winDiscovery(self, words, winName=None):
+        wins = (words, {})
+        hwin = None
+        wg.EnumWindows(self.callBack_popWin, wins)
+        try:
+            # reverse lookup
+            index = wins[1].values().index(winName)
+            hwin = (wins[1].keys())[index]
+            wg.SetForegroundWindow(hwin)
+        except:
+            index = None
 
     def initialize(self):
         self.load(self.gramSpec)
