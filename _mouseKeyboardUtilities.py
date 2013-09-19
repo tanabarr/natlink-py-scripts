@@ -57,6 +57,7 @@ class ThisGrammar(GrammarBase):
     fs = mu.FileStore() #preDict=kbMacros)
     kbMacros = fs.postDict
     fs.writefile() #output_filename='output.conf')
+    fs.writedb() #output_filename='output.conf')
 
     gramSpec = """
         <quickStart> exported = QuickStart (left|right|double) row ({3}) column ({3});

@@ -61,6 +61,22 @@ class FileStore():
             except:
                 pass
 
+    def writedb(self, db_filename='natlink.db'):
+        conn = sqlite3.connect(self.wd + db_filename)
+        c = conn.cursor()
+        # Create table
+        c.execute('''CREATE TABLE kb_macros
+                    (name text, string text, flags textb)''')
+        for gram, macroobj in self.postDict.iteritems():
+            # Insert a row of data
+            c.execute("INSERT INTO kb_macros VALUES ("+ gram + macroobj.string
+                      + str(macroobj.flags))
+            # every command? Save (commit) the changes
+            conn.commit()
+        # We can also close the connection if we are done with it.
+        # Just be sure any changes have been committed or they will be lost.
+        conn.close()
+
 class AppWindow:
 
     def __init__(self, names, rect=None, hwin=None):
