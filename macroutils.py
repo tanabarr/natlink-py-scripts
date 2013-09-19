@@ -61,21 +61,34 @@ class FileStore():
             except:
                 pass
 
-    def writedb(self, db_filename='natlink.db'):
+    def writedb(self, db_filename='natlink.db', table_name='kb_macros'):
         conn = sqlite3.connect(self.wd + db_filename)
-        c = conn.cursor()
-        # Create table
-        c.execute('''CREATE TABLE kb_macros
-                    (name text, string text, flags textb)''')
-        for gram, macroobj in self.postDict.iteritems():
-            # Insert a row of data
-            c.execute("INSERT INTO kb_macros VALUES ("+ gram + macroobj.string
-                      + str(macroobj.flags))
-            # every command? Save (commit) the changes
-            conn.commit()
-        # We can also close the connection if we are done with it.
-        # Just be sure any changes have been committed or they will be lost.
-        conn.close()
+        try:
+            c = conn.cursor()
+            # Create table
+            c.execute(("CREATE TABLE IF NOT EXISTS %s" % db_filename) +\
+                       " (name text, string text, flags text)")
+            for gram, macroobj in self.postDict.iteritems():
+                # Insert a row of data
+                c.execute(("INSERT INTO %s VALUES (%s, %s, %s)" %
+                            (gram, macroobj.string, str(macroobj.flags))))
+                # every command? Save (commit) the changes
+                conn.commit()
+            # We can also close the connection if we are done with it.
+            # Just be sure any changes have been committed or they will be lost.
+            conn.close()
+        except sqlite3.OperationalError, err:
+            logging.error( "OperationalError: %s" % err)
+
+    def readdb(self, db_filename='natlink.db', table_name='kb_macros'):
+        conn = sqlite3.connect(self.wd + db_filename)
+        try:
+            c = conn.cursor()
+            print c.execute("SELECT name FROM %s" % table_name)
+            conn.close()
+        except sqlite3.OperationalError, err:
+            logging.error( "OperationalError: %s" % err)
+
 
 class AppWindow:
 
@@ -110,47 +123,57 @@ class Windows:
                 logging.error('cannot retrieve window title')
 #               and filter(lambda x: x in args[0], winText.split()):
 
-    def winDiscovery(self, appName=None):
+    def winDiscovery(self, appName=None, winTitle=None):
+        """ support finding and focusing on application window or simple window
+        title. Find the index and focuses on the first match of any of these.
+        Applications within the application dictionary could have a number
+        window_titles associated. """
         wins = {}
         hwin = None
+        index = None
         wg.EnumWindows(self._callBack_popWin, wins)
         total_windows = len(wins)
-        print total_windows
-        print wins
-        # the function called without selecting window to find, just return
-        # window dictionary.
-        if not appName:
-            return (None, wins)
-        # trying to find window title of selected application within window
-        # dictionary( local application context). Checking that the window
-        # exists and it has a supportive local application context.
-        app = self.appDict[str(appName)]
         namelist=[]
-        # checking the window names is a list, handle string occurrence
-        if getattr(app.winNames, 'append'):
-            namelist=app.winNames
-        else:
-            namelist.append(app.winNames)
+        if winTitle:
+            namelist.append(winTitle)
+        if appName:
+            # trying to find window title of selected application within window
+            # dictionary( local application context). Checking that the window
+            # exists and it has a supportive local application context.
+            app = self.appDict[str(appName)]
+            # checking the window names is a list, handle string occurrence
+            try:
+                if app.winHandle:
+                    wg.BringWindowToTop(int(hwin))
+                    wg.SetForegroundWindow(int(hwin))
+                    return (str(hwin), wins)
+            except:
+                pass
+            if getattr(app.winNames, 'append'):
+                namelist = namelist + app.winNames
+            else:
+                namelist.append(app.winNames)
         for name in namelist:
             try:
                 index = wins.values().index(name)
                 break
             except:
-                index = None
+                pass
 
         if index is not None:
             #loggingdebug("index of application window: %d" % index)
             hwin = (wins.keys())[index]
             logging.debug(
                 "Name: {0}, Handle: {1}".format(wins[hwin], str(hwin)))
-            app.winHandle = hwin
+            try:
+                app.winHandle = hwin
+            except:
+                pass
             wg.BringWindowToTop(int(hwin))
             wg.SetForegroundWindow(int(hwin))
-            # print wg.GetWindowRect(hwin)
             #app.winRect = wg.GetWindowRect(hwin)
-            # print str(hwin)
             return (str(hwin), wins)
         else:
-            return (False, wins)
+            return (None, wins)
 
 

@@ -58,6 +58,7 @@ class ThisGrammar(GrammarBase):
     kbMacros = fs.postDict
     fs.writefile() #output_filename='output.conf')
     fs.writedb() #output_filename='output.conf')
+    fs.readdb()
 
     gramSpec = """
         <quickStart> exported = QuickStart (left|right|double) row ({3}) column ({3});
@@ -78,22 +79,22 @@ class ThisGrammar(GrammarBase):
     def gotResults_reloadEverything(self, words, fullResults):
         # bring window to front
         #[logging.info(k) for k in self.kbMacros.keys)]
-        self.windows.winDiscovery(self.msgPy)
+        self.windows.winDiscovery(winTitle=self.msgPy)
         playString('{alt}{down}',0)
         # seems to close unexpectedlywhen issuing the following
         #playString('{enter}',0)
 
     def gotResults_kbMacroPrint(self, words, fullResults):
         # todo: bring window to front
-        for k in sorted(self.kbMacros):
+        for k,v in sorted(self.kbMacros.items()):
             try:
                 if not k.startswith(words[2]):
                     continue
             except:
                 pass
-            logging.info(k) #, v.string)
+            logging.info("%s -> %s" % (k, self.kbMacros[k].string))
             #[logging.info(k) for k in self.kbMacros.keys().sort()]
-        self.windows.winDiscovery(self.msgPy)
+        self.windows.winDiscovery(winTitle=self.msgPy)
 
     def gotResults_kbMacro(self, words, fullResults):
         lenWords = len(words)

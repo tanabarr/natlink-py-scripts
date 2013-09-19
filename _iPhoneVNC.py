@@ -123,7 +123,8 @@ class ThisGrammar(GrammarBase):
         appName = 'iphoneWin'
         retries = 3
         for i in xrange(retries):
-            if mu.Windows().winDiscovery(appName)[0]:
+            # return index ofapplication window title
+            if self.windows.winDiscovery(appName=appName)[0]:
                 # supplied the key of the intended window name
                 return self.winAction(words[1:], appName)
             else:
@@ -160,7 +161,7 @@ class ThisGrammar(GrammarBase):
         appName = "iphoneWin"; num_entries = 14; offset_index = 3; select_int = 1
         select_int=(int(words[3]))
         # can use global variables populated by iphonetap
-        hwin = windows.appDict[appName].winHandle
+        hwin = self.windows.appDict[appName].winHandle
         if hwin:
             x,y,x1,y1 = wg.GetWindowRect(hwin)
             logging.debug('window Rect: %d,%d,%d,%d'% (x,y,x1,y1))
@@ -197,7 +198,7 @@ class ThisGrammar(GrammarBase):
                 x, y = getCursorPos()
             # apply vertical offset dependent on presence of "personal hotspot"
             # bar across the top of the screen
-            y += windows.appDict[appName].vert_offset
+            y += self.windows.appDict[appName].vert_offset
             logging.debug('clicking at: %d, %d'% (x,y))
             natlink.playEvents(
                 [(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
@@ -216,7 +217,7 @@ class ThisGrammar(GrammarBase):
         # do with speed ofplayback etc. Grammar not always recognised as a
         # command.
         playString('{space}', 0x00)
-        app = windows.appDict[str(appName)]
+        app = self.windows.appDict[str(appName)]
         gramList = []
         if str(actionKey) in app.mimicCmds:
             # we want to get out of grid mode aftermouse positioning
