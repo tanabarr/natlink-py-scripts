@@ -36,10 +36,8 @@ class FileStore():
                         % defaults_filename)
 
     def readfile(self, fd):
-        #paramDict={}
+        logging.info("reading from file...")
         for line in fd.readlines():
-            #param, value=line.split(self.delimchar, 1)
-            #paramDict.update({param.strip(): value.strip()})
 #            logging.debug("reading %s" % line)
             try:
 #                logging.debug(str(line.split('|',3)))
@@ -50,6 +48,7 @@ class FileStore():
                 logging.info("%s line not a macro entry" % line)
 
     def writefile(self, output_filename='output.conf'):
+        logging.info("writing to file...")
         outfile_fd=open(self.wd + output_filename,'w')
         #eogging.debug('keys: %s' % self.postDict.keys())
         outfile_fd.write('keyboard macro (name, string, flag) tuples')
@@ -61,34 +60,61 @@ class FileStore():
             except:
                 pass
 
-    def writedb(self, db_filename='natlink.db', table_name='kb_macros'):
+    def readdb(self, schema, db_filename='natlink.db', table_name='kb_macros'):
+        logging.info("reading from database...")
         conn = sqlite3.connect(self.wd + db_filename)
         try:
             c = conn.cursor()
-            # Create table
-            c.execute(("CREATE TABLE IF NOT EXISTS %s" % db_filename) +\
-                       " (name text, string text, flags text)")
-            for gram, macroobj in self.postDict.iteritems():
-                # Insert a row of data
-                c.execute(("INSERT INTO %s VALUES (%s, %s, %s)" %
-                            (gram, macroobj.string, str(macroobj.flags))))
-                # every command? Save (commit) the changes
-                conn.commit()
-            # We can also close the connection if we are done with it.
-            # Just be sure any changes have been committed or they will be lost.
+            col_names= schema.replace(' text','')
+            c.execute("SELECT %s FROM %s" % (col_names, table_name))
+            for row in c.fetchall():
+                row_decoded=self.customdecodechars(row)
+                col_index=0
+                for col_name in col_names.split(','):
+                    logging.info("col: %s=%s," % (col_name,row_decoded[col_index]))
+                    col_index+=1
             conn.close()
         except sqlite3.OperationalError, err:
             logging.error( "OperationalError: %s" % err)
 
-    def readdb(self, db_filename='natlink.db', table_name='kb_macros'):
+    def writedb(self, schema, db_filename='natlink.db', table_name='kb_macros'):
+        logging.info("writing to database...")
         conn = sqlite3.connect(self.wd + db_filename)
-        try:
-            c = conn.cursor()
-            print c.execute("SELECT name FROM %s" % table_name)
-            conn.close()
-        except sqlite3.OperationalError, err:
-            logging.error( "OperationalError: %s" % err)
+        #try:
+        c = conn.cursor()
+        # Create table
+        c.execute("CREATE TABLE IF NOT EXISTS %s (%s)" % (table_name, schema))
+        for gram, macroobj in self.postDict.iteritems():
+            # Insert a row of data
+            macro_string=self.customencodechar(macroobj.string)
+            print gram, macroobj.string, macro_string
+            try:
+                c.execute("INSERT INTO %s (%s) VALUES ('%s', '%s', '%s')" %
+                        (table_name, schema.replace(' text', ''),
+                         gram, macro_string, str(macroobj.flags)))
+            #except Exception, err:
+            except sqlite3.OperationalError, err:
+                logging.error( "OperationalError: %s" % err)
+                        #)# replace single quote with an
+                         #gram, macroobj.string.replace("'","\\'"),
+            # every command? Save (commit) the changes
+            conn.commit()
+        # We can also close the connection if we are done with it.
+        # Just be sure any changes have been committed or they will be lost.
+        conn.close()
 
+    def customencodechar(self, string):
+        string.replace("'","SNGL_QUOTE")
+        string.replace("'","SNGL_QUOTE")
+        return string
+
+    def customdecodechars(self, strings):
+        for string in strings:
+            try:
+                str(string).replace("SNGL_QUOTE", "'")
+            except:
+                print strings
+        return strings
 
 class AppWindow:
 
