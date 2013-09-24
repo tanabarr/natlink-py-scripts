@@ -68,10 +68,10 @@ class FileStore():
             col_names= schema.replace(' text','')
             c.execute("SELECT %s FROM %s" % (col_names, table_name))
             for row in c.fetchall():
-                row_decoded=self.customdecodechars(row)
+                macro_string=self.customdecodechars(row[1])
                 col_index=0
                 for col_name in col_names.split(','):
-                    logging.info("col: %s=%s," % (col_name,row_decoded[col_index]))
+                    #logging.info("col: %s=%s," % (col_name,row_decoded[col_index]))
                     col_index+=1
             conn.close()
         except sqlite3.OperationalError, err:
@@ -87,7 +87,7 @@ class FileStore():
         for gram, macroobj in self.postDict.iteritems():
             # Insert a row of data
             macro_string=self.customencodechar(macroobj.string)
-            print gram, macroobj.string, macro_string
+            #print gram, macroobj.string, macro_string
             try:
                 c.execute("INSERT INTO %s (%s) VALUES ('%s', '%s', '%s')" %
                         (table_name, schema.replace(' text', ''),
@@ -108,13 +108,16 @@ class FileStore():
         string.replace("'","SNGL_QUOTE")
         return string
 
-    def customdecodechars(self, strings):
-        for string in strings:
-            try:
-                str(string).replace("SNGL_QUOTE", "'")
-            except:
-                print strings
-        return strings
+    def customdecodechars(self, string):
+        #for string in strings:
+        #    try:
+        if "SNGL_QUOTE" in string:
+            new_string= str(string).replace("SNGL_QUOTE", "'")
+            logging.info("old %s, new %s" % (string, new_string))
+        return string
+        #    except:
+        #        print strings
+        #return strings
 
 class AppWindow:
 
