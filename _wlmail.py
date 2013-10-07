@@ -52,7 +52,7 @@ shortcuts_rule = MappingRule(
     name="shortcuts",    # The name of the rule.
     mapping={          # The mapping dict: spec -> action.
                 # Windows live mail shortcuts
-                "moved to folder": Key("cs-v"),
+                "move to folder": Key("cs-v"),
                 "sort with date": Key("a-v, b/10, down:1, enter"),
                 "sort with flag": Key("a-v, b/11, down:6, enter"),
                 'flag': Key("a-a, a"),

@@ -53,14 +53,13 @@ class ThisGrammar(GrammarBase):
     # window handler
     windows = mu.Windows(nullTitles=nullTitles)
 
-    # load default macros from file
-    fs = mu.FileStore() #preDict=kbMacros)
+    # load default macros from file, tries db file first
+    schema="name text, string text, flags text"
+    fs = mu.FileStore(schema=schema) #preDict=kbMacros)
     kbMacros = fs.postDict
     fs.writefile() #output_filename='output.conf')
-    schema="name text, string text, flags text"
-    fs.writedb(schema) #output_filename='output.conf')
-
-    fs.readdb(schema)
+    #fs.writedb(schema) #output_filename='output.conf')
+    #fs.readdb(schema)
 
     gramSpec = """
         <quickStart> exported = QuickStart (left|right|double) row ({3}) column ({3});
