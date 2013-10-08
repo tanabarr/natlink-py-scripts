@@ -29,7 +29,7 @@ class ThisGrammar(GrammarBase):
 
     # Macros can be repeated with recognitionmimic function which takes list of
     # words as parameter
-    abrvMap = {'norm': 'switch to normal mode', 'spell mode':
+    abrvMap = {'norm': 'switch to normal mode', 'spelling':
                'switch to spell mode',
                'escape': 'press escape',
                'insert': 'press insert', #'hash': 'press hash',
