@@ -172,7 +172,7 @@ class ThisGrammar(GrammarBase):
                       (x_ofs,y_ofs,y_inc))
             if (select_int + offset_index - num_entries - 1) <= 0:
                 # if entering search text,hide keypad
-                playString('{enter}',0)
+                natlink.playString('{enter}',0)
                 self.click('leftclick',x=x_ofs,y=y_ofs,appName=appName)
         return
 
@@ -182,7 +182,7 @@ class ThisGrammar(GrammarBase):
 #        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
 
     def drag(self, dragDirection='up', startPos=None, dist=None):
-        recognitionMimic(['mouse', 'drag', dragDirection])
+        natlink.recognitionMimic(['mouse', 'drag', dragDirection])
         # let the user stop as normal with voice...
 
     def click(self, clickType='leftclick', x=None, y=None, appName='iphoneWin'):
@@ -205,7 +205,7 @@ class ThisGrammar(GrammarBase):
         else:
             logging.error(' incorrect click look up for the event %s'% str(clickType))
             # default to
-            recognitionMimic(['mouse', 'click'])
+            natlink.recognitionMimic(['mouse', 'click'])
 
     def winAction(self, actionKey='', appName='iphoneWin'):
         # concatenate actionKey
@@ -216,15 +216,15 @@ class ThisGrammar(GrammarBase):
         # wake. Recognition mimic doesn't seem to be a good model. Something to
         # do with speed ofplayback etc. Grammar not always recognised as a
         # command.
-        playString('{space}', 0x00)
+        natlink.playString('{space}', 0x00)
         app = self.windows.appDict[str(appName)]
         gramList = []
         if str(actionKey) in app.mimicCmds:
             # we want to get out of grid mode aftermouse positioning
             # special cases first.
             if str(actionKey) == 'home':
-                recognitionMimic(['mouse', 'window'])
-                recognitionMimic(['go'])
+                natlink.recognitionMimic(['mouse', 'window'])
+                natlink.recognitionMimic(['go'])
                 self.click('rightclick',appName=appName)
             elif str(actionKey) == 'personal hotspot toggle':
                 if app.vert_offset:
@@ -238,20 +238,20 @@ class ThisGrammar(GrammarBase):
             elif str(actionKey).startswith("show"):
                 pass
             elif str(actionKey).startswith("drag"):
-                recognitionMimic(['mouse', 'window'])
+                natlink.recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
                 logging.info("Grammer list for action '{0}': {1}".format(
                     actionKey, gramList))
-                recognitionMimic(gramList)
-                recognitionMimic(['go'])
+                natlink.recognitionMimic(gramList)
+                natlink.recognitionMimic(['go'])
                 self.drag(dragDirection=actionKey.split()[1])
             else:
-                recognitionMimic(['mouse', 'window'])
+                natlink.recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
                 logging.info("Grammer list for action '{0}': {1}".format(
                     actionKey, gramList))
-                recognitionMimic(gramList)
-                recognitionMimic(['go'])
+                natlink.recognitionMimic(gramList)
+                natlink.recognitionMimic(['go'])
                 self.click('leftclick',appName=appName)
             return 0
         else:

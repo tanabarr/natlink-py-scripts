@@ -81,9 +81,9 @@ class ThisGrammar(GrammarBase):
         # bring window to front
         #[logging.info(k) for k in self.kbMacros.keys)]
         self.windows.winDiscovery(winTitle=self.msgPy)
-        playString('{alt}{down}',0)
+        natlink.playString('{alt}{down}',0)
         # seems to close unexpectedlywhen issuing the following
-        #playString('{enter}',0)
+        #natlink.playString('{enter}',0)
 
     def gotResults_kbMacroPrint(self, words, fullResults):
         # todo: bring window to front
@@ -102,7 +102,7 @@ class ThisGrammar(GrammarBase):
         # global macros
         if lenWords == 1:
             macro=self.kbMacros[words[0]]
-            playString(macro.string,macro.flags)
+            natlink.playString(macro.string,macro.flags)
         # terminal application-specific (when ms OS running Dragon is not aware
         # of application context)
         elif lenWords > 1:
@@ -124,7 +124,7 @@ class ThisGrammar(GrammarBase):
                     newmacro=''.join([str(newmacro),'{enter}'])
                 newmacro = ''.join(['{esc}',str(newmacro)])
             logging.debug('vim resultant macro: %s'% newmacro)
-            playString(newmacro,newflags)
+            natlink.playString(newmacro,newflags)
 
     def gotResults_abrvPhrase(self, words, fullResults):
         phrase=self.abrvMap[words[0]]
