@@ -38,7 +38,9 @@ class ThisGrammar(GrammarBase):
     # dictionary of application objects, preferably read from file
     appDict = {}
     appDict.update({"iphoneWin": mu.AppWindow(["tans-iPhone",
-                                            "host210.msm.che.vodafone"], None)})
+                                               "tans-iphone.local",
+                                               "host210.msm.che.vodafone"],
+                                              None)})
     appDict.update({"xbmcChromeWin": mu.AppWindow(["XBMC - Google Chrome",], None)})
     # appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\
     #')'
@@ -121,7 +123,7 @@ class ThisGrammar(GrammarBase):
 
     def gotResults_iphonetap(self, words, fullResults):
         appName = 'iphoneWin'
-        retries = 3
+        retries = 1 #3
         for i in xrange(retries):
             # return index ofapplication window title
             if self.windows.winDiscovery(appName=appName)[0]:
