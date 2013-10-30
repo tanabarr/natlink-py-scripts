@@ -8,8 +8,10 @@ from natlinkutils import *
 import win32gui as wg
 import logging
 import macroutils as mu
+import traceback as tb
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 # Windows GUI\ parameters
 QS_ROW_INITIAL =56
@@ -34,8 +36,8 @@ class ThisGrammar(GrammarBase):
                'escape': 'press escape',
                'insert': 'press insert', #'hash': 'press hash',
                'sleep': 'go to sleep',
-               'window left': 'press control left',
-               'window right': 'press control right',
+               'window left': 'press windows left',
+               'window right': 'press windows right',
                'page': 'page down',
                 }
 
@@ -46,9 +48,10 @@ class ThisGrammar(GrammarBase):
             'enter': 0x0d, 'backspace': 0x08, 'delete': 0x2e, 'leftclick': 0x201,
             'rightclick': 0x204, 'doubleclick': 0x202}
 
+    # WinSCP seems to display extra window
     nullTitles = ['Default IME', 'MSCTFIME UI', 'Engine Window',
                   'VDct Notifier Window', 'Program Manager',
-                  'Spelling Window', 'Start']
+                  'Spelling Window', 'Start', 'WinSCP']
 
     # window handler
     windows = mu.Windows(nullTitles=nullTitles)
@@ -64,7 +67,7 @@ class ThisGrammar(GrammarBase):
     gramSpec = """
         <quickStart> exported = QuickStart (left|right|double) row ({3}) column ({3});
         <repeatKey> exported = repeat key ({2}) ({4}|{5});
-        <windowFocus> exported = focus [on] window ({4}) [from bottom];
+        <windowFocus> exported = (focus|close) [on] window ({4}) [from bottom];
         <androidSC> exported =  show coordinates and screen size;
         <abrvPhrase> exported = ({1}) [mode];
         <kbMacro> exported = ({0});
@@ -76,11 +79,12 @@ class ThisGrammar(GrammarBase):
                 str(range(20)).strip('[]').replace(', ','|'),
                 str(range(20,50,10)).strip('[]').replace(', ','|'))
 
-    msgPy = 'Messages from Python Macros'
+    msgPy = 'New PYD Test'
+    #msgPy = 'Messages from Python Macros'
     def gotResults_reloadEverything(self, words, fullResults):
         # bring window to front
-        #[logging.info(k) for k in self.kbMacros.keys)]
-        self.windows.winDiscovery(winTitle=self.msgPy)
+        #[logger.info(k) for k in self.kbMacros.keys)]
+        self.windows.winDiscovery(beginTitle=self.msgPy)
         natlink.playString('{alt}{down}',0)
         # seems to close unexpectedlywhen issuing the following
         #natlink.playString('{enter}',0)
@@ -93,9 +97,9 @@ class ThisGrammar(GrammarBase):
                     continue
             except:
                 pass
-            logging.info("%s -> %s" % (k, self.kbMacros[k].string))
-            #[logging.info(k) for k in self.kbMacros.keys().sort()]
-        self.windows.winDiscovery(winTitle=self.msgPy)
+            logger.info("%s -> %s" % (k, self.kbMacros[k].string))
+            #[logger.info(k) for k in self.kbMacros.keys().sort()]
+        self.windows.winDiscovery(beginTitle=self.msgPy)
 
     def gotResults_kbMacro(self, words, fullResults):
         lenWords = len(words)
@@ -123,11 +127,11 @@ class ThisGrammar(GrammarBase):
                 if macro.string.startswith(':') and macro.flags != 0xff:
                     newmacro=''.join([str(newmacro),'{enter}'])
                 newmacro = ''.join(['{esc}',str(newmacro)])
-            logging.debug('vim resultant macro: %s'% newmacro)
+            #logger.debug('vim resultant macro: %s'% newmacro)
             natlink.playString(newmacro,newflags)
 
     def gotResults_abrvPhrase(self, words, fullResults):
-        phrase=self.abrvMap[words[0]]
+        phrase=self.abrvMap[' '.join(words)]
         recognitionMimic(phrase.split())
 
     def gotResults_quickStart(self, words, fullResults):
@@ -135,7 +139,7 @@ class ThisGrammar(GrammarBase):
         of the screen (because this depends on the fixed size text date which
         doesn't scale much with screen resolution). Bottom QuickStart item = y
         obtained from screen dimension-getScreenSize())-56. when selecting an
-        icon to operate on the QuickStart corneriterate from bottom left (row
+        icon to operate on the QuickStart corner iterate from bottom left (row
         1:1) """
 
         self.windows.nullTitles.append(' '.join(words))
@@ -170,7 +174,7 @@ class ThisGrammar(GrammarBase):
         explicitly setting each programs window title)
         TODO: need to fix, inaccurate when counting from bottom. Windows not
         filtered properly? (Extra "Windows" which do not have physical
-        component)"""
+        component). EDIT: 291013 - modified to perform close"""
 
         # Detect the optional word to specify offset for variable component
         if words[1] == 'on':
@@ -197,10 +201,11 @@ class ThisGrammar(GrammarBase):
         wins={}
         try:
             # Windows dictionary returned assecond element of tuple
-            wins=self.windows.winDiscovery()[1]
-            logging.debug('enumerate Windows: %s'% wins)
+            wins=self.windows.winDiscovery(skipTitle=' '.join(words))[1]
+            #logger.debug('enumerate Windows: %s'% wins)
         except:
-            logging.error('cannot enumerate Windows')
+            logger.error('cannot enumerate Windows')
+            logger.error(tb.format_exc())
             return
 
         # after visible taskbar application windows have been added to
@@ -212,19 +217,11 @@ class ThisGrammar(GrammarBase):
         # enumerate child windows of visible desktop top-level windows.
         # we want to use the dictionary component of wins and create a map of
         # parent to child Window handles.
-        #/win_map= {}
-#       #/ for hwin in wins.iterkeys():
-        #/ch_wins= []
-        #/hwin=wins.keys()[0]
-        #/#hwin=wins[wins.keys()[0]]
-        #/#print wg.GetWindowRect(hwin)
-        #/#wg.EnumChildWindows(hwin,self.callBack_popChWin,ch_wins)
-        #/win_map[hwin]=ch_wins
         if words[4:5]:
             # get desired index "from bottom" (negative index)
             from_bottom_modifier = int(words[ repeat_modifier_offset])
             # maximum number of increments is total_Windows -1
-            relative_offset = total_windows - from_bottom_modifier - 1
+            relative_offset = total_windows - from_bottom_modifier #- 1
         else:
             # get the index of window title required, add x vertical offsets
             # to get right vertical coordinate(0-based)
@@ -234,12 +231,16 @@ class ThisGrammar(GrammarBase):
                   '{0} window titles listed.'.format(total_windows))
             return 1
         y = y + (row_sep *  relative_offset)
-        event = self.kmap['leftclick']
         # move mouse to 00 first then separate mouse movement from click events
         # this seems to avoid occasional click failure
         natlink.playEvents([(wm_mousemove, x, y),])
-        #natlink.playEvents([(wm_mousemove, 0,0),(wm_mousemove, x, y)])
-        natlink.playEvents([(event, x, y), (event + 1, x, y)])
+        if words[0] == 'close':
+            event = self.kmap['rightclick']
+            natlink.playEvents([(event, x, y), (event + 1, x, y)])
+            natlink.playString('{up}{enter}')
+        else:
+            event = self.kmap['leftclick']
+            natlink.playEvents([(event, x, y), (event + 1, x, y)])
 
     def gotResults_repeatKey(self, words, fullResults):
         num = int(words[3])

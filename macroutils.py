@@ -133,6 +133,7 @@ class Windows:
     def __init__(self, appDict={}, nullTitles=[]):
         self.appDict=appDict
         self.nullTitles=nullTitles
+        self.skipTitle=None
 
     def _callBack_popWin(self, hwin, args):
         """ this callback function is called with handle of each top-level
@@ -140,17 +141,24 @@ class Windows:
         visible and if so it's title strings checked to see if it is a standard
         application (e.g. not the start button or natlink voice command itself).
         Populate dictionary of window title keys to window handle values. """
+        #print '.' #self.nullTitles
+        #nullTitles = self.nullTitles.append(self.skipTitle)
+        #print nullTitles
         if wg.IsWindowVisible(hwin):
-            try:
-                winText = wg.GetWindowText(hwin).strip()
-                if winText and winText not in self.nullTitles and\
-                    winText not in args.values():
-                    args.update({hwin: winText})
-            except:
-                logging.error('cannot retrieve window title')
+            winText = wg.GetWindowText(hwin).strip()
+            nt = self.nullTitles + [self.skipTitle,]
+            if winText and winText not in nt: # and\
+                # enable duplicates #winText not in args.values():
+                if winText.count('WinSCP') and winText != 'WinSCP Login':
+                    if winText in args.values():
+                        return
+                args.update({hwin: winText})
+            #else:
+            #    logging.error('cannot retrieve window title %s' % winText)
 #               and filter(lambda x: x in args[0], winText.split()):
 
-    def winDiscovery(self, appName=None, winTitle=None):
+    def winDiscovery(self, appName=None, winTitle=None, beginTitle=None,
+                     skipTitle=None):
         """ support finding and focusing on application window or simple window
         title. Find the index and focuses on the first match of any of these.
         Applications within the application dictionary could have a number
@@ -158,11 +166,20 @@ class Windows:
         wins = {}
         hwin = None
         index = None
+        self.skipTitle = skipTitle
         wg.EnumWindows(self._callBack_popWin, wins)
+        self.skipTitle = None
         total_windows = len(wins)
+        # creating match lists
         namelist=[]
+        partlist=[]
         if winTitle:
             namelist.append(winTitle)
+        elif beginTitle:
+            for v in wins.values():
+                if v.startswith(beginTitle):
+                    namelist.append(v)
+
         if appName:
             # trying to find window title of selected application within window
             # dictionary( local application context). Checking that the window
@@ -202,5 +219,3 @@ class Windows:
             return (str(hwin), wins)
         else:
             return (None, wins)
-
-
