@@ -63,13 +63,13 @@ class StaticRule(MappingRule):
                 "print file":               Key("c-p"),
                 "print setup":              Key("a-f, r"),
                 "reading mode":             Key("c-H"),
-                "previous page":              Key("c-pgdown"),
+                "previous page":            Key("c-pgup"),
                 # awkward method of switching between bookmark view and reading
                 # pane. creates new bookmark, delete it,then can navigate to
                 # bookmark.when wanting to return to Reading window, create and/or
                 # focuses start tab. Then switch to tab next (assume is only one tab
                 # open)
-                "bookmark navigation":      Key("c-b, enter, del"),
+                "navigation window":        Key("c-b, enter, del"),
                 "reading window":           Key("ca-s/20:2/20"),
                 "close navigation window":  Key("f4"),
                 'next':                     Key("c-tab"),
