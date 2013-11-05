@@ -7,7 +7,7 @@ import natlink
 from natlinkutils import *
 import win32gui as wg
 import logging
-import macroutils as mu
+import ioutils as iou
 import traceback as tb
 
 logging.basicConfig(level=logging.INFO)
@@ -54,11 +54,11 @@ class ThisGrammar(GrammarBase):
                   'Spelling Window', 'Start', 'WinSCP']
 
     # window handler
-    windows = mu.Windows(nullTitles=nullTitles)
+    windows = iou.Windows(nullTitles=nullTitles)
 
     # load default macros from file, tries db file first
     schema="name text, string text, flags text"
-    fs = mu.FileStore(schema=schema) #preDict=kbMacros)
+    fs = iou.FileStore(schema=schema) #preDict=kbMacros)
     kbMacros = fs.postDict
     fs.writefile() #output_filename='output.conf')
     #fs.writedb(schema) #output_filename='output.conf')

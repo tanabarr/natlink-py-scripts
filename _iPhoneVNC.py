@@ -8,7 +8,7 @@ from natlinkutils import *
 import win32gui as wg
 import os
 from subprocess import Popen
-import macroutils as mu
+import ioutils as iou
 import logging
 import time
 import wmi
@@ -37,16 +37,16 @@ class ThisGrammar(GrammarBase):
 
     # dictionary of application objects, preferably read from file
     appDict = {}
-    appDict.update({"iphoneWin": mu.AppWindow(["tans-iPhone",
+    appDict.update({"iphoneWin": iou.AppWindow(["tans-iPhone",
                                                "tans-iphone.local",
                                                "host210.msm.che.vodafone"],
                                               None)})
-    appDict.update({"xbmcChromeWin": mu.AppWindow(["XBMC - Google Chrome",], None)})
+    appDict.update({"xbmcChromeWin": iou.AppWindow(["XBMC - Google Chrome",], None)})
     # appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\
     #')'
     appSelectionStr = None
 
-    windows = mu.Windows(appDict=appDict, nullTitles=nullTitles)
+    windows = iou.Windows(appDict=appDict, nullTitles=nullTitles)
 
     # Todo: embed this list of strings within grammar to save space
     # list of android screencast buttons

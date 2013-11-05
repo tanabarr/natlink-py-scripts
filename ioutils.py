@@ -19,7 +19,7 @@ class FileStore():
 
     def __init__(self,defaults_filename='defaults.conf',
                  updates_filename='updates.conf',
-                 working_directory='C:\\NatLink\\NatLink\\MacroSystem\\',
+                 working_directory='./',
                  preDict={},delim="|",
                  db_filename='natlink.db',
                  schema=None):
@@ -68,32 +68,34 @@ class FileStore():
 
     def readdb(self, schema, db_filename='natlink.db', table_name='kb_macros'):
         logging.info("reading from database...")
-        conn = sqlite3.connect(self.wd + db_filename)
-        #try:
-        c = conn.cursor()
-        col_names= schema.replace(' text','')
-        c.execute("SELECT %s FROM %s" % (col_names, table_name))
-        for row in c.fetchall():
-            gram, macro_raw, flags = row
-            macro=self.customdecodechars(macro_raw)
-            self.postDict[gram] = MacroObj(macro, int(flags)) # .strip(r'r\n ')))
+        try:
+            conn = sqlite3.connect(self.wd + db_filename)
+            c = conn.cursor()
+            col_names= schema.replace(' text','')
+            c.execute("SELECT %s FROM %s" % (col_names, table_name))
+            for row in c.fetchall():
+                gram, macro_raw, flags = row
+                macro=self.customdecodechars(macro_raw)
+                self.postDict[gram] = MacroObj(macro, int(flags)) # .strip(r'r\n ')))
 #                col_index=0
 #                for col_name in col_names.split(','):
 #                    #logging.info("col: %s=%s," % (col_name,row_decoded[col_index]))
 #                    col_index+=1
-        conn.close()
-        return 0
-       # except sqlite3.OperationalError, err:
+            conn.close()
+            return 0
+        except:
+            return 1
+        # except sqlite3.OperationalError, err:
        #     logging.exception( "OperationalError: %s" % err)
        #     return 1
 
     def writedb(self, schema, db_filename='natlink.db', table_name='kb_macros'):
         logging.info("writing to database...")
-        conn = sqlite3.connect(self.wd + db_filename)
-        c = conn.cursor()
-        # Create table
-        c.execute("CREATE TABLE IF NOT EXISTS %s (%s)" % (table_name, schema))
         try:
+            conn = sqlite3.connect(self.wd + db_filename)
+            c = conn.cursor()
+            # Create table
+            c.execute("CREATE TABLE IF NOT EXISTS %s (%s)" % (table_name, schema))
             for gram, macroobj in self.postDict.iteritems():
                 # Insert a row of data
                 macro_string=self.customencodechar(macroobj.string)
@@ -103,10 +105,9 @@ class FileStore():
                          gram, macro_string, str(macroobj.flags)))
                 conn.commit()
         #except Exception, err:
+            conn.close()
         except sqlite3.OperationalError, err:
             logging.exception( "OperationalError: %s" % err)
-        finally:
-            conn.close()
 
     def customencodechar(self, string):
         return string.replace("'","SNGL_QUOTE")
