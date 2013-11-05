@@ -2,8 +2,9 @@
 # macro utilities for creating macro-behaviours
 #
 import logging
-import sqlite3
-import win32gui as wg
+from sqlite3 import OperationalError, connect
+from win32gui import IsWindowVisible, GetWindowText, EnumWindows, BringWindowToTop, SetForegroundWindow
+#import os
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -19,10 +20,11 @@ class FileStore():
 
     def __init__(self,defaults_filename='defaults.conf',
                  updates_filename='updates.conf',
-                 working_directory='./',
+                 working_directory='c:/Natlink/Natlink/MacroSystem/',
                  preDict={},delim="|",
                  db_filename='natlink.db',
                  schema=None):
+        #print os.getcwd()
         self.updates_filename=updates_filename
         self.postDict=preDict
         self.delimchar=delim
@@ -69,7 +71,7 @@ class FileStore():
     def readdb(self, schema, db_filename='natlink.db', table_name='kb_macros'):
         logging.info("reading from database...")
         try:
-            conn = sqlite3.connect(self.wd + db_filename)
+            conn = connect(self.wd + db_filename)
             c = conn.cursor()
             col_names= schema.replace(' text','')
             c.execute("SELECT %s FROM %s" % (col_names, table_name))
@@ -84,6 +86,7 @@ class FileStore():
             conn.close()
             return 0
         except:
+            logging.info("error reading from database...")
             return 1
         # except sqlite3.OperationalError, err:
        #     logging.exception( "OperationalError: %s" % err)
@@ -92,7 +95,7 @@ class FileStore():
     def writedb(self, schema, db_filename='natlink.db', table_name='kb_macros'):
         logging.info("writing to database...")
         try:
-            conn = sqlite3.connect(self.wd + db_filename)
+            conn = connect(self.wd + db_filename)
             c = conn.cursor()
             # Create table
             c.execute("CREATE TABLE IF NOT EXISTS %s (%s)" % (table_name, schema))
@@ -106,7 +109,7 @@ class FileStore():
                 conn.commit()
         #except Exception, err:
             conn.close()
-        except sqlite3.OperationalError, err:
+        except OperationalError, err:
             logging.exception( "OperationalError: %s" % err)
 
     def customencodechar(self, string):
@@ -145,8 +148,8 @@ class Windows:
         #print '.' #self.nullTitles
         #nullTitles = self.nullTitles.append(self.skipTitle)
         #print nullTitles
-        if wg.IsWindowVisible(hwin):
-            winText = wg.GetWindowText(hwin).strip()
+        if IsWindowVisible(hwin):
+            winText = GetWindowText(hwin).strip()
             nt = self.nullTitles + [self.skipTitle,]
             if winText and winText not in nt: # and\
                 # enable duplicates #winText not in args.values():
@@ -168,7 +171,7 @@ class Windows:
         hwin = None
         index = None
         self.skipTitle = skipTitle
-        wg.EnumWindows(self._callBack_popWin, wins)
+        EnumWindows(self._callBack_popWin, wins)
         self.skipTitle = None
         total_windows = len(wins)
         # creating match lists
@@ -189,8 +192,8 @@ class Windows:
             # checking the window names is a list, handle string occurrence
             try:
                 if app.winHandle:
-                    wg.BringWindowToTop(int(hwin))
-                    wg.SetForegroundWindow(int(hwin))
+                    BringWindowToTop(int(hwin))
+                    SetForegroundWindow(int(hwin))
                     return (str(hwin), wins)
             except:
                 pass
@@ -214,8 +217,8 @@ class Windows:
                 app.winHandle = hwin
             except:
                 pass
-            wg.BringWindowToTop(int(hwin))
-            wg.SetForegroundWindow(int(hwin))
+            BringWindowToTop(int(hwin))
+            SetForegroundWindow(int(hwin))
             #app.winRect = wg.GetWindowRect(hwin)
             return (str(hwin), wins)
         else:
