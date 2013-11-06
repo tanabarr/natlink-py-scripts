@@ -269,3 +269,7 @@ def unload():
     if thisGrammar:
         thisGrammar.unload()
     thisGrammar = None
+
+# requests
+##copy putty output to Windows clipboard: 'click system''copy all to clipboard'
+##screen copy mode/paste macros
