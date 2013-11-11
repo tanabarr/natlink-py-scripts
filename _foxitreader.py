@@ -58,7 +58,7 @@ class StaticRule(MappingRule):
            	                                 + Key("f3"),
                 "find next":                Key("f3"),
 
-                "[go to] page <int>":       Key("c-g") + Text("%(int)d\n"),
+                "go to page <int>":       Key("c-g") + Text("%(int)d\n"),
 
                 "print file":               Key("c-p"),
                 "print setup":              Key("a-f, r"),

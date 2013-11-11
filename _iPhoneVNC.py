@@ -84,11 +84,15 @@ class ThisGrammar(GrammarBase):
          # recent context
          'view all': ['two', 'four'],
          'view missed': ['two', 'six'],
-         # contacts context
+         # contacts list context
          'search text': ['two','eight','two'],
-         'select entry': [],
+         ## separate grammar for the below two
+         #'select entry': [],
+         #'select entry details': [],
+         # contact context
          'first number': ['five','two'],
          'delete contact': ['eight',],
+         'contact send message': ['four' ,'eight'],
          # keypad context
          'keypad call': ['eight',],
          # in call keypad context
@@ -117,7 +121,7 @@ class ThisGrammar(GrammarBase):
     appButtonStr = '|'.join(appDict["iphoneWin"].mimicCmds.keys())
 
     gramSpec = """
-        <iphoneselect> exported = iphone select entry ({0});
+        <iphoneselect> exported = iphone select entry ({0}) [details];
         <iphonetap> exported = iphone ({1});
     """.format(str(range(20)).strip('[]').replace(', ','|'),appButtonStr)
 
@@ -167,7 +171,11 @@ class ThisGrammar(GrammarBase):
         if hwin:
             x,y,x1,y1 = wg.GetWindowRect(hwin)
             logging.debug('window Rect: %d,%d,%d,%d'% (x,y,x1,y1))
-            x_ofs = x + (x1 - x)/2
+            if len(words) > 4 and str(words[4]) == 'details':
+                # selectable blue Arrow on the right side of the contact
+                x_ofs = x + 17*(x1 - x)/18
+            else:
+                x_ofs = x + (x1 - x)/2
             y_inc = (y1 - y)/num_entries
             y_ofs = y + y_inc/2 + (select_int + offset_index - 1)*y_inc
             logging.debug('horizontal: %d, vertical: %d, vertical increments: %d'%
