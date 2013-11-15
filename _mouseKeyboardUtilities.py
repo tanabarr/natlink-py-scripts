@@ -60,9 +60,9 @@ class ThisGrammar(GrammarBase):
     schema="name text, string text, flags text"
     fs = iou.FileStore(schema=schema) #preDict=kbMacros)
     kbMacros = fs.postDict
-    fs.writefile() #output_filename='output.conf')
-    #fs.writedb(schema) #output_filename='output.conf')
-    #fs.readdb(schema)
+    ## writing to files/db and reading updates now performed in fs
+    #initialisation
+    #fs.writedb(schema,db_filename='tmp.db')
 
     gramSpec = """
         <quickStart> exported = QuickStart (left|right|double) row ({3}) column ({3});

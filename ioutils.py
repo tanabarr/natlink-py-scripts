@@ -6,7 +6,7 @@ from sqlite3 import OperationalError, connect
 from win32gui import IsWindowVisible, GetWindowText, EnumWindows, BringWindowToTop, SetForegroundWindow
 #import os
 
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.INFO)
 
 class MacroObj():
     def __init__(self,string='',flags=0):
@@ -25,51 +25,71 @@ class FileStore():
                  db_filename='natlink.db',
                  schema=None):
         #print os.getcwd()
-        self.updates_filename=updates_filename
+#        self.updates_filename=updates_filename
         self.postDict=preDict
         self.delimchar=delim
         self.wd=working_directory
+        count=0
         if schema:
             logging.info("schema present")
-            if not self.readdb(schema):
-                return
-        logging.info("opening %s" % self.wd+defaults_filename)
-        try:
-            self.defaults_fd=open(self.wd + defaults_filename,'r')
-            logging.info("reading from...")
-            self.readfile(self.defaults_fd)
-            logging.info("%d macros read from..." % len(self.postDict))
-        except:
-            logging.error('could not open default configuration: %s'
-                        % defaults_filename)
+            count = self.readdb(schema)
+        if not count:
+            count = self.readfile(defaults_filename)
+        if count:
+            logging.info("%d macros"% count)
+            count = self.readfile(updates_filename)
+            print count
+            if count:
+                logging.info("%d updated macros"% count)
+                count = self.writefile()
+                logging.info("%d macros to file"% (count))
+                if schema:
+                    count = self.writedb(schema)
+                    logging.info("%d macros to db"% (count))
+        else:
+            logging.error('could not open : %s' %
+                                  defaults_filename)
 
-    def readfile(self, fd):
-        logging.info("reading from file...")
-        for line in fd.readlines():
-#            logging.debug("reading %s" % line)
-            try:
-#                logging.debug(str(line.split('|',3)))
-                gram, macro, flags = line.split('|')
-                #logging.debug("%s  %s  %s" % (str(gram), str(macro), str(flags).strip(r'r\n')))
-                self.postDict[gram] = MacroObj(macro, int(flags.strip(r'r\n ')))
-            except:
-                logging.info("%s line not a macro entry" % line)
+    def readfile(self, filename):
+        logging.info("opening %s" % self.wd+filename)
+        count=0
+        try:
+            with open(self.wd + filename,'r') as myfile:
+                for line in myfile:
+        #            logging.debug("reading %s" % line)
+                    if not line.startswith('#'):
+                        try:
+            #                logging.debug(str(line.split('|',3)))
+                            gram, macro, flags = line.split('|')
+                            #logging.debug("%s  %s  %s" % (str(gram), str(macro), str(flags).strip(r'r\n')))
+                            self.postDict[gram] = MacroObj(macro, int(flags.strip(r'r\n ')))
+                            count+=1
+                        except:
+                            logging.info("%s line not a macro entry" % line)
+        except:
+            logging.error('could not open : %s' % filename)
+        finally:
+            return count
 
     def writefile(self, output_filename='output.conf'):
         logging.info("writing to file...")
         outfile_fd=open(self.wd + output_filename,'w')
         #eogging.debug('keys: %s' % self.postDict.keys())
         outfile_fd.write('keyboard macro (name, string, flag) tuples')
+        count=0
         for gram, macroobj in self.postDict.iteritems():
             try:
                 outfile_fd.write('\n' + str(self.delimchar).join([gram,
-                                                   macroobj.string,
-                                                   str(macroobj.flags)]))
+                                            macroobj.string,
+                                            str(macroobj.flags)]))
+                count+=1
             except:
                 pass
+        return count
 
     def readdb(self, schema, db_filename='natlink.db', table_name='kb_macros'):
         logging.info("reading from database...")
+        count=0
         try:
             conn = connect(self.wd + db_filename)
             c = conn.cursor()
@@ -83,22 +103,26 @@ class FileStore():
 #                for col_name in col_names.split(','):
 #                    #logging.info("col: %s=%s," % (col_name,row_decoded[col_index]))
 #                    col_index+=1
+                print row
+                count+=1
             conn.close()
-            return 0
         except:
             logging.info("error reading from database...")
-            return 1
+        finally:
+            return count
         # except sqlite3.OperationalError, err:
        #     logging.exception( "OperationalError: %s" % err)
        #     return 1
 
     def writedb(self, schema, db_filename='natlink.db', table_name='kb_macros'):
         logging.info("writing to database...")
+        count = 0
         try:
             conn = connect(self.wd + db_filename)
             c = conn.cursor()
             # Create table
-            c.execute("CREATE TABLE IF NOT EXISTS %s (%s)" % (table_name, schema))
+            c.execute("DROP TABLE %s" % (table_name))
+            c.execute("CREATE TABLE %s (%s)" % (table_name, schema))
             for gram, macroobj in self.postDict.iteritems():
                 # Insert a row of data
                 macro_string=self.customencodechar(macroobj.string)
@@ -107,10 +131,13 @@ class FileStore():
                         (table_name, schema.replace(' text', ''),
                          gram, macro_string, str(macroobj.flags)))
                 conn.commit()
+                count+=1
         #except Exception, err:
             conn.close()
         except OperationalError, err:
             logging.exception( "OperationalError: %s" % err)
+        finally:
+            return count
 
     def customencodechar(self, string):
         return string.replace("'","SNGL_QUOTE")
