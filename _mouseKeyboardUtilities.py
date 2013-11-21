@@ -9,6 +9,7 @@ import win32gui as wg
 import logging
 import ioutils as iou
 import traceback as tb
+import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -33,7 +34,7 @@ class ThisGrammar(GrammarBase):
     # words as parameter
     abrvMap = {'norm': 'switch to normal mode', 'spelling':
                'switch to spell mode',
-               'escape': 'press escape',
+               'get out': 'press escape',
                'insert': 'press insert', #'hash': 'press hash',
                'sleep': 'go to sleep',
                'window left': 'press windows left',
@@ -73,6 +74,7 @@ class ThisGrammar(GrammarBase):
         <kbMacro> exported = ({0});
         <kbMacroPrint> exported = show macros [(vim|screen)];
         <reloadEverything> exported = reload everything;
+        <resetMic> exported = reset microphone;
     """.format(' | '.join(kbMacros.keys()),'|'.join(abrvMap.keys()),
                '|'.join(kmap.keys()),
                 str(range(6)).strip('[]').replace(', ','|'),
@@ -255,6 +257,11 @@ class ThisGrammar(GrammarBase):
         print 'Mouse cursor position: ' + str(getCursorPos())
         print 'Entire recognition result: ' + str(fullResults)
         print 'Partial recognition result: ' + str(words)
+
+    def gotResults_resetMic(self, words, fullResults):
+        natlink.setMicState("off")
+        time.sleep(2)
+        natlink.setMicState("on")
 
     def initialize(self):
         self.load(self.gramSpec)

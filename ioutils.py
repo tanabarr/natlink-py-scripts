@@ -13,6 +13,9 @@ class MacroObj():
         self.string=string
         self.flags=flags
 
+UPDATES_USAGE = "#keyboard macro (name, string, flag) tuples\n" \
+                "#flag '0xff' prevents macro preprocessing e.g. vim/screen\n"
+
 class FileStore():
     """ manage the storage of configurations to file """
 
@@ -45,7 +48,10 @@ class FileStore():
                 logging.info("%d macros to file"% (count))
                 if schema:
                     count = self.writedb(schema)
-                    logging.info("%d macros to db"% (count))
+                    logging.info("%d macros to db, cleaning updates file"
+                                 % (count))
+                    with open(self.wd + updates_filename,'w') as myfile:
+                        myfile.write(UPDATES_USAGE)
         else:
             logging.error('could not open : %s' %
                                   defaults_filename)
@@ -103,7 +109,7 @@ class FileStore():
 #                for col_name in col_names.split(','):
 #                    #logging.info("col: %s=%s," % (col_name,row_decoded[col_index]))
 #                    col_index+=1
-                print row
+#                print row
                 count+=1
             conn.close()
         except:
