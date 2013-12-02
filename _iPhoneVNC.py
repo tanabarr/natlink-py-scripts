@@ -241,7 +241,7 @@ class ThisGrammar(GrammarBase):
                     app.vert_offset = 0
                 else:
                     app.vert_offset = app.TOGGLE_VOFFSET
-                logging.info("Toggled vertical offset, before: %d, after: %d"%
+                logging.debug("Toggled vertical offset, before: %d, after: %d"%
                             (old, app.vert_offset))
             elif str(actionKey).startswith("select"):
                 pass # function continued in its own handler
@@ -250,7 +250,7 @@ class ThisGrammar(GrammarBase):
             elif str(actionKey).startswith("drag"):
                 natlink.recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
-                logging.info("Grammer list for action '{0}': {1}".format(
+                logging.debug("Grammer list for action '{0}': {1}".format(
                     actionKey, gramList))
                 natlink.recognitionMimic(gramList)
                 natlink.recognitionMimic(['go'])
@@ -258,7 +258,7 @@ class ThisGrammar(GrammarBase):
             else:
                 natlink.recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
-                logging.info("Grammer list for action '{0}': {1}".format(
+                logging.debug("Grammer list for action '{0}': {1}".format(
                     actionKey, gramList))
                 natlink.recognitionMimic(gramList)
                 natlink.recognitionMimic(['go'])
