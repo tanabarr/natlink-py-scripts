@@ -1,6 +1,6 @@
 #
 # Python Macro Language for Dragon NaturallySpeaking
-# nextApp
+# 031213: significant amounts of functionality transferred to vocola/unimacro
 #
 
 import natlink
@@ -34,12 +34,12 @@ class ThisGrammar(GrammarBase):
     # words as parameter
     abrvMap = {'norm': 'switch to normal mode', 'spelling':
                'switch to spell mode',
-               'get out': 'press escape',
-               'insert': 'press insert', #'hash': 'press hash',
-               'sleep': 'go to sleep',
-               'window left': 'press windows left',
-               'window right': 'press windows right',
-               'page': 'page down',
+               #'get out': 'press escape',
+               #'insert': 'press insert', #'hash': 'press hash',
+               #'sleep': 'go to sleep',
+               #'window left': 'press windows left',
+               #'window right': 'press windows right',
+               #'page': 'page down',
                 }
 
     # Todo: embed this list of strings within grammar to save space
@@ -58,9 +58,11 @@ class ThisGrammar(GrammarBase):
     windows = iou.Windows(nullTitles=nullTitles)
 
     # load default macros from file, tries db file first
-    schema="name text, string text, flags text"
-    fs = iou.FileStore(schema=schema) #preDict=kbMacros)
-    kbMacros = fs.postDict
+    ### EDIT: 031213
+    ###schema="name text, string text, flags text"
+    ###fs = iou.FileStore(schema=schema) #preDict=kbMacros)
+    ###kbMacros = fs.postDict
+
     ## writing to files/db and reading updates now performed in fs
     #initialisation
     #fs.writedb(schema,db_filename='tmp.db')
@@ -71,15 +73,18 @@ class ThisGrammar(GrammarBase):
         <windowFocus> exported = (focus|close) [on] window ({4}) [from bottom];
         <androidSC> exported =  show coordinates and screen size;
         <abrvPhrase> exported = ({1}) [mode];
-        <kbMacro> exported = ({0});
-        <kbMacroPrint> exported = show macros [(vim|screen)];
         <reloadEverything> exported = reload everything;
         <resetMic> exported = reset microphone;
-    """.format(' | '.join(kbMacros.keys()),'|'.join(abrvMap.keys()),
-               '|'.join(kmap.keys()),
+    """.format( '',
+                '|'.join(abrvMap.keys()),
+                '|'.join(kmap.keys()),
                 str(range(6)).strip('[]').replace(', ','|'),
                 str(range(20)).strip('[]').replace(', ','|'),
                 str(range(20,50,10)).strip('[]').replace(', ','|'))
+        ### EDIT: 031213      removed
+        ###' | '.join(kbMacros.keys()),
+        ###<kbMacro> exported = ({0});
+        ###<kbMacroPrint> exported = show macros [(vim|screen)];
 
     msgPy = 'New PYD Test'
     #msgPy = 'Messages from Python Macros'
