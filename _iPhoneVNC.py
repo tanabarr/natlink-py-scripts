@@ -71,6 +71,8 @@ class ThisGrammar(GrammarBase):
          # drag context
          'drag up': ['eight','two','eight'],
          'drag down': ['two','eight', 'two'],
+         'drag left': ['nine','eight','three'],
+         'drag right': ['seven','eight','one'],
          # call context
          'contacts': ['eight', 'eight'],
          'recent': ['seven', 'nine'],
@@ -190,9 +192,24 @@ class ThisGrammar(GrammarBase):
 #    def press(self, key='space'):
 #        event = self.kmap[key]
 #        natlink.playEvents([(wm_keydown, event, 0),(wm_keyup, event, 0)])
+    def sanitise_movement(func):
+        def checker(*args,**kwargs):
+            print args
+            print kwargs
+            ret = func(*args,**kwargs)
+            return ret
+        return checker
 
-    def drag(self, dragDirection='up', startPos=None, dist=None):
-        natlink.recognitionMimic(['mouse', 'drag', dragDirection])
+    @sanitise_movement
+    def drag(self, direction='up', startPos=None, dist=2):
+        natlink.recognitionMimic(['mouse', 'drag', direction, 'faster'])
+        try:
+            timeWait = int(dist)
+        except ValueError, e: # TypeError as e:
+            logging.debug('unexpected distance value, %s'% e)
+            timeWait = 1
+        time.sleep(timeWait)
+        natlink.recognitionMimic(['stop',])
         # let the user stop as normal with voice...
 
     def click(self, clickType='leftclick', x=None, y=None, appName='iphoneWin'):

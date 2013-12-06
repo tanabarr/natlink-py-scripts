@@ -141,6 +141,14 @@ class ThisGrammar(GrammarBase):
         phrase=self.abrvMap[' '.join(words)]
         recognitionMimic(phrase.split())
 
+#    def sanitise_movement(func):
+#        def checker(*args,**kwargs):
+#            print args
+#            print kwargs
+#            ret = func(*args,**kwargs)
+#            return ret
+#        return checker
+
     def gotResults_quickStart(self, words, fullResults):
         """Bottom QuickStart item can be approximated by 56 pixels above the bottom
         of the screen (because this depends on the fixed size text date which
@@ -168,7 +176,10 @@ class ThisGrammar(GrammarBase):
         # play events down click and then release (for left double click
         # increment from left button up event which produces no action
         # then when incremented, performs the double-click)
-        natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+
+        playEvents = iou.sanitise_movement(natlink.playEvents)
+#    @sanitise_movement
+        playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
 
 
     def gotResults_windowFocus(self, words, fullResults):

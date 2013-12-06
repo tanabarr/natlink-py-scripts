@@ -8,6 +8,18 @@ from win32gui import IsWindowVisible, GetWindowText, EnumWindows, BringWindowToT
 
 logging.basicConfig(level=logging.INFO)
 
+### DECORATORS ###
+
+def sanitise_movement(func):
+    def checker(*args,**kwargs):
+        print args
+        print kwargs
+        ret = func(*args,**kwargs)
+        return ret
+    return checker
+
+### CLASSES ###
+
 class MacroObj():
     def __init__(self,string='',flags=0):
         self.string=string

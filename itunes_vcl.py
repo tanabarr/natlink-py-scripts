@@ -10,13 +10,15 @@ from VocolaUtils import *
 class ThisGrammar(GrammarBase):
 
     gramSpec = """
-        <folder> = ('Temp' ) ;
-        <1> = 'Folder' <folder> ;
-        <2> = 'Copy That' ;
-        <3> = 'Paste That' ;
-        <4> = 'Go Up' ;
-        <5> = 'Go Up' ('one' | 'two' | 'three' | 'four' | 'five' | 'six' | 'seven' | 'eight' | 'nine' | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20) ;
-        <any> = <1>|<2>|<3>|<4>|<5>;
+        <1> = 'Pause' ;
+        <2> = 'Play' ;
+        <functions_arrow> = ('Next' | 'Previous' | 'Increase' | 'Decrease' ) ;
+        <3> = (('Next' | 'Previous' | 'Increase' | 'Decrease' ) ) ;
+        <4> = 'podcast view' ;
+        <5> = 'right side' ;
+        <6> = 'left side' ;
+        <7> = 'current podcast' ;
+        <any> = <1>|<2>|<3>|<4>|<5>|<6>|<7>;
         <sequence> exported = <any>;
     """
     
@@ -27,7 +29,7 @@ class ThisGrammar(GrammarBase):
 
     def gotBegin(self,moduleInfo):
         # Return if wrong application
-        window = matchWindow(moduleInfo,'ntvdm','')
+        window = matchWindow(moduleInfo,'itunes','')
         if not window: return None
         self.firstWord = 0
         # Return if same window and title as before
@@ -67,87 +69,131 @@ class ThisGrammar(GrammarBase):
         else:
             return word
 
-    def get_folder(self, list_buffer, functional, word):
-        if word == 'Temp':
-            list_buffer += 'C:\\Temp'
-        return list_buffer
-
-    # Folder <folder>
+    # Pause
     def gotResults_1(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += 'cd "'
-            word = fullResults[1 + self.firstWord][0]
-            top_buffer = self.get_folder(top_buffer, False, word)
-            top_buffer += '"{Enter}'
+            top_buffer += ' '
             top_buffer = do_flush(False, top_buffer);
-            self.firstWord += 2
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_1(words[1:], fullResults)
         except Exception, e:
-            handle_error('ntvdm.vcl', 5, 'Folder <folder>', e)
+            handle_error('itunes.vcl', 5, 'Pause', e)
             self.firstWord = -1
 
-    # Copy That
+    # Play
     def gotResults_2(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += '{Enter}'
+            top_buffer += ' '
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
             if len(words) > 1: self.gotResults_2(words[1:], fullResults)
         except Exception, e:
-            handle_error('ntvdm.vcl', 7, 'Copy That', e)
+            handle_error('itunes.vcl', 6, 'Play', e)
             self.firstWord = -1
 
-    # Paste That
+    def get_functions_arrow(self, list_buffer, functional, word):
+        if word == 'Next':
+            list_buffer += 'Right'
+        elif word == 'Previous':
+            list_buffer += 'Left'
+        elif word == 'Increase':
+            list_buffer += 'Up'
+        elif word == 'Decrease':
+            list_buffer += 'Down'
+        return list_buffer
+
+    # ((Next | Previous | Increase | Decrease))
     def gotResults_3(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += '{Alt+Space}ep'
+            top_buffer += '{Ctrl+'
+            word = fullResults[0 + self.firstWord][0]
+            if word == 'Next':
+                top_buffer += 'Right'
+            elif word == 'Previous':
+                top_buffer += 'Left'
+            elif word == 'Increase':
+                top_buffer += 'Up'
+            elif word == 'Decrease':
+                top_buffer += 'Down'
+            top_buffer += '}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
             if len(words) > 1: self.gotResults_3(words[1:], fullResults)
         except Exception, e:
-            handle_error('ntvdm.vcl', 8, 'Paste That', e)
+            handle_error('itunes.vcl', 8, '((Next | Previous | Increase | Decrease))', e)
             self.firstWord = -1
 
-    # Go Up
+    # podcast view
     def gotResults_4(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += 'cd ..{Enter}'
+            top_buffer += '{Esc}{Tab_7}{Enter}{Down_2}{Enter}'
+            limit = ''
+            limit += '6'
+            for i in range(to_long(limit)):
+                top_buffer += '{Shift+Tab}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
             if len(words) > 1: self.gotResults_4(words[1:], fullResults)
         except Exception, e:
-            handle_error('ntvdm.vcl', 10, 'Go Up', e)
+            handle_error('itunes.vcl', 9, 'podcast view', e)
             self.firstWord = -1
 
-    # Go Up 1..20
+    # right side
     def gotResults_5(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += 'cd '
-            limit = ''
-            word = fullResults[1 + self.firstWord][0]
-            limit += self.convert_number_word(word)
-            for i in range(to_long(limit)):
-                top_buffer += '..\\'
-            top_buffer += '{Enter}'
+            top_buffer += '{Tab_7}{Down}'
             top_buffer = do_flush(False, top_buffer);
-            self.firstWord += 2
-            if len(words) > 2: self.gotResults_5(words[2:], fullResults)
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_5(words[1:], fullResults)
         except Exception, e:
-            handle_error('ntvdm.vcl', 11, 'Go Up 1..20', e)
+            handle_error('itunes.vcl', 10, 'right side', e)
+            self.firstWord = -1
+
+    # left side
+    def gotResults_6(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            limit = ''
+            limit += '7'
+            for i in range(to_long(limit)):
+                top_buffer += '{Shift+Tab}'
+            top_buffer += '{Down}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_6(words[1:], fullResults)
+        except Exception, e:
+            handle_error('itunes.vcl', 11, 'left side', e)
+            self.firstWord = -1
+
+    # current podcast
+    def gotResults_7(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+l}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_7(words[1:], fullResults)
+        except Exception, e:
+            handle_error('itunes.vcl', 12, 'current podcast', e)
             self.firstWord = -1
 
 thisGrammar = ThisGrammar()
