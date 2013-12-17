@@ -10,7 +10,7 @@ from VocolaUtils import *
 class ThisGrammar(GrammarBase):
 
     gramSpec = """
-        <1> = 'call first contact' ;
+        <1> = 'minimise' ;
         <any> = <1>;
         <sequence> exported = <any>;
     """
@@ -22,7 +22,7 @@ class ThisGrammar(GrammarBase):
 
     def gotBegin(self,moduleInfo):
         # Return if wrong application
-        window = matchWindow(moduleInfo,'communicator','')
+        window = matchWindow(moduleInfo,'cmd','')
         if not window: return None
         self.firstWord = 0
         # Return if same window and title as before
@@ -62,18 +62,25 @@ class ThisGrammar(GrammarBase):
         else:
             return word
 
-    # call first contact
+    # minimise
     def gotResults_1(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += '{Tab_5}{Enter}'
+            top_buffer += '{Alt+'
+            top_buffer += ' '
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            dragon_arg1 = ''
+            dragon_arg1 += '20'
+            call_Dragon('Wait', 'i', [dragon_arg1])
+            top_buffer += 'n'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
             if len(words) > 1: self.gotResults_1(words[1:], fullResults)
         except Exception, e:
-            handle_error('communicator.vcl', 5, 'call first contact', e)
+            handle_error('cmd.vcl', 4, 'minimise', e)
             self.firstWord = -1
 
 thisGrammar = ThisGrammar()
