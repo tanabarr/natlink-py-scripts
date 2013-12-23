@@ -55,6 +55,10 @@ cmd.map = {
            "hyphen":                           Key("hyphen"),
            "minus":                            Key("minus"),
            "plus":                             Key("plus"),
+           "pipe":                             Key("bar"),
+           "backslash":                            Key("backslash"),
+           "dollar":                            Key("dollar"),
+           "question":                            Key("question"),
            "slash":                            Key("slash"),
            "single quote":                     Key("squote"),
            "tilde":                            Key("tilde"),
@@ -99,7 +103,7 @@ def format_score(dictation):          # Function name must start with "format_".
 
 # Format: some_words()
 def format_under_function(dictation):
-    """ under func <dictation> """
+    """ score func <dictation> """
     text = str(dictation)
     return "_".join(text.split(" ")) + "()"
 
@@ -112,13 +116,13 @@ def format_studley(dictation):
 
 # Format: somewords
 def format_one_word(dictation):
-    """ [all] one word <dictation> """
+    """ all together <dictation> """
     text = str(dictation)
     return "".join(text.split(" "))
 
 # Format: SOMEWORDS
 def format_upper_one_word(dictation):
-    """ one word upper <dictation> """
+    """ upper together <dictation> """
     text = str(dictation)
     words = [word.upper() for word in text.split(" ")]
     return "".join(words)
@@ -136,3 +140,8 @@ def format_java_method(dictation):
     text = str(dictation)
     words = text.split(" ")
     return words[0] + "".join(w.capitalize() for w in words[1:])
+
+#Camel [Case] That = HeardWord(\Cap,That) HeardWord(compound,that) {Ctrl+Left}
+#                    {Shift+Right} HeardWord(\No-Caps,That){Ctrl+Right};
+#(Cap | Up Case) <n> = {Shift+Right_$2} HeardWord(\All-Caps,That);
+
