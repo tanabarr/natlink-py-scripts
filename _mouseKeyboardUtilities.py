@@ -4,6 +4,8 @@
 #
 
 import natlink
+# 060114: import directly from main, otherwise not found (vocola 2.8.1 update)
+from natlinkmain import recognitionMimic
 from natlinkutils import *
 import win32gui as wg
 import logging

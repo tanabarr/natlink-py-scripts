@@ -222,7 +222,7 @@ class ThisGrammar(GrammarBase):
         # if coordinates are not supplied, just click
         if getattr(event, 'conjugate'):
             if not (x or y):
-                x, y = getCursorPos()
+                x, y = natlink.getCursorPos()
             # apply vertical offset dependent on presence of "personal hotspot"
             # bar across the top of the screen
             y += self.windows.appDict[appName].vert_offset
