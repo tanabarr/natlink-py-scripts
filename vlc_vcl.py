@@ -10,10 +10,8 @@ from VocolaUtils import *
 class ThisGrammar(GrammarBase):
 
     gramSpec = """
-        <dgndictation> imported;
-        <1> = 'Search bar' ;
-        <2> = 'Search for' <dgndictation> ;
-        <any> = <1>|<2>;
+        <1> = 'fullscreen' ;
+        <any> = <1>;
         <sequence> exported = <any>;
     """
     
@@ -24,7 +22,7 @@ class ThisGrammar(GrammarBase):
 
     def gotBegin(self,moduleInfo):
         # Return if wrong application
-        window = matchWindow(moduleInfo,'spotify','')
+        window = matchWindow(moduleInfo,'vlc','')
         if not window: return None
         self.firstWord = 0
         # Return if same window and title as before
@@ -64,38 +62,18 @@ class ThisGrammar(GrammarBase):
         else:
             return word
 
-    # 'Search bar'
+    # 'fullscreen'
     def gotResults_1(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += '{Ctrl+N}'
+            top_buffer += '{Alt+v}f'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
             if len(words) > 1: self.gotResults_1(words[1:], fullResults)
         except Exception, e:
-            handle_error('spotify.vcl', 5, '\'Search bar\'', e)
-            self.firstWord = -1
-
-    # 'Search for' <_anything>
-    def gotResults_2(self, words, fullResults):
-        if self.firstWord<0:
-            return
-        fullResults = combineDictationWords(fullResults)
-        opt = 1 + self.firstWord
-        if opt >= len(fullResults) or fullResults[opt][1] != 'converted dgndictation':
-            fullResults.insert(opt, ['', 'converted dgndictation'])
-        try:
-            top_buffer = ''
-            top_buffer += '{Ctrl+l}'
-            word = fullResults[1 + self.firstWord][0]
-            top_buffer += word
-            top_buffer += '{Enter}'
-            top_buffer = do_flush(False, top_buffer);
-            self.firstWord += 2
-        except Exception, e:
-            handle_error('spotify.vcl', 6, '\'Search for\' <_anything>', e)
+            handle_error('vlc.vcl', 4, '\'fullscreen\'', e)
             self.firstWord = -1
 
 thisGrammar = ThisGrammar()

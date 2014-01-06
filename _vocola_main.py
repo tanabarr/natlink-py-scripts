@@ -194,8 +194,7 @@ class ThisGrammar(GrammarBase):
     if language == 'nld':
         gramSpec = """
 <NatLinkWindow>     exported = Toon (NatLink|Vocola) venster;
-<edit>              exported = (Eddit|Bewerk|Sjoo|Toon)(Commandoos|Commands) |
-                               (Eddit|Bewerk|Sjoo|Toon)(stem|vojs)(Commandoos|Commands);
+<edit>              exported = (Eddit|Bewerk|Sjoo|Toon) [stem|vojs] (Commandoos|Commands);
 <editGlobal>        exported = (Eddit|Bewerk|Sjoo|Toon) (Global|globale) [stem|vojs] (Commandoos|Commands);
 <editMachine>       exported = (Eddit|Bewerk|Sjoo|Toon) Machine [stem|vojs] (Commandoos|Commands);
 <editGlobalMachine> exported = (Eddit|Bewerk|Sjoo|Toon) (Global|globale) Machine [stem|vojs] (Commandoos|Commands);
@@ -344,7 +343,7 @@ Commands" and "Edit Global Commands" are activated.
         pattern = "^" + special.sub(r'\\\1', module)
         pattern += "(_[^@]*)?(@" + special.sub(r'\\\1', self.machine)
         pattern += ")?\.vcl$"
-        p = re.compile(pattern)
+        p = re.compile(pattern, re.IGNORECASE)
 
         targets = []
         if commandFolder:
@@ -769,7 +768,7 @@ purgeOutput()
 if not VocolaEnabled:
     print "Vocola not active"
 else:
-    print "Vocola version 2.8I starting..."
+    print "Vocola version 2.8.1I starting..."
     thisGrammar = ThisGrammar()
     thisGrammar.initialize()
 
