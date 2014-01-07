@@ -4,8 +4,8 @@
 #
 
 import natlink
-# 060114: import directly from main, otherwise not found (vocola 2.8.1 update)
-from natlinkmain import recognitionMimic
+## 060114: import directly from main, otherwise not found (vocola 2.8.1 update)
+#from natlinkmain import recognitionMimic
 from natlinkutils import *
 import win32gui as wg
 import logging
@@ -162,7 +162,7 @@ class ThisGrammar(GrammarBase):
         self.windows.nullTitles.append(' '.join(words))
 
         # screen dimensions (excluding taskbar)
-        x, y = getScreenSize()
+        x, y = natlink.getScreenSize()
         # number of pixels between bottom of screen and bottom row of QuickStart icons
         row_initial = QS_ROW_INITIAL #56g
         # number of pixels between left side of taskbar and first column of icons
@@ -202,7 +202,7 @@ class ThisGrammar(GrammarBase):
         else:
             repeat_modifier_offset = 2
         # screen dimensions (excluding taskbar)
-        x, y = getScreenSize()
+        x, y = natlink.getScreenSize()
         # number of pixels between top of screen and top row of taskbar icons
         row_initial = TB_ROW_INITIAL #35 #75
         # number of pixels between left side of taskbar and first column of icons
@@ -271,8 +271,8 @@ class ThisGrammar(GrammarBase):
          in range(num)]
 
     def gotResults_androidSC(self, words, fullResults):
-        print 'Screen dimensions: ' + str(getScreenSize())
-        print 'Mouse cursor position: ' + str(getCursorPos())
+        print 'Screen dimensions: ' + str(natlink.getScreenSize())
+        print 'Mouse cursor position: ' + str(natlink.getCursorPos())
         print 'Entire recognition result: ' + str(fullResults)
         print 'Partial recognition result: ' + str(words)
 
