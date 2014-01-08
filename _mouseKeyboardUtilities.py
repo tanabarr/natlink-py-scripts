@@ -141,7 +141,7 @@ class ThisGrammar(GrammarBase):
 
     def gotResults_abrvPhrase(self, words, fullResults):
         phrase=self.abrvMap[' '.join(words)]
-        recognitionMimic(phrase.split())
+        natlink.recognitionMimic(phrase.split())
 
 #    def sanitise_movement(func):
 #        def checker(*args,**kwargs):

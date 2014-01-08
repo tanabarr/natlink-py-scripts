@@ -57,7 +57,7 @@ class ThisGrammar(GrammarBase):
         else:
             STEP=4
             count=0
-            micstate=getMicState()
+            micstate=natlink.getMicState()
             print "micstate: {0}, {1} sec wait".format(micstate, count)
 
             # poll until Dragon is in sleep state (select "start dragon in sleep
@@ -65,11 +65,11 @@ class ThisGrammar(GrammarBase):
             while micstate not in ['sleeping', 'on']: #'off':
                 time.sleep(STEP)
                 count+=STEP
-                micstate = getMicState()
+                micstate=natlink.getMicState()
                 print "polling micstate: {0}, {1} sec wait".format(micstate, count)
 
-            setMicState('on')
-            micstate = getMicState()
+            natlink.setMicState('on')
+            micstate=natlink.getMicState()
             print "micstate: {0}, {1} sec wait".format(micstate, count)
 
             # now Dragon is on, put in an exclusive state waiting for "switch
