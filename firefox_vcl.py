@@ -15,22 +15,20 @@ class ThisGrammar(GrammarBase):
         <2> = 'zoom out' ;
         <3> = 'save' ;
         <4> = 'new' ;
-        <5> = 'last' ;
-        <6> = 'new window' ;
-        <7> = 'next' <n> ;
-        <8> = 'previous' <n> ;
-        <9> = 'switch tab' <n> ;
-        <10> = 'private' ;
-        <11> = 'close' ;
-        <12> = 'bookmark' ;
+        <5> = 'new window' ;
+        <6> = 'next' <n> ;
+        <7> = 'previous' <n> ;
+        <8> = 'switch tab' <n> ;
+        <9> = 'private' ;
+        <10> = 'close' ;
+        <11> = 'bookmark' ;
+        <12> = 'show bookmarks' ;
         <13> = 'tools' ;
-        <14> = 'reload' ;
-        <15> = 'back page' ;
-        <16> = ('Copy' | 'Paste' | 'Go' ) ('Address' | 'URL' ) ;
-        <17> = 'text box' ;
-        <18> = 'show links' ;
-        <19> = 'copy links' ;
-        <any> = <1>|<2>|<3>|<4>|<5>|<6>|<7>|<8>|<9>|<10>|<11>|<12>|<13>|<14>|<15>|<16>|<17>|<18>|<19>;
+        <14> = 'options' ;
+        <15> = 'reload' ;
+        <16> = 'back page' ;
+        <17> = ('Copy' | 'Paste' | 'Go' ) ('Address' | 'URL' ) ;
+        <any> = <1>|<2>|<3>|<4>|<5>|<6>|<7>|<8>|<9>|<10>|<11>|<12>|<13>|<14>|<15>|<16>|<17>;
         <sequence> exported = <any>;
     """
     
@@ -41,7 +39,7 @@ class ThisGrammar(GrammarBase):
 
     def gotBegin(self,moduleInfo):
         # Return if wrong application
-        window = matchWindow(moduleInfo,'chrome','')
+        window = matchWindow(moduleInfo,'firefox','')
         if not window: return None
         self.firstWord = 0
         # Return if same window and title as before
@@ -96,7 +94,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_1(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 7, '\'zoom in\'', e)
+            handle_error('firefox.vcl', 6, '\'zoom in\'', e)
             self.firstWord = -1
 
     # 'zoom out'
@@ -110,7 +108,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_2(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 8, '\'zoom out\'', e)
+            handle_error('firefox.vcl', 7, '\'zoom out\'', e)
             self.firstWord = -1
 
     # 'save'
@@ -124,7 +122,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_3(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 9, '\'save\'', e)
+            handle_error('firefox.vcl', 8, '\'save\'', e)
             self.firstWord = -1
 
     # 'new'
@@ -138,25 +136,11 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_4(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 10, '\'new\'', e)
-            self.firstWord = -1
-
-    # 'last'
-    def gotResults_5(self, words, fullResults):
-        if self.firstWord<0:
-            return
-        try:
-            top_buffer = ''
-            top_buffer += '{Ctrl+T}'
-            top_buffer = do_flush(False, top_buffer);
-            self.firstWord += 1
-            if len(words) > 1: self.gotResults_5(words[1:], fullResults)
-        except Exception, e:
-            handle_error('chrome.vcl', 11, '\'last\'', e)
+            handle_error('firefox.vcl', 9, '\'new\'', e)
             self.firstWord = -1
 
     # 'new window'
-    def gotResults_6(self, words, fullResults):
+    def gotResults_5(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -164,13 +148,13 @@ class ThisGrammar(GrammarBase):
             top_buffer += '{Ctrl+n}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_6(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_5(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 12, '\'new window\'', e)
+            handle_error('firefox.vcl', 11, '\'new window\'', e)
             self.firstWord = -1
 
     # 'next' <n>
-    def gotResults_7(self, words, fullResults):
+    def gotResults_6(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -183,11 +167,11 @@ class ThisGrammar(GrammarBase):
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
         except Exception, e:
-            handle_error('chrome.vcl', 13, '\'next\' <n>', e)
+            handle_error('firefox.vcl', 12, '\'next\' <n>', e)
             self.firstWord = -1
 
     # 'previous' <n>
-    def gotResults_8(self, words, fullResults):
+    def gotResults_7(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -200,11 +184,11 @@ class ThisGrammar(GrammarBase):
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
         except Exception, e:
-            handle_error('chrome.vcl', 14, '\'previous\' <n>', e)
+            handle_error('firefox.vcl', 13, '\'previous\' <n>', e)
             self.firstWord = -1
 
     # 'switch tab' <n>
-    def gotResults_9(self, words, fullResults):
+    def gotResults_8(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -217,30 +201,25 @@ class ThisGrammar(GrammarBase):
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
         except Exception, e:
-            handle_error('chrome.vcl', 15, '\'switch tab\' <n>', e)
+            handle_error('firefox.vcl', 14, '\'switch tab\' <n>', e)
             self.firstWord = -1
 
     # 'private'
-    def gotResults_10(self, words, fullResults):
+    def gotResults_9(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += '{Alt+e}'
-            top_buffer = do_flush(False, top_buffer);
-            dragon_arg1 = ''
-            dragon_arg1 += '10'
-            call_Dragon('Wait', 'i', [dragon_arg1])
-            top_buffer += '{i}'
+            top_buffer += '{Ctrl+Shift+p}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_10(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_9(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 16, '\'private\'', e)
+            handle_error('firefox.vcl', 15, '\'private\'', e)
             self.firstWord = -1
 
     # 'close'
-    def gotResults_11(self, words, fullResults):
+    def gotResults_10(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -248,13 +227,13 @@ class ThisGrammar(GrammarBase):
             top_buffer += '{Ctrl+w}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_11(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_10(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 17, '\'close\'', e)
+            handle_error('firefox.vcl', 17, '\'close\'', e)
             self.firstWord = -1
 
     # 'bookmark'
-    def gotResults_12(self, words, fullResults):
+    def gotResults_11(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -262,9 +241,23 @@ class ThisGrammar(GrammarBase):
             top_buffer += '{Ctrl+d}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
+            if len(words) > 1: self.gotResults_11(words[1:], fullResults)
+        except Exception, e:
+            handle_error('firefox.vcl', 18, '\'bookmark\'', e)
+            self.firstWord = -1
+
+    # 'show bookmarks'
+    def gotResults_12(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+b}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
             if len(words) > 1: self.gotResults_12(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 18, '\'bookmark\'', e)
+            handle_error('firefox.vcl', 19, '\'show bookmarks\'', e)
             self.firstWord = -1
 
     # 'tools'
@@ -278,11 +271,30 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_13(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 19, '\'tools\'', e)
+            handle_error('firefox.vcl', 20, '\'tools\'', e)
+            self.firstWord = -1
+
+    # 'options'
+    def gotResults_14(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+t}'
+            top_buffer = do_flush(False, top_buffer);
+            dragon_arg1 = ''
+            dragon_arg1 += '100'
+            call_Dragon('Wait', 'i', [dragon_arg1])
+            top_buffer += '{o}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_14(words[1:], fullResults)
+        except Exception, e:
+            handle_error('firefox.vcl', 21, '\'options\'', e)
             self.firstWord = -1
 
     # 'reload'
-    def gotResults_14(self, words, fullResults):
+    def gotResults_15(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -290,13 +302,13 @@ class ThisGrammar(GrammarBase):
             top_buffer += '{f5}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_14(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_15(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 20, '\'reload\'', e)
+            handle_error('firefox.vcl', 22, '\'reload\'', e)
             self.firstWord = -1
 
     # 'back page'
-    def gotResults_15(self, words, fullResults):
+    def gotResults_16(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -304,13 +316,13 @@ class ThisGrammar(GrammarBase):
             top_buffer += '{backspace}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_15(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_16(words[1:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 21, '\'back page\'', e)
+            handle_error('firefox.vcl', 23, '\'back page\'', e)
             self.firstWord = -1
 
     # ('Copy' | 'Paste' | 'Go') ('Address' | 'URL')
-    def gotResults_16(self, words, fullResults):
+    def gotResults_17(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -318,7 +330,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += '{Alt+d}'
             top_buffer = do_flush(False, top_buffer);
             dragon_arg1 = ''
-            dragon_arg1 += '20'
+            dragon_arg1 += '200'
             call_Dragon('Wait', 'i', [dragon_arg1])
             word = fullResults[0 + self.firstWord][0]
             if word == 'Copy':
@@ -329,51 +341,9 @@ class ThisGrammar(GrammarBase):
                 top_buffer += ''
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
-            if len(words) > 2: self.gotResults_16(words[2:], fullResults)
+            if len(words) > 2: self.gotResults_17(words[2:], fullResults)
         except Exception, e:
-            handle_error('chrome.vcl', 22, '(\'Copy\' | \'Paste\' | \'Go\') (\'Address\' | \'URL\')', e)
-            self.firstWord = -1
-
-    # 'text box'
-    def gotResults_17(self, words, fullResults):
-        if self.firstWord<0:
-            return
-        try:
-            top_buffer = ''
-            top_buffer += '{Esc}gi'
-            top_buffer = do_flush(False, top_buffer);
-            self.firstWord += 1
-            if len(words) > 1: self.gotResults_17(words[1:], fullResults)
-        except Exception, e:
-            handle_error('chrome.vcl', 24, '\'text box\'', e)
-            self.firstWord = -1
-
-    # 'show links'
-    def gotResults_18(self, words, fullResults):
-        if self.firstWord<0:
-            return
-        try:
-            top_buffer = ''
-            top_buffer += '{Esc}f'
-            top_buffer = do_flush(False, top_buffer);
-            self.firstWord += 1
-            if len(words) > 1: self.gotResults_18(words[1:], fullResults)
-        except Exception, e:
-            handle_error('chrome.vcl', 25, '\'show links\'', e)
-            self.firstWord = -1
-
-    # 'copy links'
-    def gotResults_19(self, words, fullResults):
-        if self.firstWord<0:
-            return
-        try:
-            top_buffer = ''
-            top_buffer += '{Esc}yf'
-            top_buffer = do_flush(False, top_buffer);
-            self.firstWord += 1
-            if len(words) > 1: self.gotResults_19(words[1:], fullResults)
-        except Exception, e:
-            handle_error('chrome.vcl', 28, '\'copy links\'', e)
+            handle_error('firefox.vcl', 24, '(\'Copy\' | \'Paste\' | \'Go\') (\'Address\' | \'URL\')', e)
             self.firstWord = -1
 
 thisGrammar = ThisGrammar()
