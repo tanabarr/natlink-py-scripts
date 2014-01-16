@@ -42,13 +42,13 @@ cmd.map = {
            "doc end":                          Key("c-end"),
 
            "apostrophe":                       Key("apostrophe"),
-           "asterisk":                         Key("asterisk"),
+           "star":                         Key("asterisk"),
            "at-sign":                          Key("at"),
            "hat":                              Key("caret"),
            "colon":                            Key("colon"),
            "comma":                            Key("comma"),
            "dot":                              Key("dot"),
-           "double quote":                     Key("dquote"),
+           "quote":                     Key("dquote"),
            "equal":                            Key("equal"),
            "exclamation":                      Key("exclamation"),
            "hash":                             Key("hash"),
@@ -113,6 +113,12 @@ def format_studley(dictation):
     text = str(dictation)
     words = [word.capitalize() for word in text.split(" ")]
     return "".join(words)
+
+# Format: some-words
+def format_dash(dictation):
+    """ dashed <dictation> """
+    text = str(dictation)
+    return "".join(text.split(" "))
 
 # Format: somewords
 def format_one_word(dictation):
