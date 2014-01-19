@@ -107,7 +107,7 @@ def format_under_function(dictation):
     text = str(dictation)
     return "_".join(text.split(" ")) + "()"
 
-# Format: SomeWords
+# Format: SomeWords -- same as camel case and expenses
 def format_studley(dictation):
     """ studley <dictation> """
     text = str(dictation)
@@ -118,7 +118,7 @@ def format_studley(dictation):
 def format_dash(dictation):
     """ dashed <dictation> """
     text = str(dictation)
-    return "".join(text.split(" "))
+    return "-".join(text.split(" "))
 
 # Format: somewords
 def format_one_word(dictation):

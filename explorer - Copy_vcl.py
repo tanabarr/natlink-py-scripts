@@ -52,7 +52,7 @@ class ThisGrammar(GrammarBase):
 
     def gotBegin(self,moduleInfo):
         # Return if wrong application
-        window = matchWindow(moduleInfo,'explorer','')
+        window = matchWindow(moduleInfo,'explorer - copy','')
         if not window: return None
         self.firstWord = 0
         # Return if same window and title as before
@@ -103,7 +103,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_1(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 6, '\'Refresh View\'', e)
+            handle_error('explorer - Copy.vcl', 6, '\'Refresh View\'', e)
             self.firstWord = -1
 
     # 'Refresh'
@@ -117,7 +117,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_28(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 6, '\'Refresh\'', e)
+            handle_error('explorer - Copy.vcl', 6, '\'Refresh\'', e)
             self.firstWord = -1
 
     def get_view_mode(self, list_buffer, functional, word):
@@ -145,7 +145,7 @@ class ThisGrammar(GrammarBase):
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
         except Exception, e:
-            handle_error('explorer.vcl', 9, '\'View Mode\' <view_mode>', e)
+            handle_error('explorer - Copy.vcl', 9, '\'View Mode\' <view_mode>', e)
             self.firstWord = -1
 
     # 'Search'
@@ -159,7 +159,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_3(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 10, '\'Search\'', e)
+            handle_error('explorer - Copy.vcl', 10, '\'Search\'', e)
             self.firstWord = -1
 
     # ('Copy' | 'Paste' | 'Go') 'Address'
@@ -184,7 +184,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 2
             if len(words) > 2: self.gotResults_4(words[2:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 11, '(\'Copy\' | \'Paste\' | \'Go\') \'Address\'', e)
+            handle_error('explorer - Copy.vcl', 11, '(\'Copy\' | \'Paste\' | \'Go\') \'Address\'', e)
             self.firstWord = -1
 
     # 'Go' ('Back' | 'Forward')
@@ -207,7 +207,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 2
             if len(words) > 2: self.gotResults_5(words[2:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 14, '\'Go\' (\'Back\' | \'Forward\')', e)
+            handle_error('explorer - Copy.vcl', 14, '\'Go\' (\'Back\' | \'Forward\')', e)
             self.firstWord = -1
 
     # 'Go' ('Back' | 'Forward') 1..10
@@ -233,7 +233,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 3
             if len(words) > 3: self.gotResults_6(words[3:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 15, '\'Go\' (\'Back\' | \'Forward\') 1..10', e)
+            handle_error('explorer - Copy.vcl', 15, '\'Go\' (\'Back\' | \'Forward\') 1..10', e)
             self.firstWord = -1
 
     # ('Copy' | 'Paste' | 'Go') ('Address' | 'URL')
@@ -254,7 +254,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 2
             if len(words) > 2: self.gotResults_7(words[2:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 16, '(\'Copy\' | \'Paste\' | \'Go\') (\'Address\' | \'URL\')', e)
+            handle_error('explorer - Copy.vcl', 16, '(\'Copy\' | \'Paste\' | \'Go\') (\'Address\' | \'URL\')', e)
             self.firstWord = -1
 
     def get_folder(self, list_buffer, functional, word):
@@ -279,7 +279,7 @@ class ThisGrammar(GrammarBase):
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
         except Exception, e:
-            handle_error('explorer.vcl', 22, '\'Folder\' <folder>', e)
+            handle_error('explorer - Copy.vcl', 22, '\'Folder\' <folder>', e)
             self.firstWord = -1
 
     # 'Search' <folder>
@@ -295,7 +295,7 @@ class ThisGrammar(GrammarBase):
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
         except Exception, e:
-            handle_error('explorer.vcl', 23, '\'Search\' <folder>', e)
+            handle_error('explorer - Copy.vcl', 23, '\'Search\' <folder>', e)
             self.firstWord = -1
 
     # 'New Folder'
@@ -309,7 +309,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_10(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 25, '\'New Folder\'', e)
+            handle_error('explorer - Copy.vcl', 25, '\'New Folder\'', e)
             self.firstWord = -1
 
     # 'Folders'
@@ -323,7 +323,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_11(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 26, '\'Folders\'', e)
+            handle_error('explorer - Copy.vcl', 26, '\'Folders\'', e)
             self.firstWord = -1
 
     # 'Open Folder'
@@ -337,7 +337,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_12(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 27, '\'Open Folder\'', e)
+            handle_error('explorer - Copy.vcl', 27, '\'Open Folder\'', e)
             self.firstWord = -1
 
     # 'Expand That'
@@ -354,7 +354,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_13(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 28, '\'Expand That\'', e)
+            handle_error('explorer - Copy.vcl', 28, '\'Expand That\'', e)
             self.firstWord = -1
 
     # 'Collapse That'
@@ -371,7 +371,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_14(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 29, '\'Collapse That\'', e)
+            handle_error('explorer - Copy.vcl', 29, '\'Collapse That\'', e)
             self.firstWord = -1
 
     # 'Share That'
@@ -390,7 +390,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_15(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 30, '\'Share That\'', e)
+            handle_error('explorer - Copy.vcl', 30, '\'Share That\'', e)
             self.firstWord = -1
 
     # 'Copy Filename'
@@ -405,7 +405,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_16(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 35, '\'Copy Filename\'', e)
+            handle_error('explorer - Copy.vcl', 35, '\'Copy Filename\'', e)
             self.firstWord = -1
 
     # 'Copy Folder Name'
@@ -419,7 +419,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_17(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 36, '\'Copy Folder Name\'', e)
+            handle_error('explorer - Copy.vcl', 36, '\'Copy Folder Name\'', e)
             self.firstWord = -1
 
     # 'Copy Leaf Name'
@@ -433,7 +433,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_18(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 37, '\'Copy Leaf Name\'', e)
+            handle_error('explorer - Copy.vcl', 37, '\'Copy Leaf Name\'', e)
             self.firstWord = -1
 
     # 'new text Document'
@@ -447,7 +447,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_19(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 39, '\'new text Document\'', e)
+            handle_error('explorer - Copy.vcl', 39, '\'new text Document\'', e)
             self.firstWord = -1
 
     # 'Duplicate That'
@@ -461,7 +461,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_20(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 40, '\'Duplicate That\'', e)
+            handle_error('explorer - Copy.vcl', 40, '\'Duplicate That\'', e)
             self.firstWord = -1
 
     # 'Rename That'
@@ -475,7 +475,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_21(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 41, '\'Rename That\'', e)
+            handle_error('explorer - Copy.vcl', 41, '\'Rename That\'', e)
             self.firstWord = -1
 
     # 'Paste Here'
@@ -495,7 +495,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_22(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 42, '\'Paste Here\'', e)
+            handle_error('explorer - Copy.vcl', 42, '\'Paste Here\'', e)
             self.firstWord = -1
 
     # ('Show' | 'Edit') 'Properties'
@@ -509,7 +509,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 2
             if len(words) > 2: self.gotResults_23(words[2:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 44, '(\'Show\' | \'Edit\') \'Properties\'', e)
+            handle_error('explorer - Copy.vcl', 44, '(\'Show\' | \'Edit\') \'Properties\'', e)
             self.firstWord = -1
 
     # 'Toggle Read Only'
@@ -528,7 +528,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_24(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 45, '\'Toggle Read Only\'', e)
+            handle_error('explorer - Copy.vcl', 45, '\'Toggle Read Only\'', e)
             self.firstWord = -1
 
     # 'Read Only'
@@ -547,7 +547,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_29(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 45, '\'Read Only\'', e)
+            handle_error('explorer - Copy.vcl', 45, '\'Read Only\'', e)
             self.firstWord = -1
 
     # 'open with'
@@ -566,7 +566,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_25(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 49, '\'open with\'', e)
+            handle_error('explorer - Copy.vcl', 49, '\'open with\'', e)
             self.firstWord = -1
 
     # 'file edit'
@@ -580,7 +580,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_26(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 50, '\'file edit\'', e)
+            handle_error('explorer - Copy.vcl', 50, '\'file edit\'', e)
             self.firstWord = -1
 
     # 'file options'
@@ -594,7 +594,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_27(words[1:], fullResults)
         except Exception, e:
-            handle_error('explorer.vcl', 51, '\'file options\'', e)
+            handle_error('explorer - Copy.vcl', 51, '\'file options\'', e)
             self.firstWord = -1
 
 thisGrammar = ThisGrammar()
