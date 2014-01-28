@@ -21,7 +21,9 @@ class ThisGrammar(GrammarBase):
     buttons on Windows without "say what you see" Dragon NaturallySpeaking
     functionality. To be developed to use the either grid reference or
     MouseGrid coordinate utterances. There should be functionality to add
-    buttons in real-time, need to be backed up in persistent database."""
+    buttons in real-time, need to be backed up in persistent database.
+    with iOS seven use the "say" functionality to dictate, avoids key
+    latching over the VNC connection """
 
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
@@ -79,7 +81,7 @@ class ThisGrammar(GrammarBase):
          'keypad': ['nine', 'seven'],
          # messages context
          'new message': ['three', 'six'],
-         'send message middle': ['six', 'eight'],
+         'send message middle': ['six', 'eight', 'six'],
          'send message bottom': ['nine', 'eight'],
          'message text middle': ['five', 'eight'],
          'message text bottom': ['eight', 'eight'], #five', 'eight'],
@@ -140,6 +142,7 @@ class ThisGrammar(GrammarBase):
                 # window doesn't exist, might need to start USB tunnel application
                 # as well as vnc
                 if 'itunnel_mux.exe' not in [c.Name for c in wmi.WMI().Win32_Process()]:
+                    logging.debug("itunnel process not found, starting...")
                     itun_p = Popen(["C:\win scripts\iphone usb.bat", "&"])
                 # need to supply executable string (so-can locate the Windows
                 # executable, it's not a Python executable) and then the
@@ -161,7 +164,8 @@ class ThisGrammar(GrammarBase):
         size on the screen, would fit into the screen dimensions), the offset
         index of the first usable entry from top (how many entries Could fit
         above the first usable entry, give the index of the first usable entry)
-        and the index of the desired entry. """
+        and the index of the desired entry. TODO: click on contact buttons on
+        the right of entries """
         cmdwords= words[:3]
         self.gotResults_iphonetap(cmdwords, fullResults)
         # now target window should be in focus and ready
@@ -201,8 +205,11 @@ class ThisGrammar(GrammarBase):
         return checker
 
     @sanitise_movement
-    def drag(self, dragDirection='up', startPos=None, dist=3):
-        natlink.recognitionMimic(['mouse', 'drag', dragDirection, 'faster'])
+    def drag(self, dragDirection='up', startPos=None, dist=2):
+        natlink.recognitionMimic(['mouse', 'drag', dragDirection])
+        natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
+        natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
+        natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
         try:
             timeWait = int(dist)
         except ValueError, e: # TypeError as e:
