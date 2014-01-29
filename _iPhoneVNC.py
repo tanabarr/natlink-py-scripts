@@ -60,6 +60,7 @@ class ThisGrammar(GrammarBase):
          'personal hotspot toggle': [],
          'show': [],
          'home': [],
+         'wake': [],
          'end': ['seven', 'nine', 'two'],
          'answer': ['nine', 'seven', 'two'],
          'call': ['seven', 'five', 'eight'],
@@ -131,10 +132,11 @@ class ThisGrammar(GrammarBase):
 
     def gotResults_iphonetap(self, words, fullResults):
         appName = 'iphoneWin'
-        retries = 1 #3
+        retries = 2 #3
         for i in xrange(retries):
             # return index ofapplication window title
             if self.windows.winDiscovery(appName=appName)[0]:
+                print "return from function discovery"
                 # supplied the key of the intended window name
                 return self.winAction(words[1:], appName)
             else:
@@ -242,6 +244,7 @@ class ThisGrammar(GrammarBase):
             natlink.recognitionMimic(['mouse', 'click'])
 
     def winAction(self, actionKey='', appName='iphoneWin'):
+        print "action"
         # concatenate actionKey
         if getattr(actionKey, 'insert'):
             actionKey = ' '.join(actionKey)
@@ -260,6 +263,18 @@ class ThisGrammar(GrammarBase):
                 natlink.recognitionMimic(['mouse', 'window'])
                 natlink.recognitionMimic(['go'])
                 self.click('rightclick',appName=appName)
+            elif str(actionKey) == 'wake':
+                natlink.recognitionMimic(['mouse', 'window'])
+                natlink.recognitionMimic(['go'])
+                self.click('rightclick',appName=appName)
+                actionKey = 'drag right'
+                natlink.recognitionMimic(['mouse', 'window'])
+                gramList = app.mimicCmds[actionKey]
+                logging.debug("Grammer list for action '{0}': {1}".format(
+                    actionKey, gramList))
+                natlink.recognitionMimic(gramList)
+                natlink.recognitionMimic(['go'])
+                self.drag(dragDirection=actionKey.split()[1])
             elif str(actionKey) == 'personal hotspot toggle':
                 if app.vert_offset:
                     app.vert_offset = 0

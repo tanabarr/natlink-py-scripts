@@ -3,7 +3,7 @@
 #
 import logging
 from sqlite3 import OperationalError, connect
-from win32gui import IsWindowVisible, GetWindowText, EnumWindows, BringWindowToTop, SetForegroundWindow
+from win32gui import ShowWindow, IsWindowVisible, GetWindowText, EnumWindows, BringWindowToTop, SetForegroundWindow
 #import os
 
 logging.basicConfig(level=logging.INFO)
@@ -216,10 +216,12 @@ class Windows:
         hwin = None
         index = None
         self.skipTitle = skipTitle
+        # numerate windows into dictionary  "wins" through callback function
         EnumWindows(self._callBack_popWin, wins)
+        # clear the skip title that was passed into this function
         self.skipTitle = None
         total_windows = len(wins)
-        # creating match lists
+        # creating match lists for window titles
         namelist=[]
         partlist=[]
         if winTitle:
@@ -237,11 +239,13 @@ class Windows:
             # checking the window names is a list, handle string occurrence
             try:
                 if app.winHandle:
-                    BringWindowToTop(int(hwin))
+                    ShowWindow(int(hwin), SW_RESTORE)
                     SetForegroundWindow(int(hwin))
+                    SeTActiveWindow(int(hwin))
                     return (str(hwin), wins)
             except:
                 pass
+            # name to append to namelist
             if getattr(app.winNames, 'append'):
                 namelist = namelist + app.winNames
             else:
@@ -254,7 +258,8 @@ class Windows:
                 pass
 
         if index is not None:
-            #loggingdebug("index of application window: %d" % index)
+#            logging.debug("index of application window: %s = %d" %
+#                          (wins[index],index))
             hwin = (wins.keys())[index]
             logging.debug(
                 "Name: {0}, Handle: {1}".format(wins[hwin], str(hwin)))
@@ -262,8 +267,10 @@ class Windows:
                 app.winHandle = hwin
             except:
                 pass
-            BringWindowToTop(int(hwin))
+            # ShowWindow and SetForegroundWindow are the recommended functions
+            ShowWindow(int(hwin), SW_RESTORE)
             SetForegroundWindow(int(hwin))
+            SeTActiveWindow(int(hwin))
             #app.winRect = wg.GetWindowRect(hwin)
             return (str(hwin), wins)
         else:
