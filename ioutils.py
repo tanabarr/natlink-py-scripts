@@ -239,9 +239,9 @@ class Windows:
             # checking the window names is a list, handle string occurrence
             try:
                 if app.winHandle:
-                    ShowWindow(int(hwin), SW_RESTORE)
+                    ShowWindow(int(hwin), 1) #SW_RESTORE)
                     SetForegroundWindow(int(hwin))
-                    SeTActiveWindow(int(hwin))
+                    #SetActiveWindow(int(hwin))
                     return (str(hwin), wins)
             except:
                 pass
@@ -268,9 +268,9 @@ class Windows:
             except:
                 pass
             # ShowWindow and SetForegroundWindow are the recommended functions
-            ShowWindow(int(hwin), SW_RESTORE)
+            ShowWindow(int(hwin), 1) #SW_RESTORE)
             SetForegroundWindow(int(hwin))
-            SeTActiveWindow(int(hwin))
+            #SetActiveWindow(int(hwin))
             #app.winRect = wg.GetWindowRect(hwin)
             return (str(hwin), wins)
         else:

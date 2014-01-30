@@ -42,7 +42,7 @@ class ThisGrammar(GrammarBase):
     appDict.update({"iphoneWin": iou.AppWindow(["tans-iPhone",
                                                "tans-iphone.local",
                                                "host210.msm.che.vodafone"],
-                                              None)})
+                                               None)})
     appDict.update({"xbmcChromeWin": iou.AppWindow(["XBMC - Google Chrome",], None)})
     # appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\
     #')'
@@ -140,11 +140,11 @@ class ThisGrammar(GrammarBase):
                 # supplied the key of the intended window name
                 return self.winAction(words[1:], appName)
             else:
-                logging.debug("iphone window not found")
+                print(str(self.__module__) +  "debug: iphone window not found")
                 # window doesn't exist, might need to start USB tunnel application
                 # as well as vnc
                 if 'itunnel_mux.exe' not in [c.Name for c in wmi.WMI().Win32_Process()]:
-                    logging.debug("itunnel process not found, starting...")
+                    print(str(self.__module__) +  "debug: itunnel process not found, starting...")
                     itun_p = Popen(["C:\win scripts\iphone usb.bat", "&"])
                 # need to supply executable string (so-can locate the Windows
                 # executable, it's not a Python executable) and then the
@@ -155,10 +155,10 @@ class ThisGrammar(GrammarBase):
                 vnc_p = Popen([r'C:\Program Files (x86)\TightVNC\vncviewer.exe',
                             '-config', r'C:\win scripts\localhost-5904.vnc'])
                 # wait for creation
-                logging.debug("waiting for process creation")
+                print(str(self.__module__) +  "debug: waiting for process creation")
                 time.sleep(2)
                 # window should now exist, discover again
-        logging.info('could not connect with phone ')
+        print(str(self.__module__) +  "info:" 'could not connect with phone ')
 
     def gotResults_iphoneselect(self, words, fullResults):
         """ Gives coordinates of an entry in a list on the iPhone. Receives the
@@ -215,7 +215,7 @@ class ThisGrammar(GrammarBase):
         try:
             timeWait = int(dist)
         except ValueError, e: # TypeError as e:
-            logging.debug('unexpected distance value, %s'% e)
+            print(str(self.__module__) +  "debug:" 'unexpected distance value, %s'% e)
             timeWait = 1
         time.sleep(timeWait)
         natlink.recognitionMimic(['mouse','click']) #stop',])
@@ -248,7 +248,7 @@ class ThisGrammar(GrammarBase):
         # concatenate actionKey
         if getattr(actionKey, 'insert'):
             actionKey = ' '.join(actionKey)
-            logging.debug("action Key of command concatenated: %s"% actionKey)
+            print(str(self.__module__) +  "debug: action Key of command concatenated: %s"% actionKey)
         # assuming the correct window is in focus
         # wake. Recognition mimic doesn't seem to be a good model. Something to
         # do with speed ofplayback etc. Grammar not always recognised as a
@@ -270,7 +270,7 @@ class ThisGrammar(GrammarBase):
                 actionKey = 'drag right'
                 natlink.recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
-                logging.debug("Grammer list for action '{0}': {1}".format(
+                print(str(self.__module__) + "debug: Grammer list for action '{0}': {1}".format(
                     actionKey, gramList))
                 natlink.recognitionMimic(gramList)
                 natlink.recognitionMimic(['go'])
@@ -280,7 +280,7 @@ class ThisGrammar(GrammarBase):
                     app.vert_offset = 0
                 else:
                     app.vert_offset = app.TOGGLE_VOFFSET
-                logging.debug("Toggled vertical offset, before: %d, after: %d"%
+                print(str(self.__module__) + "debug: Toggled vertical offset, before: %d, after: %d"%
                             (old, app.vert_offset))
             elif str(actionKey).startswith("select"):
                 pass # function continued in its own handler
@@ -289,7 +289,7 @@ class ThisGrammar(GrammarBase):
             elif str(actionKey).startswith("drag"):
                 natlink.recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
-                logging.debug("Grammer list for action '{0}': {1}".format(
+                print(str(self.__module__) + "debug: Grammer list for action '{0}': {1}".format(
                     actionKey, gramList))
                 natlink.recognitionMimic(gramList)
                 natlink.recognitionMimic(['go'])
@@ -297,14 +297,14 @@ class ThisGrammar(GrammarBase):
             else:
                 natlink.recognitionMimic(['mouse', 'window'])
                 gramList = app.mimicCmds[actionKey]
-                logging.debug("Grammer list for action '{0}': {1}".format(
+                print(str(self.__module__) + "debug: Grammer list for action '{0}': {1}".format(
                     actionKey, gramList))
                 natlink.recognitionMimic(gramList)
                 natlink.recognitionMimic(['go'])
                 self.click('leftclick',appName=appName)
             return 0
         else:
-            logging.error('unknown actionKey')
+            print(str(self.__module__) +  'error:unknown actionKey')
             return 1
     def initialize(self):
         self.load(self.gramSpec)
