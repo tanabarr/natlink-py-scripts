@@ -61,8 +61,8 @@ class ThisGrammar(GrammarBase):
          'show': [],
          'home': [],
          'wake': [],
-         'end': ['seven', 'nine', 'two'],
-         'answer': ['nine', 'seven', 'two'],
+         'end': ['seven', 'nine', 'two', 'two',],
+         'answer': ['nine', 'seven', 'two', 'two'],
          'call': ['seven', 'five', 'eight'],
          'messages': ['one', 'five', 'eight'],
          'settings': ['six', 'eight'],
@@ -207,7 +207,7 @@ class ThisGrammar(GrammarBase):
         return checker
 
     @sanitise_movement
-    def drag(self, dragDirection='up', startPos=None, dist=2):
+    def drag(self, dragDirection='up', startPos=None, dist=4):
         natlink.recognitionMimic(['mouse', 'drag', dragDirection])
         natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
         natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
@@ -274,7 +274,7 @@ class ThisGrammar(GrammarBase):
                     actionKey, gramList))
                 natlink.recognitionMimic(gramList)
                 natlink.recognitionMimic(['go'])
-                self.drag(dragDirection=actionKey.split()[1])
+                self.drag(dragDirection=actionKey.split()[1], dist=2)
             elif str(actionKey) == 'personal hotspot toggle':
                 if app.vert_offset:
                     app.vert_offset = 0
