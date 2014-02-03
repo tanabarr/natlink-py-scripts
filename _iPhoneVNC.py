@@ -70,12 +70,12 @@ class ThisGrammar(GrammarBase):
          'maps search': ['two'],
          'message ok': ['five', 'eight'],
          'dismiss': ['five', 'eight'],
-         'bluetooth on': ['three', 'eight', 'two', 'eight'],
+         'bluetooth on': ['three', 'eight', 'two'],
          # drag context
          'drag up': ['eight','two','eight'],
          'drag down': ['two','eight', 'two'],
-         'drag left': ['nine','eight','three'],
-         'drag right': ['seven','eight','three'],
+         'drag left': ['nine','eight','three', 'two'],
+         'drag right': ['seven','eight','three', 'two'],
          # call context
          'contacts': ['eight', 'eight'],
          'recent': ['seven', 'nine'],
