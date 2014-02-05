@@ -61,6 +61,7 @@ class ThisGrammar(GrammarBase):
          'show': [],
          'home': [],
          'wake': [],
+         'switch screens': ['eight'],
          'end': ['seven', 'nine', 'two', 'two',],
          'answer': ['nine', 'seven', 'two', 'two'],
          'call': ['seven', 'five', 'eight'],
@@ -70,7 +71,7 @@ class ThisGrammar(GrammarBase):
          'maps search': ['two'],
          'message ok': ['five', 'eight'],
          'dismiss': ['five', 'eight'],
-         'bluetooth on': ['three', 'eight', 'two'],
+         'bluetooth on': ['three', 'eight'],
          # drag context
          'drag up': ['eight','two','eight'],
          'drag down': ['two','eight', 'two'],
@@ -78,7 +79,8 @@ class ThisGrammar(GrammarBase):
          'drag right': ['seven','eight','three', 'two'],
          # call context
          'contacts': ['eight', 'eight'],
-         'recent': ['seven', 'nine'],
+         'recents': ['seven', 'nine'],
+         'favourites': ['seven', 'eight', 'four'],
          'keypad': ['nine', 'seven'],
          # messages context
          'new message': ['three', 'six'],
@@ -209,9 +211,10 @@ class ThisGrammar(GrammarBase):
     @sanitise_movement
     def drag(self, dragDirection='up', startPos=None, dist=4):
         natlink.recognitionMimic(['mouse', 'drag', dragDirection])
+        time.sleep(0.5)
         natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
-        natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
-        natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
+        #time.sleep(0.5)
+        #natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
         try:
             timeWait = int(dist)
         except ValueError, e: # TypeError as e:
