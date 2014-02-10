@@ -61,25 +61,27 @@ class ThisGrammar(GrammarBase):
          'show': [],
          'home': [],
          'wake': [],
+         'trust': ['four', 'nine'],
          'switch screens': ['eight'],
          'end': ['seven', 'nine', 'two', 'two',],
          'answer': ['nine', 'seven', 'two', 'two'],
          'call': ['seven', 'five', 'eight'],
          'messages': ['one', 'five', 'eight'],
+         'app store': ['five', 'seven'],
          'settings': ['six', 'eight'],
          'maps': ['five','one', 'two'],
          'maps search': ['two'],
          'message ok': ['five', 'eight'],
          'dismiss': ['five', 'eight'],
-         'bluetooth on': ['three', 'eight'],
+         'bluetooth on': ['three', 'eight', 'five', 'eight'],
          # drag context
          'drag up': ['eight','two','eight'],
          'drag down': ['two','eight', 'two'],
-         'drag left': ['nine','eight','three', 'two'],
-         'drag right': ['seven','eight','three', 'two'],
+         'drag left': ['nine','eight','three'],
+         'drag right': ['seven','eight','three'],
          # call context
          'contacts': ['eight', 'eight'],
-         'recents': ['seven', 'nine'],
+         'recent': ['seven', 'nine'],
          'favourites': ['seven', 'eight', 'four'],
          'keypad': ['nine', 'seven'],
          # messages context
@@ -103,7 +105,7 @@ class ThisGrammar(GrammarBase):
          # keypad context
          'keypad call': ['eight',],
          # in call keypad context
-         'incall keypad': ['five',],
+         'incall keypad': ['five','two','two'],
          'keypad zero': [ 'eight', 'two',],
          'keypad one': [ 'four', 'three', 'eight',],
          'keypad two': ['five', 'two', 'eight',],
@@ -208,7 +210,7 @@ class ThisGrammar(GrammarBase):
             return ret
         return checker
 
-    @sanitise_movement
+    #@sanitise_movement
     def drag(self, dragDirection='up', startPos=None, dist=4):
         natlink.recognitionMimic(['mouse', 'drag', dragDirection])
         time.sleep(0.5)
