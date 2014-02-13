@@ -187,6 +187,7 @@ class ThisGrammar(GrammarBase):
                 # selectable blue Arrow on the right side of the contact
                 x_ofs = x + 17*(x1 - x)/18
             else:
+                # otherwise click in the centre (horizontal)
                 x_ofs = x + (x1 - x)/2
             y_inc = (y1 - y)/num_entries
             y_ofs = y + y_inc/2 + (select_int + offset_index - 1)*y_inc
