@@ -70,9 +70,9 @@ class ThisGrammar(GrammarBase):
          'app store': ['five', 'seven'],
          'settings': ['six', 'eight'],
          'maps': ['five','one', 'two'],
-         'maps search': ['two'],
+         'maps text': ['two'],
          'message ok': ['five', 'eight'],
-         'dismiss': ['five', 'eight'],
+         'dismiss': ['five', 'eight','eight', 'eight'],
          'bluetooth on': ['three', 'eight', 'five', 'eight'],
          # drag context
          'drag up': ['eight','two','eight'],
