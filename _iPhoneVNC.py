@@ -126,6 +126,15 @@ class ThisGrammar(GrammarBase):
     #white circle, for example device >>  lock screen long press can be used to
     #turn off (needs slide motion macro as well)
 
+    # TODO: translate shorthand keys into proper dictionary entry
+    # requires mapping numbers to words
+    # for k in appDict["iphoneWin"].mimicCmds.keys():
+      # if str(k).startswith('x'):
+        # k.lsplit()
+#3478 contact call
+#852 contact voice call
+#98 call voicemail
+
     # List of buttons
     appButtonStr = '|'.join(appDict["iphoneWin"].mimicCmds.keys())
 
