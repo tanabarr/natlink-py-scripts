@@ -118,6 +118,9 @@ class ThisGrammar(GrammarBase):
          'keypad nine': ['six', 'seven',],
          'keypad star': [ 'seven', 'three',],
          'keypad hash': ['nine', 'one',],
+         '3478 contact call': [],
+         '852 contact voice call': [],
+         '98 call voicemail': [],
          })
     ## Note: recognition seems to be dependent on the numbers being spelt out in
     # words. Button location macros/strings should be persisted in file or
@@ -126,17 +129,25 @@ class ThisGrammar(GrammarBase):
     #white circle, for example device >>  lock screen long press can be used to
     #turn off (needs slide motion macro as well)
 
+    num_to_word =\
+    ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+        
     # TODO: translate shorthand keys into proper dictionary entry
     # requires mapping numbers to words
-    # for k in appDict["iphoneWin"].mimicCmds.keys():
-      # if str(k).startswith('x'):
-        # k.lsplit()
-#3478 contact call
-#852 contact voice call
-#98 call voicemail
+    cDict = appDict["iphoneWin"].mimicCmds
+    for k in cDict.keys():
+      if str(k)[0].isdigit():
+        coordinates,command=str(str(k).split(' ',1)[0])
+        print command 
+        print coordinates
+        coordinates_list= [num_to_word[int(i)] for i in coordinates]
+        print coordinates_list
+        cDict.remove(k)
+        cDict.update({command: coordinates_list})
+
 
     # List of buttons
-    appButtonStr = '|'.join(appDict["iphoneWin"].mimicCmds.keys())
+    appButtonStr = '|'.join(cDict.keys())
 
     gramSpec = """
         <iphoneselect> exported = iphone select entry ({0}) [details];
