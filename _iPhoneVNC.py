@@ -137,12 +137,12 @@ class ThisGrammar(GrammarBase):
     cDict = appDict["iphoneWin"].mimicCmds
     for k in cDict.keys():
       if str(k)[0].isdigit():
-        coordinates,command=str(str(k).split(' ',1)[0])
+        coordinates,command=str(k).split(' ',1)
         print command 
         print coordinates
         coordinates_list= [num_to_word[int(i)] for i in coordinates]
         print coordinates_list
-        cDict.remove(k)
+        del cDict[k]
         cDict.update({command: coordinates_list})
 
 
