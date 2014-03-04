@@ -119,6 +119,7 @@ class ThisGrammar(GrammarBase):
          'keypad star': [ 'seven', 'three',],
          'keypad hash': ['nine', 'one',],
          '3478 contact call': [],
+         '858 contact send message': [],
          '852 contact voice call': [],
          '98 call voicemail': [],
          })
@@ -138,9 +139,8 @@ class ThisGrammar(GrammarBase):
     for k in cDict.keys():
       if str(k)[0].isdigit():
         coordinates,command=str(k).split(' ',1)
-        print command 
-        print coordinates
         coordinates_list= [num_to_word[int(i)] for i in coordinates]
+        print command 
         print coordinates_list
         del cDict[k]
         cDict.update({command: coordinates_list})
