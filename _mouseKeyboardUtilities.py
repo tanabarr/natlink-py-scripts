@@ -71,25 +71,27 @@ class ThisGrammar(GrammarBase):
 
     gramSpec = """
         <quickStart> exported = QuickStart (left|right|double) row ({3}) column ({3});
+        <bumpMouse> exported = ({0}) ({0}) bump mouse [({4})];
         <repeatKey> exported = repeat key ({2}) ({4}|{5});
         <windowFocus> exported = (focus|close) [on] window ({4}) [from bottom];
         <androidSC> exported =  show coordinates and screen size;
         <abrvPhrase> exported = ({1}) [mode];
         <reloadEverything> exported = reload everything;
         <resetMic> exported = reset microphone;
-    """.format( '',
+    """.format( 
+                str(range(10)).strip('[]').replace(', ','|'),
                 '|'.join(abrvMap.keys()),
                 '|'.join(kmap.keys()),
-                str(range(6)).strip('[]').replace(', ','|'),
-                str(range(20)).strip('[]').replace(', ','|'),
+                str(range(7)).strip('[]').replace(', ','|'),
+                str(range(21)).strip('[]').replace(', ','|'),
                 str(range(20,50,10)).strip('[]').replace(', ','|'))
         ### EDIT: 031213      removed
         ###' | '.join(kbMacros.keys()),
         ###<kbMacro> exported = ({0});
         ###<kbMacroPrint> exported = show macros [(vim|screen)];
 
-    msgPy = 'New PYD Test'
-    #msgPy = 'Messages from Python Macros'
+    #msgPy = 'New PYD Test'
+    msgPy = 'Messages from Python Macros'
     def gotResults_reloadEverything(self, words, fullResults):
         # bring window to front
         #[logger.info(k) for k in self.kbMacros.keys)]
@@ -150,6 +152,37 @@ class ThisGrammar(GrammarBase):
 #            ret = func(*args,**kwargs)
 #            return ret
 #        return checker
+
+    def gotResults_bumpMouse(self, words, fullResults):
+        """ usage: <x-axis increment> <y-axis increment> bump <integer
+        multiplier> """
+
+        # register required displacement integer 's\s
+        x_disp = int(words[0])
+        y_disp = int(words[1])
+        # do we have a multiplier?
+        mult = 1
+        if len(words) > 4:
+            mult = int(words[4])
+        logger.error( "mult:%d" % (mult))
+        # get current position
+        x, y = natlink.getCursorPos()
+        logger.error("x:%d y:%d" % (x,y))
+        # coordinate calculated using row and column pixel offset * multiplier 
+        if int(words[0]) != 0:
+            x = x + x_disp*mult
+        if int(words[1]) != 0:
+            y = y + y_disp*mult
+
+        logger.error("x:%d y:%d" % (x,y))
+        # get the equivalent event code of the type of mouse event to perform
+        # leftclick, rightclick, rightdouble-click (currently left click)
+        event = self.kmap['leftclick']
+        # play events down click and then release (for left double click
+        # increment from left button up event which produces no action
+        # then when incremented, performs the double-click)
+        natlink.playEvents([(wm_mousemove, x, y), (event, x, y), (event + 1, x, y)])
+
 
     def gotResults_quickStart(self, words, fullResults):
         """Bottom QuickStart item can be approximated by 56 pixels above the bottom
