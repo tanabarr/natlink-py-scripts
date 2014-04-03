@@ -12,6 +12,7 @@ import ioutils as iou
 import logging
 import time
 import wmi
+from VocolaUtils import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -25,6 +26,16 @@ class ThisGrammar(GrammarBase):
     with iOS seven use the "say" functionality to dictate, avoids key
     latching over the VNC connection """
 
+    # function mappings to process coordinates for drag action
+    dragDirMapx = {
+        'right': lambda x,d: x+d, 'left': lambda x,d: x-d,
+        'up': lambda x,d: x, 'down': lambda x,d: x,
+    }
+    dragDirMapy = {
+        'right': lambda y,d: y, 'left': lambda y,d: y,
+        'up': lambda y,d: y-d, 'down': lambda y,d: y+d
+    }
+    
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
     # VK_SPACE,VK_UP,VK_DOWN,VK_LEFT,VK_RIGHT,VK_RETURN,VK_BACK
@@ -231,20 +242,38 @@ class ThisGrammar(GrammarBase):
             return ret
         return checker
 
+    def getDragPoints(self,x,y,displacement,dragDirection):
+        """ take current cursor position, displacement and direction, 
+        receives starting coordinates and returns end coordinates. 
+        axis displacement is in direction of "dragDirection". e.g. to Drag right;
+        Place mouse at beginning of desired Drag action, add displacement
+        from x coordinate and return the new coordinates """
+
+        return (self.dragDirMapx[dragDirection](x,displacement),
+                   self.dragDirMapy[dragDirection](y,displacement))
+               
+
+        
     #@sanitise_movement
     def drag(self, dragDirection='up', startPos=None, dist=4):
-        natlink.recognitionMimic(['mouse', 'drag', dragDirection])
-        time.sleep(0.5)
-        natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
-        #time.sleep(0.5)
-        #natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
-        try:
-            timeWait = int(dist)
-        except ValueError, e: # TypeError as e:
-            print(str(self.__module__) +  "debug:" 'unexpected distance value, %s'% e)
-            timeWait = 1
-        time.sleep(timeWait)
-        natlink.recognitionMimic(['mouse','click']) #stop',])
+        displacement = 190
+        call_Dragon('RememberPoint', '', [])
+        x, y = natlink.getCursorPos()
+        newx,newy = self.getDragPoints(x,y,displacement,dragDirection)
+        natlink.playEvents([(wm_mousemove, newx, newy)])
+        # natlink.playEvents([(wm_mousemove, x, y-displacement)])
+        call_Dragon('DragToPoint', 'i', [])
+
+        # natlink.recognitionMimic(['mouse', 'drag', dragDirection])
+        # time.sleep(0.5)
+        # natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
+        # try:
+        #     timeWait = int(dist)
+        # except ValueError, e: # TypeError as e:
+        #     print(str(self.__module__) +  "debug:" 'unexpected distance value, %s'% e)
+        #     timeWait = 1
+        # time.sleep(timeWait)
+        # natlink.recognitionMimic(['mouse','click']) #stop',])
         # let the user stop as normal with voice...
 
     def click(self, clickType='leftclick', x=None, y=None, appName='iphoneWin'):

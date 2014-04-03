@@ -174,7 +174,7 @@ class ThisGrammar(GrammarBase):
         if int(words[1]) != 0:
             y = y + y_disp*mult
 
-        logger.error("x:%d y:%d" % (x,y))
+        logger.error("x:%d y:%d drag" % (x,y))
         # get the equivalent event code of the type of mouse event to perform
         # leftclick, rightclick, rightdouble-click (currently left click)
         event = self.kmap['leftclick']
