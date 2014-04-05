@@ -156,6 +156,10 @@ class ThisGrammar(GrammarBase):
         del cDict[k]
         cDict.update({command: coordinates_list})
 
+    def grid(self, coordinates):
+        """ replace the MouseGrid recognition mimic calls with function
+        calculate a destination coordinate """
+        pass
 
     # List of buttons
     appButtonStr = '|'.join(cDict.keys())
