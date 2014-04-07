@@ -10,7 +10,7 @@ from VocolaUtils import *
 class ThisGrammar(GrammarBase):
 
     gramSpec = """
-        <1> = 'refresh' ;
+        <1> = ('next' | 'last' ) 'command' (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) ;
         <any> = <1>;
         <sequence> exported = <any>;
     """
@@ -22,7 +22,7 @@ class ThisGrammar(GrammarBase):
 
     def gotBegin(self,moduleInfo):
         # Return if wrong application
-        window = matchWindow(moduleInfo,'winscp','')
+        window = matchWindow(moduleInfo,'pythonwin','')
         if not window: return None
         self.firstWord = 0
         # Return if same window and title as before
@@ -44,18 +44,28 @@ class ThisGrammar(GrammarBase):
         else:
             return word
 
-    # 'refresh'
+    # ('next' | 'last') 'command' 1..9
     def gotResults_1(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += '{ctrl+r}'
+            limit = ''
+            word = fullResults[2 + self.firstWord][0]
+            limit += self.convert_number_word(word)
+            for i in range(to_long(limit)):
+                top_buffer += '{ctrl+'
+                word = fullResults[0 + self.firstWord][0]
+                if word == 'next':
+                    top_buffer += 'j'
+                elif word == 'last':
+                    top_buffer += 'k'
+                top_buffer += '}'
             top_buffer = do_flush(False, top_buffer);
-            self.firstWord += 1
-            if len(words) > 1: self.gotResults_1(words[1:], fullResults)
+            self.firstWord += 3
+            if len(words) > 3: self.gotResults_1(words[3:], fullResults)
         except Exception, e:
-            handle_error('winscp.vcl', 4, '\'refresh\'', e)
+            handle_error('pythonwin.vcl', 4, '(\'next\' | \'last\') \'command\' 1..9', e)
             self.firstWord = -1
 
 thisGrammar = ThisGrammar()
