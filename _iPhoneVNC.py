@@ -35,7 +35,10 @@ class ThisGrammar(GrammarBase):
         'right': lambda y,d: y, 'left': lambda y,d: y,
         'up': lambda y,d: y-d, 'down': lambda y,d: y+d
     }
-    
+    dispMap = {
+        'right': 190,'left': 190,'up': 250,'down':250
+    }
+
     # Todo: embed this list of strings within grammar to save space
     # mapping of keyboard keys to virtual key code to send as key input
     # VK_SPACE,VK_UP,VK_DOWN,VK_LEFT,VK_RIGHT,VK_RETURN,VK_BACK
@@ -143,15 +146,15 @@ class ThisGrammar(GrammarBase):
 
     num_to_word =\
     ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
-        
-    # TODO: translate shorthand keys into proper dictionary entry
+
+    # translate shorthand keys into proper dictionary entry
     # requires mapping numbers to words
     cDict = appDict["iphoneWin"].mimicCmds
     for k in cDict.keys():
       if str(k)[0].isdigit():
         coordinates,command=str(k).split(' ',1)
         coordinates_list= [num_to_word[int(i)] for i in coordinates]
-        print command 
+        print command
         print coordinates_list
         del cDict[k]
         cDict.update({command: coordinates_list})
@@ -247,38 +250,23 @@ class ThisGrammar(GrammarBase):
         return checker
 
     def getDragPoints(self,x,y,displacement,dragDirection):
-        """ take current cursor position, displacement and direction, 
-        receives starting coordinates and returns end coordinates. 
+        """ take current cursor position, displacement and direction,
+        receives starting coordinates and returns end coordinates.
         axis displacement is in direction of "dragDirection". e.g. to Drag right;
         Place mouse at beginning of desired Drag action, add displacement
         from x coordinate and return the new coordinates """
 
         return (self.dragDirMapx[dragDirection](x,displacement),
                    self.dragDirMapy[dragDirection](y,displacement))
-               
 
-        
     #@sanitise_movement
     def drag(self, dragDirection='up', startPos=None, dist=4):
-        displacement = 190
+        displacement = self.dispMap[dragDirection]
         call_Dragon('RememberPoint', '', [])
         x, y = natlink.getCursorPos()
         newx,newy = self.getDragPoints(x,y,displacement,dragDirection)
         natlink.playEvents([(wm_mousemove, newx, newy)])
-        # natlink.playEvents([(wm_mousemove, x, y-displacement)])
         call_Dragon('DragToPoint', 'i', [])
-
-        # natlink.recognitionMimic(['mouse', 'drag', dragDirection])
-        # time.sleep(0.5)
-        # natlink.recognitionMimic(['fast']) #, 'fast', 'fast'])
-        # try:
-        #     timeWait = int(dist)
-        # except ValueError, e: # TypeError as e:
-        #     print(str(self.__module__) +  "debug:" 'unexpected distance value, %s'% e)
-        #     timeWait = 1
-        # time.sleep(timeWait)
-        # natlink.recognitionMimic(['mouse','click']) #stop',])
-        # let the user stop as normal with voice...
 
     def click(self, clickType='leftclick', x=None, y=None, appName='iphoneWin'):
         # get the equivalent event code of the type of mouse event to perform
