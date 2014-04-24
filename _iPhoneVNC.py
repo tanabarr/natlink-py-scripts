@@ -136,6 +136,7 @@ class ThisGrammar(GrammarBase):
          '858 contact send message': [],
          '852 contact voice call': [],
          '98 call voicemail': [],
+         '6 flicker': [],
          })
     ## Note: recognition seems to be dependent on the numbers being spelt out in
     # words. Button location macros/strings should be persisted in file or
