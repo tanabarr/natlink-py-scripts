@@ -62,7 +62,7 @@ cmd.map = {
            "slash":                            Key("slash"),
            "single quote":                     Key("squote"),
            "tilde":                            Key("tilde"),
-           "underscore":                       Key("underscore"),
+           "score":                       Key("underscore"),
 
            "space [<n>]":                      release + Key("space:%(n)d"),
            "enter [<n>]":                      release + Key("enter:%(n)d"),
