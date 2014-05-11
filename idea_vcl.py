@@ -20,13 +20,13 @@ class ThisGrammar(GrammarBase):
         <mod> = 'Shift' | 'control-key' | 'Alt' ;
         <nn> = (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50) ;
         <5> = 'Press' <special> <nn> ;
-        <122> = (('Left' | 'Right' | 'Up' | 'Down' | 'space-bar' | 'tab-key' | 'Enter' | 'page-up' | 'page-down' | 'Backspace' | 'delete' | 'escape' ) ) <nn> ;
+        <246> = (('Left' | 'Right' | 'Up' | 'Down' | 'space-bar' | 'tab-key' | 'Enter' | 'page-up' | 'page-down' | 'Backspace' | 'delete' | 'escape' ) ) <nn> ;
         <6> = 'Press' <mod> <key> <nn> ;
-        <123> = ('Shift' | 'control-key' | 'Alt' ) <key> <nn> ;
+        <247> = ('Shift' | 'control-key' | 'Alt' ) <key> <nn> ;
         <7> = 'Press' <mod> <mod> <key> <nn> ;
-        <124> = ('Shift' | 'control-key' | 'Alt' ) <mod> <key> <nn> ;
+        <248> = ('Shift' | 'control-key' | 'Alt' ) <mod> <key> <nn> ;
         <8> = 'Press' <mod> <mod> <mod> <key> <nn> ;
-        <125> = ('Shift' | 'control-key' | 'Alt' ) <mod> <mod> <key> <nn> ;
+        <249> = ('Shift' | 'control-key' | 'Alt' ) <mod> <mod> <key> <nn> ;
         <0to9> = ('0' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) ;
         <2to9> = (2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) ;
         <1to30> = (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30) ;
@@ -36,30 +36,30 @@ class ThisGrammar(GrammarBase):
         <9> = ((1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30) ) <direction> ;
         <10> = ('Change' | 'Copy' ) ('Char' | '1' | 'One' ) ;
         <11> = ('Change' | 'Copy' ) 'Back 1' ;
-        <126> = ('Change' | 'Copy' ) 'Back' ;
+        <250> = ('Change' | 'Copy' ) 'Back' ;
         <12> = ('Change' | 'Copy' ) <12b> ;
         <12b> = <1to30> 'Chars' ;
-        <127> = ('Change' | 'Copy' ) <1to30> ;
+        <251> = ('Change' | 'Copy' ) <1to30> ;
         <13> = ('Change' | 'Copy' ) 'Back' <13b> ;
         <13b> = <1to30> 'Chars' ;
-        <128> = ('Change' | 'Copy' ) 'Back' <1to30> ;
+        <252> = ('Change' | 'Copy' ) 'Back' <1to30> ;
         <14> = 'Kill' ('Char' | '1' | 'One' ) ;
         <15> = 'Kill Back 1' ;
-        <129> = 'Kill Back' ;
+        <253> = 'Kill Back' ;
         <16> = 'Kill' <16b> ;
         <16b> = <1to30> 'Chars' ;
-        <130> = 'Kill' <1to30> ;
+        <254> = 'Kill' <1to30> ;
         <17> = 'Kill Back' <17b> ;
         <17b> = <1to30> 'Chars' ;
-        <131> = 'Kill Back' <1to30> ;
+        <255> = 'Kill Back' <1to30> ;
         <18> = 'Change case' ('back' ) <1to30> ;
-        <133> = 'Change case' ('back' ) ;
-        <132> = 'Change case' <1to30> ;
-        <134> = 'Change case' ;
+        <257> = 'Change case' ('back' ) ;
+        <256> = 'Change case' <1to30> ;
+        <258> = 'Change case' ;
         <19> = 'One Word' ;
-        <135> = 'Word' ;
+        <259> = 'Word' ;
         <20> = 'Back One Word' ;
-        <136> = 'Back Word' ;
+        <260> = 'Back Word' ;
         <21> = <1to30> 'Words' ;
         <22> = 'Back' <22b> ;
         <22b> = <1to30> 'Words' ;
@@ -73,19 +73,19 @@ class ThisGrammar(GrammarBase):
         <edit_mode> = ('Change' | 'Kill' | 'Copy' ) ;
         <28> = <line_actions> 'Line' ;
         <29> = 'Swap' ('Back' | 'Next' ) 'Line' ;
-        <138> = 'Swap' ('Back' | 'Next' ) ;
-        <137> = 'Swap Line' ;
-        <139> = 'Swap' ;
+        <262> = 'Swap' ('Back' | 'Next' ) ;
+        <261> = 'Swap Line' ;
+        <263> = 'Swap' ;
         <30> = <edit_mode> ('Beginning' | 'Start' | 'End' ) 'Line Here' ;
-        <141> = <edit_mode> ('Beginning' | 'Start' | 'End' ) 'Line' ;
-        <140> = <edit_mode> ('Beginning' | 'Start' | 'End' ) 'Here' ;
-        <142> = <edit_mode> ('Beginning' | 'Start' | 'End' ) ;
+        <265> = <edit_mode> ('Beginning' | 'Start' | 'End' ) 'Line' ;
+        <264> = <edit_mode> ('Beginning' | 'Start' | 'End' ) 'Here' ;
+        <266> = <edit_mode> ('Beginning' | 'Start' | 'End' ) ;
         <31> = 'Blank' ('back' | 'insert' ) 'Line' ;
-        <143> = 'Blank' ('back' | 'insert' ) ;
+        <267> = 'Blank' ('back' | 'insert' ) ;
         <32> = 'Join' ('Back' | 'Next' ) 'Line' ;
-        <145> = 'Join' ('Back' | 'Next' ) ;
-        <144> = 'Join Line' ;
-        <146> = 'Join' ;
+        <269> = 'Join' ('Back' | 'Next' ) ;
+        <268> = 'Join Line' ;
+        <270> = 'Join' ;
         <relative_range_actions> = ('Change' | 'Kill' | 'Copy' | 'Move to' | 'Copy to' | 'Duplicate' | 'indent' | 'reverse indent' ) ;
         <relative_range_commands> = ('Sub' | 'Comment' | 'Start' | 'Append' ) ;
         <33> = <relative_range_actions> ('Next' | 'Back' ) 'Line' ;
@@ -98,33 +98,33 @@ class ThisGrammar(GrammarBase):
         <39> = <range_actions> 'Range' ;
         <insert> = ('insert' | 'append' ) ;
         <40> = 'Flow' ('Start' | 'Append' ) <insert> ;
-        <147> = 'Flow' ('Start' | 'Append' ) ;
+        <271> = 'Flow' ('Start' | 'Append' ) ;
         <41> = <edit_mode> ('Flow Here' | 'Flow All' | 'Back Flow Here' ) ;
         <42> = ('Indent' | 'reverse indent' ) ('Line' | 'Range' ) (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) ;
-        <148> = ('Indent' | 'reverse indent' ) ('Line' | 'Range' ) ;
+        <272> = ('Indent' | 'reverse indent' ) ('Line' | 'Range' ) ;
         <sub_action> = ('line' | 'all' | 'here' | 'back here' ) ;
         <43> = ('sub' | 'substitute' ) <sub_action> ;
         <44> = 'edit' ('undo' | 'redo' ) <2to9> ;
-        <149> = 'edit' ('undo' | 'redo' ) ;
+        <273> = 'edit' ('undo' | 'redo' ) ;
         <45> = ('change' ) ('inner' | 'outer' ) ('brackets' ) ;
         <46> = 'Start macro' ;
         <47> = 'Repeat macro' (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) 'times' ;
-        <150> = 'Repeat macro' ;
+        <274> = 'Repeat macro' ;
         <text_actions> = ('Paste' | 'Paste Back' | 'Insert' | 'Append' | 'Substitute' | 'Replace' | 'diff push' | 'diff pull' | 'diff next' | 'diff back' | 'Format' | 'Normal mode' | 'visual mode' ) ;
         <48> = (('Paste' | 'Paste Back' | 'Insert' | 'Append' | 'Substitute' | 'Replace' | 'diff push' | 'diff pull' | 'diff next' | 'diff back' | 'Format' | 'Normal mode' | 'visual mode' ) ) ;
         <line_mod> = ('Start' | 'Append' | 'Sub' | 'Scroll to bottom' | 'Scroll bottom' | 'Scroll to top' | 'Scroll top' | 'Scroll to middle' | 'Scroll middle' | 'beginning' | 'middlie' | 'end' | 'New back' | 'insert' | 'Change' | 'Kill' | 'Copy' | 'Paste' | 'Paste Back' | 'Move to' | 'Copy to' | 'copy here' | 'indent' | 'reverse indent' | 'Comment' | 'Blank back' | 'Blank insert' ) ;
         <49> = 'line' <line_mod> <0to9> ;
-        <154> = 'line' <0to9> ;
+        <278> = 'line' <0to9> ;
         <50> = 'line' <line_mod> <0to9> <0to9> ;
-        <155> = 'line' <0to9> <0to9> ;
+        <279> = 'line' <0to9> <0to9> ;
         <51> = 'line' <line_mod> <0to9> <0to9> <0to9> ;
-        <156> = 'line' <0to9> <0to9> <0to9> ;
+        <280> = 'line' <0to9> <0to9> <0to9> ;
         <52> = 'line' <line_mod> <0to9> <0to9> <0to9> <0to9> ;
-        <157> = 'line' <0to9> <0to9> <0to9> <0to9> ;
+        <281> = 'line' <0to9> <0to9> <0to9> <0to9> ;
         <navigation_actions> = ('List changes' | 'back change' | 'Undo jump' | 'Return from' | 'Set mark' | 'Goto mark' | 'Append back' | 'Append next' | 'Start back' | 'Start next' | 'Match bracket' | 'Scroll to bottom' | 'Scroll bottom' | 'Scroll to top' | 'Scroll top' | 'Scroll to middle' | 'Scroll middle' ) ;
         <53> = (('List changes' | 'back change' | 'Undo jump' | 'Return from' | 'Set mark' | 'Goto mark' | 'Append back' | 'Append next' | 'Start back' | 'Start next' | 'Match bracket' | 'Scroll to bottom' | 'Scroll bottom' | 'Scroll to top' | 'Scroll top' | 'Scroll to middle' | 'Scroll middle' ) ) ;
         <54> = 'Halfpage' ('Up' | 'Down' ) ;
-        <161> = 'Halfpage' ;
+        <285> = 'Halfpage' ;
         <55> = 'Page' <top_bottom> ;
         <56> = 'Back till' <key> ;
         <57> = 'Till' <key> ;
@@ -141,7 +141,7 @@ class ThisGrammar(GrammarBase):
         <68> = 'Close file' ;
         <69> = 'Save and close file' ;
         <70> = 'back command' (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) ;
-        <162> = 'back command' ;
+        <286> = 'back command' ;
         <71> = 'Edit another' ;
         <72> = 'File browser' ;
         <73> = 'vim diff split' ;
@@ -156,12 +156,12 @@ class ThisGrammar(GrammarBase):
         <82> = 'Function definition' <dgndictation> ;
         <83> = 'Show Help' ;
         <84> = 'Set setting' ('paste' ) ;
-        <163> = 'Set setting' ;
+        <287> = 'Set setting' ;
         <85> = 'Set dark background' ;
         <86> = 'Set light background' ;
         <87> = 'reload vim config' ;
         <88> = 'run this' ('now' ) ;
-        <164> = 'run this' ;
+        <288> = 'run this' ;
         <89> = 'Split vertical' ;
         <window_action> = ('left' | 'right' | 'up' | 'down' | 'next' | 'close' ) ;
         <90> = 'Vim Window' <window_action> ;
@@ -195,10 +195,146 @@ class ThisGrammar(GrammarBase):
         <116> = 'histogram debug' ;
         <117> = 'ifdef' ('debug' | 'trace' ) ;
         <118> = 'ifdef end' ;
-        <119> = 'File Open' ;
-        <120> = 'file save as' ;
-        <121> = 'file save' ;
-        <any> = <1>|<2>|<3>|<4>|<5>|<122>|<6>|<123>|<7>|<124>|<8>|<125>|<9>|<10>|<11>|<126>|<12>|<127>|<13>|<128>|<14>|<15>|<129>|<16>|<130>|<17>|<131>|<18>|<133>|<132>|<134>|<19>|<135>|<20>|<136>|<21>|<22>|<23>|<24>|<25>|<26>|<27>|<28>|<29>|<138>|<137>|<139>|<30>|<141>|<140>|<142>|<31>|<143>|<32>|<145>|<144>|<146>|<33>|<34>|<35>|<36>|<37>|<38>|<39>|<40>|<147>|<41>|<42>|<148>|<43>|<44>|<149>|<45>|<46>|<47>|<150>|<48>|<49>|<154>|<50>|<155>|<51>|<156>|<52>|<157>|<53>|<54>|<161>|<55>|<56>|<57>|<58>|<59>|<60>|<61>|<62>|<63>|<64>|<65>|<66>|<67>|<68>|<69>|<70>|<162>|<71>|<72>|<73>|<74>|<75>|<76>|<77>|<78>|<79>|<80>|<81>|<82>|<83>|<84>|<163>|<85>|<86>|<87>|<88>|<164>|<89>|<90>|<91>|<92>|<93>|<94>|<95>|<96>|<97>|<98>|<99>|<100>|<101>|<102>|<103>|<104>|<105>|<106>|<107>|<108>|<109>|<110>|<111>|<112>|<113>|<114>|<115>|<116>|<117>|<118>|<119>|<120>|<121>;
+        <machine> = ('release five' | 'release six' | 'P.O. Box' | 'PA install' | 'build Debian' | 'build Debian one' | 'build Debian two' | 'build cent toss' | 'build wheezy' | 'metabox one' | 'lark' | 'Embarcadero' | 'remote foil' | 'local foil' ) ;
+        <common_actions> = ('edit' | 'source' ) ;
+        <119> = <common_actions> ('vim' | 'bash' ) 'config' ;
+        <120> = 'bash history' ;
+        <121> = 'break' ;
+        <122> = 'break end of file' ;
+        <123> = 'escape process' ;
+        <124> = ('foreground' | 'background' ) 'process' ;
+        <125> = 'double dash' ;
+        <126> = 'Bash Tag File Update' ;
+        <127> = 'make tar' ;
+        <128> = 'extract tar' ;
+        <129> = 'confirm force remove file' ;
+        <130> = 'back directory' (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) ;
+        <131> = 'change ownership' ;
+        <132> = 'change' ('permissions' | 'mode' ) ;
+        <133> = 'home root' ;
+        <134> = 'enter list' ;
+        <135> = 'change absolute directory' ;
+        <136> = 'present working directory' ;
+        <137> = 'vim diff' ;
+        <138> = 'cygwin password' ;
+        <139> = ('sub' | 'SVM' ) ('checkout' | 'diff' | 'commit' | 'update' | 'remove' | 'log' | 'start bug' | 'status' ) ;
+        <140> = 'start environment' (1 | 2 | 3 | 4 | 5) ;
+        <141> = 'stop environment' ;
+        <142> = 'Django' ('shell' | 'database shell' | 'sink' | 'run' ) ;
+        <143> = 'pip' ('freeze' | 'completion' | 'install' | 'list' | 'help' ) ;
+        <144> = 'pip option' ('bash' | 'upgrade' | 'outdated' | 'local' | 'no index' | 'find links' ) ;
+        <145> = 'network stats' ;
+        <show> = ('show' | 'show some of' | 'show a lot of' | 'local show' ) ;
+        <desc> = ('long' | 'full' | 'recent' | 'recursive' | 'human' ) ;
+        <146> = <show> <desc> <desc> <desc> 'directory' ;
+        <291> = <show> <desc> <desc> 'directory' ;
+        <290> = <show> <desc> 'directory' ;
+        <289> = <show> 'directory' ;
+        <147> = <show> <desc> 'directory' ;
+        <148> = <show> 'directory' ;
+        <149> = 'show disk space' ;
+        <usage> = ('usage' | 'usage kilobytes' | 'usage megabytes' ) ;
+        <150> = 'show disk' <usage> ;
+        <151> = 'secure login to' <machine> ;
+        <292> = 'secure login' <machine> ;
+        <152> = 'S F T P' <machine> ;
+        <153> = 'multiple get' ;
+        <154> = 'local change directory' ;
+        <155> = 'local working directory' ;
+        <scp> = ('secure copy' | 'secure recursive copy' | 'recursive secure copy' | 'secure clone' ) ;
+        <156> = 'upload to default' ;
+        <157> = 'go to' ('class' | 'file' | 'symbol' | 'declaration' | 'implementation' | 'type declaration' | 'usages' | 'action' ) ;
+        <158> = 'return from jump' ;
+        <159> = 'symbol preview' ;
+        <160> = 'Recent files popup' ;
+        <161> = 'File structure popup' ;
+        <162> = 'File structure view' ;
+        <163> = 'project view' ;
+        <164> = 'Show navigation bar' ;
+        <165> = 'Hide window' ;
+        <166> = 'Toggle maximizing editor' ;
+        <167> = ('tool' | 'window' ) 'close' ;
+        <168> = 'quick definition lookup' ;
+        <169> = 'Go to' ('next' | 'back' ) 'tab' ;
+        <170> = 'charm Switch tab' (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) ;
+        <293> = 'charm Switch tab' ;
+        <171> = 'Charm back change' ;
+        <172> = 'Select current file or symbol' ;
+        <173> = 'Toggle bookmark' ;
+        <174> = 'Toggle bookmark with mnemonic' ;
+        <175> = 'Go to numbered bookmark' ('0' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) ;
+        <176> = 'Show bookmarks' ;
+        <177> = 'Find usages' ;
+        <178> = 'Find usages in file' ;
+        <179> = 'Highlight usages in file' ;
+        <180> = 'Rename' ;
+        <181> = 'charm' ('hide tools' | 'settings' | 'run console' | 'manage tasks' | 'last tool' | 'list tools' | 'run program' | 'split vertical' | 'split tools' ) ;
+        <182> = 'Show possible actions' ;
+        <183> = 'complete' ;
+        <184> = 'Show error description' ;
+        <185> = ('comment' | 'expand' | 'collapse' ) 'line' ;
+        <186> = 'comment' (2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20) 'lines' ;
+        <187> = 'surround with' ;
+        <188> = ('replace normal' | 'find in path' | 'replace in path' | 'structure find' | 'structure replace' ) ;
+        <189> = 'Select successively increasing code blocks' ;
+        <190> = 'Decrease current selection to previous state' ;
+        <191> = 'Select till code block' ('end' | 'start' ) ;
+        <192> = 'Save all' ;
+        <193> = 'Inspect file' ;
+        <194> = 'Optimize imports' ;
+        <195> = 'Select configuration and run' ;
+        <196> = 'Select configuration and debug' ;
+        <197> = 'Debug' ;
+        <198> = 'Run context configuration from editor' ;
+        <199> = 'Step over' ;
+        <200> = 'Step into' ;
+        <201> = 'Step out' ;
+        <202> = 'Run to cursor' ;
+        <203> = 'Evaluate expression' ;
+        <204> = 'Quick evaluate expression' ;
+        <205> = 'Resume program' ;
+        <206> = 'Toggle breakpoint' ;
+        <207> = 'View breakpoints' ;
+        <208> = 'Go to' ('previous' | 'next' ) 'method' ;
+        <209> = 'Move to code block' ('end' | 'start' ) ;
+        <210> = 'Type hierarchy' ;
+        <211> = 'Method hierarchy' ;
+        <212> = 'Call hierarchy' ;
+        <213> = ('Next' | 'previous' ) 'highlighted error' ;
+        <214> = 'Safe Delete' ;
+        <215> = 'Change Signature' ;
+        <216> = 'Inline' ;
+        <217> = 'Extract' ('Method' | 'Variable' | 'Field' | 'Constant' | 'Parameter' ) ;
+        <218> = 'Open tool window' ('0' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) ;
+        <219> = 'Add to Favorites' ;
+        <220> = 'Quick switch current scheme' ;
+        <221> = 'add item' ;
+        <222> = 'search everywhere' ;
+        <223> = 'clean compile files' ;
+        <224> = 'Complete statement' ;
+        <225> = 'Parameter info' ;
+        <226> = 'Quick documentation lookup' ;
+        <227> = 'External Doc' ;
+        <228> = 'Generate code' ;
+        <229> = 'Override methods' ;
+        <230> = 'Reformat code' ;
+        <231> = 'Auto-indent line' ;
+        <232> = 'Copy to clipboard' ;
+        <233> = 'Paste from clipboard' ;
+        <234> = 'Paste from recent buffers' ;
+        <235> = 'Duplicate current line or selected block' ;
+        <236> = 'Smart line split' ;
+        <237> = 'Toggle case for word at caret or selected block' ;
+        <238> = 'find' ('this' | 'next' | 'back' ) ;
+        <294> = 'find' ;
+        <239> = 'select' ('next' | 'all' | 'unselect' ) ;
+        <240> = 'Commit project to VCS' ;
+        <241> = 'Update project from VCS' ;
+        <242> = 'View recent changes' ;
+        <243> = 'quick popup' ;
+        <244> = 'Surround with Live Template' ;
+        <245> = 'Insert Live Template' ;
+        <any> = <1>|<2>|<3>|<4>|<5>|<246>|<6>|<247>|<7>|<248>|<8>|<249>|<9>|<10>|<11>|<250>|<12>|<251>|<13>|<252>|<14>|<15>|<253>|<16>|<254>|<17>|<255>|<18>|<257>|<256>|<258>|<19>|<259>|<20>|<260>|<21>|<22>|<23>|<24>|<25>|<26>|<27>|<28>|<29>|<262>|<261>|<263>|<30>|<265>|<264>|<266>|<31>|<267>|<32>|<269>|<268>|<270>|<33>|<34>|<35>|<36>|<37>|<38>|<39>|<40>|<271>|<41>|<42>|<272>|<43>|<44>|<273>|<45>|<46>|<47>|<274>|<48>|<49>|<278>|<50>|<279>|<51>|<280>|<52>|<281>|<53>|<54>|<285>|<55>|<56>|<57>|<58>|<59>|<60>|<61>|<62>|<63>|<64>|<65>|<66>|<67>|<68>|<69>|<70>|<286>|<71>|<72>|<73>|<74>|<75>|<76>|<77>|<78>|<79>|<80>|<81>|<82>|<83>|<84>|<287>|<85>|<86>|<87>|<88>|<288>|<89>|<90>|<91>|<92>|<93>|<94>|<95>|<96>|<97>|<98>|<99>|<100>|<101>|<102>|<103>|<104>|<105>|<106>|<107>|<108>|<109>|<110>|<111>|<112>|<113>|<114>|<115>|<116>|<117>|<118>|<119>|<120>|<121>|<122>|<123>|<124>|<125>|<126>|<127>|<128>|<129>|<130>|<131>|<132>|<133>|<134>|<135>|<136>|<137>|<138>|<139>|<140>|<141>|<142>|<143>|<144>|<145>|<146>|<291>|<290>|<289>|<147>|<148>|<149>|<150>|<151>|<292>|<152>|<153>|<154>|<155>|<156>|<157>|<158>|<159>|<160>|<161>|<162>|<163>|<164>|<165>|<166>|<167>|<168>|<169>|<170>|<293>|<171>|<172>|<173>|<174>|<175>|<176>|<177>|<178>|<179>|<180>|<181>|<182>|<183>|<184>|<185>|<186>|<187>|<188>|<189>|<190>|<191>|<192>|<193>|<194>|<195>|<196>|<197>|<198>|<199>|<200>|<201>|<202>|<203>|<204>|<205>|<206>|<207>|<208>|<209>|<210>|<211>|<212>|<213>|<214>|<215>|<216>|<217>|<218>|<219>|<220>|<221>|<222>|<223>|<224>|<225>|<226>|<227>|<228>|<229>|<230>|<231>|<232>|<233>|<234>|<235>|<236>|<237>|<238>|<294>|<239>|<240>|<241>|<242>|<243>|<244>|<245>;
         <sequence> exported = <any>;
     """
     
@@ -209,7 +345,7 @@ class ThisGrammar(GrammarBase):
 
     def gotBegin(self,moduleInfo):
         # Return if wrong application
-        window = matchWindow(moduleInfo,'gvim','')
+        window = matchWindow(moduleInfo,'idea','')
         if not window: return None
         self.firstWord = 0
         # Return if same window and title as before
@@ -520,7 +656,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # (('Left' | 'Right' | 'Up' | 'Down' | 'space-bar' | 'tab-key' | 'Enter' | 'page-up' | 'page-down' | 'Backspace' | 'delete' | 'escape')) <nn>
-    def gotResults_122(self, words, fullResults):
+    def gotResults_246(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -584,7 +720,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # ('Shift' | 'control-key' | 'Alt') <key> <nn>
-    def gotResults_123(self, words, fullResults):
+    def gotResults_247(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -636,7 +772,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # ('Shift' | 'control-key' | 'Alt') <mod> <key> <nn>
-    def gotResults_124(self, words, fullResults):
+    def gotResults_248(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -694,7 +830,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # ('Shift' | 'control-key' | 'Alt') <mod> <mod> <key> <nn>
-    def gotResults_125(self, words, fullResults):
+    def gotResults_249(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -818,7 +954,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # ('Change' | 'Copy') 'Back'
-    def gotResults_126(self, words, fullResults):
+    def gotResults_250(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -832,7 +968,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += 'h'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
-            if len(words) > 2: self.gotResults_126(words[2:], fullResults)
+            if len(words) > 2: self.gotResults_250(words[2:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 28, '(\'Change\' | \'Copy\') \'Back\'', e)
             self.firstWord = -1
@@ -859,7 +995,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # ('Change' | 'Copy') <1to30>
-    def gotResults_127(self, words, fullResults):
+    def gotResults_251(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -901,7 +1037,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # ('Change' | 'Copy') 'Back' <1to30>
-    def gotResults_128(self, words, fullResults):
+    def gotResults_252(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -950,7 +1086,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Kill Back'
-    def gotResults_129(self, words, fullResults):
+    def gotResults_253(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -958,7 +1094,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += '{Left}{Del}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_129(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_253(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 32, '\'Kill Back\'', e)
             self.firstWord = -1
@@ -980,7 +1116,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Kill' <1to30>
-    def gotResults_130(self, words, fullResults):
+    def gotResults_254(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1015,7 +1151,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Kill Back' <1to30>
-    def gotResults_131(self, words, fullResults):
+    def gotResults_255(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1071,7 +1207,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Change case' ('back')
-    def gotResults_133(self, words, fullResults):
+    def gotResults_257(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1099,13 +1235,13 @@ class ThisGrammar(GrammarBase):
                 top_buffer += '~'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
-            if len(words) > 2: self.gotResults_133(words[2:], fullResults)
+            if len(words) > 2: self.gotResults_257(words[2:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 35, '\'Change case\' (\'back\')', e)
             self.firstWord = -1
 
     # 'Change case' <1to30>
-    def gotResults_132(self, words, fullResults):
+    def gotResults_256(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1140,7 +1276,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Change case'
-    def gotResults_134(self, words, fullResults):
+    def gotResults_258(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1166,7 +1302,7 @@ class ThisGrammar(GrammarBase):
                 top_buffer += '~'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_134(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_258(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 35, '\'Change case\'', e)
             self.firstWord = -1
@@ -1187,7 +1323,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Word'
-    def gotResults_135(self, words, fullResults):
+    def gotResults_259(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1196,7 +1332,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += 'w'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_135(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_259(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 38, '\'Word\'', e)
             self.firstWord = -1
@@ -1217,7 +1353,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Back Word'
-    def gotResults_136(self, words, fullResults):
+    def gotResults_260(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1226,7 +1362,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += 'b'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_136(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_260(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 39, '\'Back Word\'', e)
             self.firstWord = -1
@@ -1454,7 +1590,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Swap' ('Back' | 'Next')
-    def gotResults_138(self, words, fullResults):
+    def gotResults_262(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1479,13 +1615,13 @@ class ThisGrammar(GrammarBase):
             top_buffer += 'ddp'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
-            if len(words) > 2: self.gotResults_138(words[2:], fullResults)
+            if len(words) > 2: self.gotResults_262(words[2:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 59, '\'Swap\' (\'Back\' | \'Next\')', e)
             self.firstWord = -1
 
     # 'Swap Line'
-    def gotResults_137(self, words, fullResults):
+    def gotResults_261(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1502,13 +1638,13 @@ class ThisGrammar(GrammarBase):
             top_buffer += 'ddp'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_137(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_261(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 59, '\'Swap Line\'', e)
             self.firstWord = -1
 
     # 'Swap'
-    def gotResults_139(self, words, fullResults):
+    def gotResults_263(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1525,7 +1661,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += 'ddp'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_139(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_263(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 59, '\'Swap\'', e)
             self.firstWord = -1
@@ -1564,7 +1700,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # <edit_mode> ('Beginning' | 'Start' | 'End') 'Line'
-    def gotResults_141(self, words, fullResults):
+    def gotResults_265(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1597,7 +1733,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # <edit_mode> ('Beginning' | 'Start' | 'End') 'Here'
-    def gotResults_140(self, words, fullResults):
+    def gotResults_264(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1630,7 +1766,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # <edit_mode> ('Beginning' | 'Start' | 'End')
-    def gotResults_142(self, words, fullResults):
+    def gotResults_266(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1683,7 +1819,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Blank' ('back' | 'insert')
-    def gotResults_143(self, words, fullResults):
+    def gotResults_267(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1697,7 +1833,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += '{esc}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
-            if len(words) > 2: self.gotResults_143(words[2:], fullResults)
+            if len(words) > 2: self.gotResults_267(words[2:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 61, '\'Blank\' (\'back\' | \'insert\')', e)
             self.firstWord = -1
@@ -1732,7 +1868,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Join' ('Back' | 'Next')
-    def gotResults_145(self, words, fullResults):
+    def gotResults_269(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1755,13 +1891,13 @@ class ThisGrammar(GrammarBase):
             top_buffer += 'J'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
-            if len(words) > 2: self.gotResults_145(words[2:], fullResults)
+            if len(words) > 2: self.gotResults_269(words[2:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 62, '\'Join\' (\'Back\' | \'Next\')', e)
             self.firstWord = -1
 
     # 'Join Line'
-    def gotResults_144(self, words, fullResults):
+    def gotResults_268(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1776,13 +1912,13 @@ class ThisGrammar(GrammarBase):
             top_buffer += 'J'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_144(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_268(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 62, '\'Join Line\'', e)
             self.firstWord = -1
 
     # 'Join'
-    def gotResults_146(self, words, fullResults):
+    def gotResults_270(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -1797,7 +1933,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += 'J'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_146(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_270(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 62, '\'Join\'', e)
             self.firstWord = -1
@@ -2064,7 +2200,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Flow' ('Start' | 'Append')
-    def gotResults_147(self, words, fullResults):
+    def gotResults_271(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -2082,7 +2218,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += ''
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
-            if len(words) > 2: self.gotResults_147(words[2:], fullResults)
+            if len(words) > 2: self.gotResults_271(words[2:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 92, '\'Flow\' (\'Start\' | \'Append\')', e)
             self.firstWord = -1
@@ -2170,7 +2306,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # ('Indent' | 'reverse indent') ('Line' | 'Range')
-    def gotResults_148(self, words, fullResults):
+    def gotResults_272(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -2216,7 +2352,7 @@ class ThisGrammar(GrammarBase):
                     top_buffer += '{Left}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
-            if len(words) > 2: self.gotResults_148(words[2:], fullResults)
+            if len(words) > 2: self.gotResults_272(words[2:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 96, '(\'Indent\' | \'reverse indent\') (\'Line\' | \'Range\')', e)
             self.firstWord = -1
@@ -2290,7 +2426,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'edit' ('undo' | 'redo')
-    def gotResults_149(self, words, fullResults):
+    def gotResults_273(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -2315,7 +2451,7 @@ class ThisGrammar(GrammarBase):
                     top_buffer += '{ctrl+r}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 2
-            if len(words) > 2: self.gotResults_149(words[2:], fullResults)
+            if len(words) > 2: self.gotResults_273(words[2:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 101, '\'edit\' (\'undo\' | \'redo\')', e)
             self.firstWord = -1
@@ -2376,7 +2512,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Repeat macro'
-    def gotResults_150(self, words, fullResults):
+    def gotResults_274(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -2387,7 +2523,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += '}z'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_150(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_274(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 108, '\'Repeat macro\'', e)
             self.firstWord = -1
@@ -2610,7 +2746,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'line' <0to9>
-    def gotResults_154(self, words, fullResults):
+    def gotResults_278(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -2676,7 +2812,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'line' <0to9> <0to9>
-    def gotResults_155(self, words, fullResults):
+    def gotResults_279(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -2754,7 +2890,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'line' <0to9> <0to9> <0to9>
-    def gotResults_156(self, words, fullResults):
+    def gotResults_280(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -2834,7 +2970,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'line' <0to9> <0to9> <0to9> <0to9>
-    def gotResults_157(self, words, fullResults):
+    def gotResults_281(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -3000,7 +3136,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Halfpage'
-    def gotResults_161(self, words, fullResults):
+    def gotResults_285(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -3016,7 +3152,7 @@ class ThisGrammar(GrammarBase):
                 top_buffer += '{Ctrl+d}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_161(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_285(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 162, '\'Halfpage\'', e)
             self.firstWord = -1
@@ -3343,7 +3479,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'back command'
-    def gotResults_162(self, words, fullResults):
+    def gotResults_286(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -3373,7 +3509,7 @@ class ThisGrammar(GrammarBase):
                 top_buffer += '{up}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_162(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_286(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 183, '\'back command\'', e)
             self.firstWord = -1
@@ -3637,7 +3773,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'Set setting'
-    def gotResults_163(self, words, fullResults):
+    def gotResults_287(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -3652,7 +3788,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += ''
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_163(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_287(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 209, '\'Set setting\'', e)
             self.firstWord = -1
@@ -3744,7 +3880,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord = -1
 
     # 'run this'
-    def gotResults_164(self, words, fullResults):
+    def gotResults_288(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
@@ -3759,7 +3895,7 @@ class ThisGrammar(GrammarBase):
             top_buffer += ''
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
-            if len(words) > 1: self.gotResults_164(words[1:], fullResults)
+            if len(words) > 1: self.gotResults_288(words[1:], fullResults)
         except Exception, e:
             handle_error('vim.vch', 213, '\'run this\'', e)
             self.firstWord = -1
@@ -4368,56 +4504,2289 @@ class ThisGrammar(GrammarBase):
             handle_error('vim.vch', 267, '\'ifdef end\'', e)
             self.firstWord = -1
 
-    # 'File Open'
+    def get_machine(self, list_buffer, functional, word):
+        if word == 'release five':
+            list_buffer += 'mdl@...'
+        elif word == 'release six':
+            list_buffer += 'mdl@...'
+        elif word == 'P.O. Box':
+            list_buffer += 'mdl@...'
+        elif word == 'PA install':
+            list_buffer += 'lillibridgem@...'
+        elif word == 'build Debian':
+            list_buffer += 'lillibridgem@...'
+        elif word == 'build Debian one':
+            list_buffer += 'lillibridgem@...'
+        elif word == 'build Debian two':
+            list_buffer += 'lillibridgem@...'
+        elif word == 'build cent toss':
+            list_buffer += 'lillibridgem@...'
+        elif word == 'build wheezy':
+            list_buffer += 'lillibridgem@...'
+        elif word == 'metabox one':
+            list_buffer += 'lillibridgem@...'
+        elif word == 'lark':
+            list_buffer += 'mdl@...'
+        elif word == 'Embarcadero':
+            list_buffer += 'mdl@...'
+        elif word == 'remote foil':
+            list_buffer += 'mdl@<censored>'
+        elif word == 'local foil':
+            list_buffer += 'mdl@...'
+        return list_buffer
+
+    def get_common_actions(self, list_buffer, functional, word):
+        if word == 'edit':
+            list_buffer += 'vim'
+        elif word == 'source':
+            list_buffer += 'source'
+        return list_buffer
+
+    # <common_actions> ('vim' | 'bash') 'config'
     def gotResults_119(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += '{Alt+f}{Down_3}{enter}'
+            word = fullResults[0 + self.firstWord][0]
+            top_buffer = self.get_common_actions(top_buffer, False, word)
+            top_buffer += ' ~/.'
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer += word
+            top_buffer += 'rc'
+            top_buffer += '{Enter}'
             top_buffer = do_flush(False, top_buffer);
-            dragon_arg1 = ''
-            dragon_arg1 += '100'
-            call_Dragon('Wait', 'i', [dragon_arg1])
-            top_buffer += '{Shift+Tab}'
-            top_buffer = do_flush(False, top_buffer);
-            dragon_arg1 = ''
-            dragon_arg1 += '700'
-            call_Dragon('Wait', 'i', [dragon_arg1])
-            top_buffer += '{Shift+Tab}'
-            top_buffer = do_flush(False, top_buffer);
-            self.firstWord += 1
-            if len(words) > 1: self.gotResults_119(words[1:], fullResults)
+            self.firstWord += 3
         except Exception, e:
-            handle_error('gvim.vcl', 6, '\'File Open\'', e)
+            handle_error('UNIX_shell.vch', 14, '<common_actions> (\'vim\' | \'bash\') \'config\'', e)
             self.firstWord = -1
 
-    # 'file save as'
+    # 'bash history'
     def gotResults_120(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += '{Alt+f}{a}{enter}'
+            top_buffer += '{Ctrl+r}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
             if len(words) > 1: self.gotResults_120(words[1:], fullResults)
         except Exception, e:
-            handle_error('gvim.vcl', 7, '\'file save as\'', e)
+            handle_error('UNIX_shell.vch', 15, '\'bash history\'', e)
             self.firstWord = -1
 
-    # 'file save'
+    # 'break'
     def gotResults_121(self, words, fullResults):
         if self.firstWord<0:
             return
         try:
             top_buffer = ''
-            top_buffer += '{Alt+f}{s}'
+            top_buffer += '{Ctrl+c}'
             top_buffer = do_flush(False, top_buffer);
             self.firstWord += 1
             if len(words) > 1: self.gotResults_121(words[1:], fullResults)
         except Exception, e:
-            handle_error('gvim.vcl', 8, '\'file save\'', e)
+            handle_error('UNIX_shell.vch', 16, '\'break\'', e)
+            self.firstWord = -1
+
+    # 'break end of file'
+    def gotResults_122(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+d}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_122(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 17, '\'break end of file\'', e)
+            self.firstWord = -1
+
+    # 'escape process'
+    def gotResults_123(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{esc}{ctrl+z}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_123(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 18, '\'escape process\'', e)
+            self.firstWord = -1
+
+    # ('foreground' | 'background') 'process'
+    def gotResults_124(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            word = fullResults[0 + self.firstWord][0]
+            if word == 'foreground':
+                top_buffer += 'fg'
+            elif word == 'background':
+                top_buffer += 'bg'
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_124(words[2:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 20, '(\'foreground\' | \'background\') \'process\'', e)
+            self.firstWord = -1
+
+    # 'double dash'
+    def gotResults_125(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '--'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_125(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 21, '\'double dash\'', e)
+            self.firstWord = -1
+
+    # 'Bash Tag File Update'
+    def gotResults_126(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .'
+            top_buffer += '{Enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_126(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 23, '\'Bash Tag File Update\'', e)
+            self.firstWord = -1
+
+    # 'make tar'
+    def gotResults_127(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'tar -cf '
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_127(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 24, '\'make tar\'', e)
+            self.firstWord = -1
+
+    # 'extract tar'
+    def gotResults_128(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'tar -xf '
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_128(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 25, '\'extract tar\'', e)
+            self.firstWord = -1
+
+    # 'confirm force remove file'
+    def gotResults_129(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'rm -r'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_129(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 26, '\'confirm force remove file\'', e)
+            self.firstWord = -1
+
+    # 'back directory' 1..9
+    def gotResults_130(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            limit = ''
+            word = fullResults[1 + self.firstWord][0]
+            limit += self.convert_number_word(word)
+            for i in range(to_long(limit)):
+                top_buffer += '../'
+            top_buffer += '{Enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_130(words[2:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 27, '\'back directory\' 1..9', e)
+            self.firstWord = -1
+
+    # 'change ownership'
+    def gotResults_131(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'chown -R tan:tan '
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_131(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 28, '\'change ownership\'', e)
+            self.firstWord = -1
+
+    # 'change' ('permissions' | 'mode')
+    def gotResults_132(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'chmod -R 755 '
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_132(words[2:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 29, '\'change\' (\'permissions\' | \'mode\')', e)
+            self.firstWord = -1
+
+    # 'home root'
+    def gotResults_133(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '~/'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_133(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 30, '\'home root\'', e)
+            self.firstWord = -1
+
+    # 'enter list'
+    def gotResults_134(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{enter}ls{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_134(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 31, '\'enter list\'', e)
+            self.firstWord = -1
+
+    # 'change absolute directory'
+    def gotResults_135(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'cd -P .{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_135(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 32, '\'change absolute directory\'', e)
+            self.firstWord = -1
+
+    # 'present working directory'
+    def gotResults_136(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'pwd'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_136(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 33, '\'present working directory\'', e)
+            self.firstWord = -1
+
+    # 'vim diff'
+    def gotResults_137(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'vimdiff'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_137(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 34, '\'vim diff\'', e)
+            self.firstWord = -1
+
+    # 'cygwin password'
+    def gotResults_138(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '^2A'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_138(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 35, '\'cygwin password\'', e)
+            self.firstWord = -1
+
+    # ('sub' | 'SVM') ('checkout' | 'diff' | 'commit' | 'update' | 'remove' | 'log' | 'start bug' | 'status')
+    def gotResults_139(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            word = fullResults[0 + self.firstWord][0]
+            if word == 'sub':
+                top_buffer += 'sub'
+            elif word == 'SVM':
+                top_buffer += 'svn'
+            top_buffer += ' '
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'checkout':
+                top_buffer += 'checkout'
+            elif word == 'diff':
+                top_buffer += 'diff'
+            elif word == 'commit':
+                top_buffer += 'commit'
+            elif word == 'update':
+                top_buffer += 'update'
+            elif word == 'remove':
+                top_buffer += 'remove'
+            elif word == 'log':
+                top_buffer += 'log_grep'
+            elif word == 'start bug':
+                top_buffer += 'start_bug'
+            elif word == 'status':
+                top_buffer += 'status'
+            top_buffer += ' '
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_139(words[2:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 36, '(\'sub\' | \'SVM\') (\'checkout\' | \'diff\' | \'commit\' | \'update\' | \'remove\' | \'log\' | \'start bug\' | \'status\')', e)
+            self.firstWord = -1
+
+    # 'start environment' 1..5
+    def gotResults_140(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'source $ENV'
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer += self.convert_number_word(word)
+            top_buffer += '/bin/activate{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_140(words[2:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 37, '\'start environment\' 1..5', e)
+            self.firstWord = -1
+
+    # 'stop environment'
+    def gotResults_141(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'deactivate{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_141(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 38, '\'stop environment\'', e)
+            self.firstWord = -1
+
+    # 'Django' ('shell' | 'database shell' | 'sink' | 'run')
+    def gotResults_142(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'python manage.py '
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'shell':
+                top_buffer += 'shell'
+            elif word == 'database shell':
+                top_buffer += 'dbshell'
+            elif word == 'sink':
+                top_buffer += 'syncdb'
+            elif word == 'run':
+                top_buffer += 'runserver'
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_142(words[2:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 39, '\'Django\' (\'shell\' | \'database shell\' | \'sink\' | \'run\')', e)
+            self.firstWord = -1
+
+    # 'pip' ('freeze' | 'completion' | 'install' | 'list' | 'help')
+    def gotResults_143(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'pip '
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer += word
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_143(words[2:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 40, '\'pip\' (\'freeze\' | \'completion\' | \'install\' | \'list\' | \'help\')', e)
+            self.firstWord = -1
+
+    # 'pip option' ('bash' | 'upgrade' | 'outdated' | 'local' | 'no index' | 'find links')
+    def gotResults_144(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += ' --'
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'bash':
+                top_buffer += 'bash'
+            elif word == 'upgrade':
+                top_buffer += 'upgrade'
+            elif word == 'outdated':
+                top_buffer += 'outdated'
+            elif word == 'local':
+                top_buffer += 'local'
+            elif word == 'no index':
+                top_buffer += 'no-index'
+            elif word == 'find links':
+                top_buffer += 'find-links'
+            top_buffer += ' '
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_144(words[2:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 41, '\'pip option\' (\'bash\' | \'upgrade\' | \'outdated\' | \'local\' | \'no index\' | \'find links\')', e)
+            self.firstWord = -1
+
+    # 'network stats'
+    def gotResults_145(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'netstat -nl{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_145(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 42, '\'network stats\'', e)
+            self.firstWord = -1
+
+    def get_show(self, list_buffer, functional, word):
+        if word == 'show':
+            list_buffer += ''
+        elif word == 'show some of':
+            list_buffer += ' | head'
+        elif word == 'show a lot of':
+            list_buffer += ' | head -n 50'
+        elif word == 'local show':
+            list_buffer += '{ctrl+a}l{ctrl+e}'
+        return list_buffer
+
+    def get_desc(self, list_buffer, functional, word):
+        if word == 'long':
+            list_buffer += '-l'
+        elif word == 'full':
+            list_buffer += '-A'
+        elif word == 'recent':
+            list_buffer += '-t'
+        elif word == 'recursive':
+            list_buffer += '-R'
+        elif word == 'human':
+            list_buffer += '-h'
+        return list_buffer
+
+    # <show> <desc> <desc> <desc> 'directory'
+    def gotResults_146(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'ls'
+            when_value = ''
+            word = fullResults[1 + self.firstWord][0]
+            when_value = self.get_desc(when_value, True, word)
+            if when_value != "":
+                top_buffer += ' '
+                word = fullResults[1 + self.firstWord][0]
+                top_buffer = self.get_desc(top_buffer, False, word)
+            when_value = ''
+            word = fullResults[2 + self.firstWord][0]
+            when_value = self.get_desc(when_value, True, word)
+            if when_value != "":
+                top_buffer += ' '
+                word = fullResults[2 + self.firstWord][0]
+                top_buffer = self.get_desc(top_buffer, False, word)
+            when_value = ''
+            word = fullResults[3 + self.firstWord][0]
+            when_value = self.get_desc(when_value, True, word)
+            if when_value != "":
+                top_buffer += ' '
+                word = fullResults[3 + self.firstWord][0]
+                top_buffer = self.get_desc(top_buffer, False, word)
+            word = fullResults[0 + self.firstWord][0]
+            top_buffer = self.get_show(top_buffer, False, word)
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 5
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 57, '<show> <desc> <desc> <desc> \'directory\'', e)
+            self.firstWord = -1
+
+    # <show> <desc> <desc> 'directory'
+    def gotResults_291(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'ls'
+            when_value = ''
+            word = fullResults[1 + self.firstWord][0]
+            when_value = self.get_desc(when_value, True, word)
+            if when_value != "":
+                top_buffer += ' '
+                word = fullResults[1 + self.firstWord][0]
+                top_buffer = self.get_desc(top_buffer, False, word)
+            when_value = ''
+            word = fullResults[2 + self.firstWord][0]
+            when_value = self.get_desc(when_value, True, word)
+            if when_value != "":
+                top_buffer += ' '
+                word = fullResults[2 + self.firstWord][0]
+                top_buffer = self.get_desc(top_buffer, False, word)
+            when_value = ''
+            when_value += ''
+            if when_value != "":
+                top_buffer += ' '
+                top_buffer += ''
+            word = fullResults[0 + self.firstWord][0]
+            top_buffer = self.get_show(top_buffer, False, word)
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 4
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 57, '<show> <desc> <desc> \'directory\'', e)
+            self.firstWord = -1
+
+    # <show> <desc> 'directory'
+    def gotResults_290(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'ls'
+            when_value = ''
+            word = fullResults[1 + self.firstWord][0]
+            when_value = self.get_desc(when_value, True, word)
+            if when_value != "":
+                top_buffer += ' '
+                word = fullResults[1 + self.firstWord][0]
+                top_buffer = self.get_desc(top_buffer, False, word)
+            when_value = ''
+            when_value += ''
+            if when_value != "":
+                top_buffer += ' '
+                top_buffer += ''
+            when_value = ''
+            when_value += ''
+            if when_value != "":
+                top_buffer += ' '
+                top_buffer += ''
+            word = fullResults[0 + self.firstWord][0]
+            top_buffer = self.get_show(top_buffer, False, word)
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 3
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 57, '<show> <desc> \'directory\'', e)
+            self.firstWord = -1
+
+    # <show> 'directory'
+    def gotResults_289(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'ls'
+            when_value = ''
+            when_value += ''
+            if when_value != "":
+                top_buffer += ' '
+                top_buffer += ''
+            when_value = ''
+            when_value += ''
+            if when_value != "":
+                top_buffer += ' '
+                top_buffer += ''
+            when_value = ''
+            when_value += ''
+            if when_value != "":
+                top_buffer += ' '
+                top_buffer += ''
+            word = fullResults[0 + self.firstWord][0]
+            top_buffer = self.get_show(top_buffer, False, word)
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 57, '<show> \'directory\'', e)
+            self.firstWord = -1
+
+    # <show> <desc> 'directory'
+    def gotResults_147(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'ls'
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer = self.get_desc(top_buffer, False, word)
+            word = fullResults[0 + self.firstWord][0]
+            top_buffer = self.get_show(top_buffer, False, word)
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 3
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 58, '<show> <desc> \'directory\'', e)
+            self.firstWord = -1
+
+    # <show> 'directory'
+    def gotResults_148(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'ls'
+            word = fullResults[0 + self.firstWord][0]
+            top_buffer = self.get_show(top_buffer, False, word)
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 59, '<show> \'directory\'', e)
+            self.firstWord = -1
+
+    # 'show disk space'
+    def gotResults_149(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'df -h .{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_149(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 62, '\'show disk space\'', e)
+            self.firstWord = -1
+
+    def get_usage(self, list_buffer, functional, word):
+        if word == 'usage':
+            list_buffer += '-h'
+        elif word == 'usage kilobytes':
+            list_buffer += ''
+        elif word == 'usage megabytes':
+            list_buffer += '-m'
+        return list_buffer
+
+    # 'show disk' <usage>
+    def gotResults_150(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'du '
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer = self.get_usage(top_buffer, False, word)
+            top_buffer += ' -s -- "`ls --color=none -A`" .{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 66, '\'show disk\' <usage>', e)
+            self.firstWord = -1
+
+    # 'secure login to' <machine>
+    def gotResults_151(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'ssh -X '
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer = self.get_machine(top_buffer, False, word)
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 74, '\'secure login to\' <machine>', e)
+            self.firstWord = -1
+
+    # 'secure login' <machine>
+    def gotResults_292(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'ssh -X '
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer = self.get_machine(top_buffer, False, word)
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 74, '\'secure login\' <machine>', e)
+            self.firstWord = -1
+
+    # 'S F T P' <machine>
+    def gotResults_152(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'sftp '
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer = self.get_machine(top_buffer, False, word)
+            top_buffer += '{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 77, '\'S F T P\' <machine>', e)
+            self.firstWord = -1
+
+    # 'multiple get'
+    def gotResults_153(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'mget '
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_153(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 81, '\'multiple get\'', e)
+            self.firstWord = -1
+
+    # 'local change directory'
+    def gotResults_154(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'lcd '
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_154(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 82, '\'local change directory\'', e)
+            self.firstWord = -1
+
+    # 'local working directory'
+    def gotResults_155(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += 'lpwd{enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_155(words[1:], fullResults)
+        except Exception, e:
+            handle_error('UNIX_shell.vch', 84, '\'local working directory\'', e)
+            self.firstWord = -1
+
+    def get_scp(self, list_buffer, functional, word):
+        if word == 'secure copy':
+            list_buffer += 'scp'
+        elif word == 'secure recursive copy':
+            list_buffer += 'scp -r'
+        elif word == 'recursive secure copy':
+            list_buffer += 'scp -r'
+        elif word == 'secure clone':
+            list_buffer += 'scp -p -r'
+        return list_buffer
+
+    # 'upload to default'
+    def gotResults_156(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{ctrl+alt+shift+p}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_156(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 10, '\'upload to default\'', e)
+            self.firstWord = -1
+
+    # 'go to' ('class' | 'file' | 'symbol' | 'declaration' | 'implementation' | 'type declaration' | 'usages' | 'action')
+    def gotResults_157(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{esc}'
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'class':
+                top_buffer += '{Ctrl+n}'
+            elif word == 'file':
+                top_buffer += '{Ctrl+Shift+n}'
+            elif word == 'symbol':
+                top_buffer += '{Ctrl+Alt+Shift+n}'
+            elif word == 'declaration':
+                top_buffer += '{Ctrl+b}'
+            elif word == 'implementation':
+                top_buffer += '{Ctrl+Alt+b}'
+            elif word == 'type declaration':
+                top_buffer += '{Ctrl+Shift+b}'
+            elif word == 'usages':
+                top_buffer += '{Ctrl+Alt+F7}'
+            elif word == 'action':
+                top_buffer += '{ctrl+shift+a}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_157(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 22, '\'go to\' (\'class\' | \'file\' | \'symbol\' | \'declaration\' | \'implementation\' | \'type declaration\' | \'usages\' | \'action\')', e)
+            self.firstWord = -1
+
+    # 'return from jump'
+    def gotResults_158(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{ctrl+u}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_158(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 23, '\'return from jump\'', e)
+            self.firstWord = -1
+
+    # 'symbol preview'
+    def gotResults_159(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{ctrl+y}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_159(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 24, '\'symbol preview\'', e)
+            self.firstWord = -1
+
+    # 'Recent files popup'
+    def gotResults_160(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+shift+e}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_160(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 26, '\'Recent files popup\'', e)
+            self.firstWord = -1
+
+    # 'File structure popup'
+    def gotResults_161(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+F12}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_161(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 27, '\'File structure popup\'', e)
+            self.firstWord = -1
+
+    # 'File structure view'
+    def gotResults_162(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+7}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_162(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 28, '\'File structure view\'', e)
+            self.firstWord = -1
+
+    # 'project view'
+    def gotResults_163(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{alt+1}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_163(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 29, '\'project view\'', e)
+            self.firstWord = -1
+
+    # 'Show navigation bar'
+    def gotResults_164(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+Home}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_164(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 30, '\'Show navigation bar\'', e)
+            self.firstWord = -1
+
+    # 'Hide window'
+    def gotResults_165(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Shift+Esc}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_165(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 31, '\'Hide window\'', e)
+            self.firstWord = -1
+
+    # 'Toggle maximizing editor'
+    def gotResults_166(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+F12}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_166(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 32, '\'Toggle maximizing editor\'', e)
+            self.firstWord = -1
+
+    # ('tool' | 'window') 'close'
+    def gotResults_167(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{ctrl+'
+            word = fullResults[0 + self.firstWord][0]
+            if word == 'tool':
+                top_buffer += 'shift+'
+            elif word == 'window':
+                pass  # no actions
+            top_buffer += 'f4}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_167(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 33, '(\'tool\' | \'window\') \'close\'', e)
+            self.firstWord = -1
+
+    # 'quick definition lookup'
+    def gotResults_168(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+i}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_168(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 34, '\'quick definition lookup\'', e)
+            self.firstWord = -1
+
+    # 'Go to' ('next' | 'back') 'tab'
+    def gotResults_169(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+'
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'next':
+                top_buffer += 'Right'
+            elif word == 'back':
+                top_buffer += 'Left'
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 3
+            if len(words) > 3: self.gotResults_169(words[3:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 36, '\'Go to\' (\'next\' | \'back\') \'tab\'', e)
+            self.firstWord = -1
+
+    # 'charm Switch tab' 1..9
+    def gotResults_170(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            when_value = ''
+            word = fullResults[1 + self.firstWord][0]
+            when_value += self.convert_number_word(word)
+            if when_value != "":
+                top_buffer += '{Ctrl+Tab_'
+                word = fullResults[1 + self.firstWord][0]
+                top_buffer += self.convert_number_word(word)
+                top_buffer += '}'
+            else:
+                top_buffer += '{ctrl+tab}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_170(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 37, '\'charm Switch tab\' 1..9', e)
+            self.firstWord = -1
+
+    # 'charm Switch tab'
+    def gotResults_293(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            when_value = ''
+            when_value += ''
+            if when_value != "":
+                top_buffer += '{Ctrl+Tab_'
+                top_buffer += ''
+                top_buffer += '}'
+            else:
+                top_buffer += '{ctrl+tab}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_293(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 37, '\'charm Switch tab\'', e)
+            self.firstWord = -1
+
+    # 'Charm back change'
+    def gotResults_171(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+Backspace}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_171(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 38, '\'Charm back change\'', e)
+            self.firstWord = -1
+
+    # 'Select current file or symbol'
+    def gotResults_172(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+F1}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_172(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 39, '\'Select current file or symbol\'', e)
+            self.firstWord = -1
+
+    # 'Toggle bookmark'
+    def gotResults_173(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{F11}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_173(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 41, '\'Toggle bookmark\'', e)
+            self.firstWord = -1
+
+    # 'Toggle bookmark with mnemonic'
+    def gotResults_174(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+F11}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_174(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 42, '\'Toggle bookmark with mnemonic\'', e)
+            self.firstWord = -1
+
+    # 'Go to numbered bookmark' 0..9
+    def gotResults_175(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+'
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer += self.convert_number_word(word)
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_175(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 43, '\'Go to numbered bookmark\' 0..9', e)
+            self.firstWord = -1
+
+    # 'Show bookmarks'
+    def gotResults_176(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Shift+F11}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_176(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 44, '\'Show bookmarks\'', e)
+            self.firstWord = -1
+
+    # 'Find usages'
+    def gotResults_177(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+f7}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_177(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 47, '\'Find usages\'', e)
+            self.firstWord = -1
+
+    # 'Find usages in file'
+    def gotResults_178(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+F7}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_178(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 48, '\'Find usages in file\'', e)
+            self.firstWord = -1
+
+    # 'Highlight usages in file'
+    def gotResults_179(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+F7}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_179(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 49, '\'Highlight usages in file\'', e)
+            self.firstWord = -1
+
+    # 'Rename'
+    def gotResults_180(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Shift+F6}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_180(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 50, '\'Rename\'', e)
+            self.firstWord = -1
+
+    # 'charm' ('hide tools' | 'settings' | 'run console' | 'manage tasks' | 'last tool' | 'list tools' | 'run program' | 'split vertical' | 'split tools')
+    def gotResults_181(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'hide tools':
+                top_buffer += '{ctrl+shift+f12}'
+            elif word == 'settings':
+                top_buffer += '{ctrl+shift+f11}'
+            elif word == 'run console':
+                top_buffer += '{ctrl+shift+f2}'
+            elif word == 'manage tasks':
+                top_buffer += '{ctrl+shift+'
+                top_buffer += ','
+                top_buffer += '}'
+            elif word == 'last tool':
+                top_buffer += '{f12}'
+            elif word == 'list tools':
+                top_buffer += '{alt+Down}'
+            elif word == 'run program':
+                top_buffer += '{shift+f10}'
+            elif word == 'split vertical':
+                top_buffer += '{ctrl+shift+\\}'
+            elif word == 'split tools':
+                top_buffer += '{shift+\\}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_181(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 62, '\'charm\' (\'hide tools\' | \'settings\' | \'run console\' | \'manage tasks\' | \'last tool\' | \'list tools\' | \'run program\' | \'split vertical\' | \'split tools\')', e)
+            self.firstWord = -1
+
+    # 'Show possible actions'
+    def gotResults_182(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+Enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_182(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 65, '\'Show possible actions\'', e)
+            self.firstWord = -1
+
+    # 'complete'
+    def gotResults_183(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{ctrl+'
+            top_buffer += ' '
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_183(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 66, '\'complete\'', e)
+            self.firstWord = -1
+
+    # 'Show error description'
+    def gotResults_184(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+F1}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_184(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 67, '\'Show error description\'', e)
+            self.firstWord = -1
+
+    # ('comment' | 'expand' | 'collapse') 'line'
+    def gotResults_185(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{ctrl+'
+            word = fullResults[0 + self.firstWord][0]
+            if word == 'comment':
+                top_buffer += '/'
+            elif word == 'expand':
+                top_buffer += '+'
+            elif word == 'collapse':
+                top_buffer += '-'
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_185(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 69, '(\'comment\' | \'expand\' | \'collapse\') \'line\'', e)
+            self.firstWord = -1
+
+    # 'comment' 2..20 'lines'
+    def gotResults_186(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            limit = ''
+            word = fullResults[1 + self.firstWord][0]
+            limit += self.convert_number_word(word)
+            for i in range(to_long(limit)):
+                top_buffer = do_flush(False, top_buffer);
+                dragon2_arg1 = ''
+                dragon2_arg1 += '200'
+                call_Dragon('Wait', 'i', [dragon2_arg1])
+                top_buffer += '{ctrl+'
+                top_buffer += '/'
+                top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 3
+            if len(words) > 3: self.gotResults_186(words[3:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 70, '\'comment\' 2..20 \'lines\'', e)
+            self.firstWord = -1
+
+    # 'surround with'
+    def gotResults_187(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{ctrl+alt+t}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_187(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 71, '\'surround with\'', e)
+            self.firstWord = -1
+
+    # ('replace normal' | 'find in path' | 'replace in path' | 'structure find' | 'structure replace')
+    def gotResults_188(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{'
+            word = fullResults[0 + self.firstWord][0]
+            if word == 'replace normal':
+                top_buffer += 'ctrl+alt+shift+r'
+            elif word == 'find in path':
+                top_buffer += 'ctrl+shift+F'
+            elif word == 'replace in path':
+                top_buffer += 'ctrl+shift+R'
+            elif word == 'structure find':
+                pass  # no actions
+            elif word == 'structure replace':
+                pass  # no actions
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_188(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 72, '(\'replace normal\' | \'find in path\' | \'replace in path\' | \'structure find\' | \'structure replace\')', e)
+            self.firstWord = -1
+
+    # 'Select successively increasing code blocks'
+    def gotResults_189(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+w}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_189(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 74, '\'Select successively increasing code blocks\'', e)
+            self.firstWord = -1
+
+    # 'Decrease current selection to previous state'
+    def gotResults_190(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+w}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_190(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 75, '\'Decrease current selection to previous state\'', e)
+            self.firstWord = -1
+
+    # 'Select till code block' ('end' | 'start')
+    def gotResults_191(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+'
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'end':
+                top_buffer += ']'
+            elif word == 'start':
+                top_buffer += '['
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_191(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 76, '\'Select till code block\' (\'end\' | \'start\')', e)
+            self.firstWord = -1
+
+    # 'Save all'
+    def gotResults_192(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+s}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_192(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 78, '\'Save all\'', e)
+            self.firstWord = -1
+
+    # 'Inspect file'
+    def gotResults_193(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+Shift+i}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_193(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 79, '\'Inspect file\'', e)
+            self.firstWord = -1
+
+    # 'Optimize imports'
+    def gotResults_194(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Alt+o}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_194(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 80, '\'Optimize imports\'', e)
+            self.firstWord = -1
+
+    # 'Select configuration and run'
+    def gotResults_195(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+Shift+F10}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_195(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 85, '\'Select configuration and run\'', e)
+            self.firstWord = -1
+
+    # 'Select configuration and debug'
+    def gotResults_196(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+Shift+F9}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_196(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 86, '\'Select configuration and debug\'', e)
+            self.firstWord = -1
+
+    # 'Debug'
+    def gotResults_197(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Shift+F9}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_197(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 87, '\'Debug\'', e)
+            self.firstWord = -1
+
+    # 'Run context configuration from editor'
+    def gotResults_198(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+F10}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_198(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 88, '\'Run context configuration from editor\'', e)
+            self.firstWord = -1
+
+    # 'Step over'
+    def gotResults_199(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{F8}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_199(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 89, '\'Step over\'', e)
+            self.firstWord = -1
+
+    # 'Step into'
+    def gotResults_200(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{F7}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_200(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 90, '\'Step into\'', e)
+            self.firstWord = -1
+
+    # 'Step out'
+    def gotResults_201(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Shift+F8}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_201(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 91, '\'Step out\'', e)
+            self.firstWord = -1
+
+    # 'Run to cursor'
+    def gotResults_202(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+F9}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_202(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 92, '\'Run to cursor\'', e)
+            self.firstWord = -1
+
+    # 'Evaluate expression'
+    def gotResults_203(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+F8}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_203(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 93, '\'Evaluate expression\'', e)
+            self.firstWord = -1
+
+    # 'Quick evaluate expression'
+    def gotResults_204(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Alt+F8}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_204(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 94, '\'Quick evaluate expression\'', e)
+            self.firstWord = -1
+
+    # 'Resume program'
+    def gotResults_205(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{F9}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_205(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 95, '\'Resume program\'', e)
+            self.firstWord = -1
+
+    # 'Toggle breakpoint'
+    def gotResults_206(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+F8}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_206(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 96, '\'Toggle breakpoint\'', e)
+            self.firstWord = -1
+
+    # 'View breakpoints'
+    def gotResults_207(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+F8}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_207(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 97, '\'View breakpoints\'', e)
+            self.firstWord = -1
+
+    # 'Go to' ('previous' | 'next') 'method'
+    def gotResults_208(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+'
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'previous':
+                top_buffer += 'Up'
+            elif word == 'next':
+                top_buffer += 'Down'
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 3
+            if len(words) > 3: self.gotResults_208(words[3:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 101, '\'Go to\' (\'previous\' | \'next\') \'method\'', e)
+            self.firstWord = -1
+
+    # 'Move to code block' ('end' | 'start')
+    def gotResults_209(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+'
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'end':
+                top_buffer += ']'
+            elif word == 'start':
+                top_buffer += '['
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_209(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 102, '\'Move to code block\' (\'end\' | \'start\')', e)
+            self.firstWord = -1
+
+    # 'Type hierarchy'
+    def gotResults_210(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+h}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_210(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 103, '\'Type hierarchy\'', e)
+            self.firstWord = -1
+
+    # 'Method hierarchy'
+    def gotResults_211(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+h}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_211(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 104, '\'Method hierarchy\'', e)
+            self.firstWord = -1
+
+    # 'Call hierarchy'
+    def gotResults_212(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Alt+h}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_212(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 105, '\'Call hierarchy\'', e)
+            self.firstWord = -1
+
+    # ('Next' | 'previous') 'highlighted error'
+    def gotResults_213(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{'
+            word = fullResults[0 + self.firstWord][0]
+            if word == 'Next':
+                top_buffer += 'f2'
+            elif word == 'previous':
+                top_buffer += 'shift+f2'
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_213(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 106, '(\'Next\' | \'previous\') \'highlighted error\'', e)
+            self.firstWord = -1
+
+    # 'Safe Delete'
+    def gotResults_214(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+Delete}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_214(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 110, '\'Safe Delete\'', e)
+            self.firstWord = -1
+
+    # 'Change Signature'
+    def gotResults_215(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+F6}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_215(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 111, '\'Change Signature\'', e)
+            self.firstWord = -1
+
+    # 'Inline'
+    def gotResults_216(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Alt+n}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_216(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 112, '\'Inline\'', e)
+            self.firstWord = -1
+
+    # 'Extract' ('Method' | 'Variable' | 'Field' | 'Constant' | 'Parameter')
+    def gotResults_217(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Alt+'
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'Method':
+                top_buffer += 'M'
+            elif word == 'Variable':
+                top_buffer += 'V'
+            elif word == 'Field':
+                top_buffer += 'F'
+            elif word == 'Constant':
+                top_buffer += 'C'
+            elif word == 'Parameter':
+                top_buffer += 'P'
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_217(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 113, '\'Extract\' (\'Method\' | \'Variable\' | \'Field\' | \'Constant\' | \'Parameter\')', e)
+            self.firstWord = -1
+
+    # 'Open tool window' 0..9
+    def gotResults_218(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+'
+            word = fullResults[1 + self.firstWord][0]
+            top_buffer += self.convert_number_word(word)
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_218(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 116, '\'Open tool window\' 0..9', e)
+            self.firstWord = -1
+
+    # 'Add to Favorites'
+    def gotResults_219(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+Shift+f}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_219(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 118, '\'Add to Favorites\'', e)
+            self.firstWord = -1
+
+    # 'Quick switch current scheme'
+    def gotResults_220(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+'
+            top_buffer += '`'
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_220(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 119, '\'Quick switch current scheme\'', e)
+            self.firstWord = -1
+
+    # 'add item'
+    def gotResults_221(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{alt+insert}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_221(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 120, '\'add item\'', e)
+            self.firstWord = -1
+
+    # 'search everywhere'
+    def gotResults_222(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{shift}{shift}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_222(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 121, '\'search everywhere\'', e)
+            self.firstWord = -1
+
+    # 'clean compile files'
+    def gotResults_223(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{ctrl+shift+'
+            top_buffer += '#'
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_223(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 122, '\'clean compile files\'', e)
+            self.firstWord = -1
+
+    # 'Complete statement'
+    def gotResults_224(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+Enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_224(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 126, '\'Complete statement\'', e)
+            self.firstWord = -1
+
+    # 'Parameter info'
+    def gotResults_225(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+p}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_225(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 127, '\'Parameter info\'', e)
+            self.firstWord = -1
+
+    # 'Quick documentation lookup'
+    def gotResults_226(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+q}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_226(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 128, '\'Quick documentation lookup\'', e)
+            self.firstWord = -1
+
+    # 'External Doc'
+    def gotResults_227(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Shift+F1}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_227(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 129, '\'External Doc\'', e)
+            self.firstWord = -1
+
+    # 'Generate code'
+    def gotResults_228(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+Insert}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_228(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 130, '\'Generate code\'', e)
+            self.firstWord = -1
+
+    # 'Override methods'
+    def gotResults_229(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+o}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_229(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 131, '\'Override methods\'', e)
+            self.firstWord = -1
+
+    # 'Reformat code'
+    def gotResults_230(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Alt+l}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_230(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 132, '\'Reformat code\'', e)
+            self.firstWord = -1
+
+    # 'Auto-indent line'
+    def gotResults_231(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Alt+i}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_231(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 133, '\'Auto-indent line\'', e)
+            self.firstWord = -1
+
+    # 'Copy to clipboard'
+    def gotResults_232(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+c}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_232(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 134, '\'Copy to clipboard\'', e)
+            self.firstWord = -1
+
+    # 'Paste from clipboard'
+    def gotResults_233(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+v}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_233(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 135, '\'Paste from clipboard\'', e)
+            self.firstWord = -1
+
+    # 'Paste from recent buffers'
+    def gotResults_234(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+v}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_234(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 136, '\'Paste from recent buffers\'', e)
+            self.firstWord = -1
+
+    # 'Duplicate current line or selected block'
+    def gotResults_235(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+d}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_235(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 137, '\'Duplicate current line or selected block\'', e)
+            self.firstWord = -1
+
+    # 'Smart line split'
+    def gotResults_236(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Enter}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_236(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 138, '\'Smart line split\'', e)
+            self.firstWord = -1
+
+    # 'Toggle case for word at caret or selected block'
+    def gotResults_237(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Shift+u}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_237(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 139, '\'Toggle case for word at caret or selected block\'', e)
+            self.firstWord = -1
+
+    # 'find' ('this' | 'next' | 'back')
+    def gotResults_238(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            when_value = ''
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'this':
+                when_value += 'ctrl+'
+            elif word == 'next':
+                pass  # no actions
+            elif word == 'back':
+                when_value += 'shift+'
+            if when_value != "":
+                top_buffer += '{'
+                word = fullResults[1 + self.firstWord][0]
+                if word == 'this':
+                    top_buffer += 'ctrl+'
+                elif word == 'next':
+                    pass  # no actions
+                elif word == 'back':
+                    top_buffer += 'shift+'
+                top_buffer += 'f3}'
+            else:
+                top_buffer += '{alt+f3}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_238(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 142, '\'find\' (\'this\' | \'next\' | \'back\')', e)
+            self.firstWord = -1
+
+    # 'find'
+    def gotResults_294(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            when_value = ''
+            when_value += ''
+            if when_value != "":
+                top_buffer += '{'
+                top_buffer += ''
+                top_buffer += 'f3}'
+            else:
+                top_buffer += '{alt+f3}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_294(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 142, '\'find\'', e)
+            self.firstWord = -1
+
+    # 'select' ('next' | 'all' | 'unselect')
+    def gotResults_239(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{'
+            word = fullResults[1 + self.firstWord][0]
+            if word == 'next':
+                top_buffer += 'alt+'
+            elif word == 'all':
+                top_buffer += 'ctrl+alt+'
+            elif word == 'unselect':
+                top_buffer += 'shift+alt+'
+            top_buffer += 'j}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 2
+            if len(words) > 2: self.gotResults_239(words[2:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 143, '\'select\' (\'next\' | \'all\' | \'unselect\')', e)
+            self.firstWord = -1
+
+    # 'Commit project to VCS'
+    def gotResults_240(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+k}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_240(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 146, '\'Commit project to VCS\'', e)
+            self.firstWord = -1
+
+    # 'Update project from VCS'
+    def gotResults_241(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+t}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_241(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 147, '\'Update project from VCS\'', e)
+            self.firstWord = -1
+
+    # 'View recent changes'
+    def gotResults_242(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+Shift+c}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_242(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 148, '\'View recent changes\'', e)
+            self.firstWord = -1
+
+    # 'quick popup'
+    def gotResults_243(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Alt+'
+            top_buffer += '`'
+            top_buffer += '}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_243(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 149, '\'quick popup\'', e)
+            self.firstWord = -1
+
+    # 'Surround with Live Template'
+    def gotResults_244(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+Alt+j}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_244(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 152, '\'Surround with Live Template\'', e)
+            self.firstWord = -1
+
+    # 'Insert Live Template'
+    def gotResults_245(self, words, fullResults):
+        if self.firstWord<0:
+            return
+        try:
+            top_buffer = ''
+            top_buffer += '{Ctrl+j}'
+            top_buffer = do_flush(False, top_buffer);
+            self.firstWord += 1
+            if len(words) > 1: self.gotResults_245(words[1:], fullResults)
+        except Exception, e:
+            handle_error('idea.vcl', 153, '\'Insert Live Template\'', e)
             self.firstWord = -1
 
 thisGrammar = ThisGrammar()
