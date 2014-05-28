@@ -92,7 +92,7 @@ class ThisGrammar(GrammarBase):
          'drag up': ['eight','two','eight'],
          'drag down': ['two','eight', 'two'],
          'drag left': ['nine','eight','three'],
-         'drag right': ['seven','eight','three', 'two', 'eight'],
+         'drag right': ['seven','eight','three', 'two', 'eight', 'two'],
          # call context
          'contacts': ['eight', 'eight'],
          'recent': ['seven', 'nine'],
@@ -132,7 +132,7 @@ class ThisGrammar(GrammarBase):
          'keypad nine': ['six', 'seven',],
          'keypad star': [ 'seven', 'three',],
          'keypad hash': ['nine', 'one',],
-         '34782 contact call': [],
+         '347828 contact call': [],
          '858 contact send message': [],
          '852 contact voice call': [],
          '98 call voicemail': [],
