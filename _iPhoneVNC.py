@@ -92,7 +92,7 @@ class ThisGrammar(GrammarBase):
          'drag up': ['eight','two','eight'],
          'drag down': ['two','eight', 'two'],
          'drag left': ['nine','eight','three'],
-         'drag right': ['seven','eight','three', 'two', 'eight', 'two'],
+         'drag right': ['seven','eight','three', 'five', 'two'],
          # call context
          'contacts': ['eight', 'eight'],
          'recent': ['seven', 'nine'],
