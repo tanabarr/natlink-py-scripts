@@ -42,13 +42,13 @@ class ThisGrammar(GrammarBase):
 
     def initialize(self):
         self.load(self.testGram)
-        # problem of Dragon not waiting on initialisation when in sleep,
+        # problem of Dragon not waking on initialisation when in sleep,
         # exacerbated by background noise.
         # Seems that cannot change micState until it is waiting in sleeping
         # mode. Waiting in initialisation in natlink delays  Dragon start-up.
         # polling produces a ~68 seconds wait for sleeping mode to activate.
         # TODO: to avoid this delay, need to catch signal from DNS post NatLink
-        # init. ( temporary solution to test the dimensions of monitor)
+        # init. ( temporary solution is to test the dimensions of monitor)
         monitorRects=[mon[2] for mon in win32api.EnumDisplayMonitors(None, None) if
                       mon[2] == (0,0,1024,768)]
         if not monitorRects:
