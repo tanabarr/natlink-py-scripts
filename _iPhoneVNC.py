@@ -1,6 +1,5 @@
 #
 # Python Macro Language for Dragon NaturallySpeaking
-# nextApp
 #
 
 import natlink
@@ -132,7 +131,7 @@ class ThisGrammar(GrammarBase):
          'keypad nine': ['six', 'seven',],
          'keypad star': [ 'seven', 'three',],
          'keypad hash': ['nine', 'one',],
-         '347828 contact call': [],
+         '381 contact call': [],
          '858 contact send message': [],
          '852 contact voice call': [],
          '98 call voicemail': [],
