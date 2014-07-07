@@ -35,6 +35,7 @@ class ThisGrammar(GrammarBase):
         'up': lambda y,d: y-d, 'down': lambda y,d: y+d
     }
     dispMap = {
+        # default distances to drag (pixels)
         'right': 190,'left': 190,'up': 250,'down':250
     }
 
@@ -91,7 +92,7 @@ class ThisGrammar(GrammarBase):
          'drag up': ['eight','two','eight'],
          'drag down': ['two','eight', 'two'],
          'drag left': ['nine','eight','three'],
-         'drag right': ['seven','eight','three', 'five', 'two'],
+         'drag right': ['seven','eight','three', 'two'],
          # call context
          'contacts': ['eight', 'eight'],
          'recent': ['seven', 'nine'],
