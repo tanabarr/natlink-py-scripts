@@ -55,7 +55,7 @@ class ThisGrammar(GrammarBase):
     appDict = {}
     appDict.update({"iphoneWin": iou.AppWindow(["tans-iPhone",
                                                "tans-iphone.local",
-                                               "host210.msm.che.vodafone"],
+                                               "vodafone"],
                                                None)})
     appDict.update({"xbmcChromeWin": iou.AppWindow(["XBMC - Google Chrome",], None)})
     # appSelectionStr = '(' + str(appDict.keys()).strip('][').replace(',','|') +\

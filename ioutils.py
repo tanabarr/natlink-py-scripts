@@ -234,9 +234,10 @@ class Windows:
         if appName:
             # trying to find window title of selected application within window
             # dictionary( local application context). Checking that the window
-            # exists and it has a supportive local application context.
+            # exists and it has supporting local application context (appDict)
             app = self.appDict[str(appName)]
-            # checking the window names is a list, handle string occurrence
+            # app is an AppWindow object
+            # checking if the window names is a list, handle string occurrence
             try:
                 if app.winHandle:
                     ShowWindow(int(hwin), 1) #SW_RESTORE)
@@ -245,15 +246,19 @@ class Windows:
                     return (str(hwin), wins)
             except:
                 pass
-            # name to append to namelist
-            if getattr(app.winNames, 'append'):
+            # check if winNames is a list and add name to append to namelist
+            if getattr(app.winNames, 'append', None):
                 namelist = namelist + app.winNames
             else:
                 namelist.append(app.winNames)
+
+        # iterate through populated list of potential window titles
         for name in namelist:
             try:
-                index = wins.values().index(name)
-                break
+                for title in wins.values():
+                    if name in title:
+                        index = wins.values().index(title)
+                        break
             except:
                 pass
 
