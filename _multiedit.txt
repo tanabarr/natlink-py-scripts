@@ -147,6 +147,13 @@ def format_upper_normal(dictation):
     words = [word.upper() for word in text.split(" ")]
     return " ".join(words)
 
+# Format: Some Words
+def format_capitalised_words(dictation):
+    """ Capitalised words <dictation> """
+    text = str(dictation)
+    words = [word.capitalize() for word in text.split(" ")]
+    return " ".join(words)
+
 # Format: someWords
 def format_java_method(dictation):
     """ Java method <dictation> """
