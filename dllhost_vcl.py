@@ -22,7 +22,7 @@ class ThisGrammar(GrammarBase):
 
     def gotBegin(self,moduleInfo):
         # Return if wrong application
-        window = matchWindow(moduleInfo,'ois','')
+        window = matchWindow(moduleInfo,'dllhost','')
         if not window: return None
         self.firstWord = 0
         # Return if same window and title as before
@@ -39,8 +39,26 @@ class ThisGrammar(GrammarBase):
                     pass
 
     def convert_number_word(self, word):
-        if   word == '0':
+        if   word == 'zero':
             return '0'
+        elif word == 'one':
+            return '1'
+        elif word == 'two':
+            return '2'
+        elif word == 'three':
+            return '3'
+        elif word == 'four':
+            return '4'
+        elif word == 'five':
+            return '5'
+        elif word == 'six':
+            return '6'
+        elif word == 'seven':
+            return '7'
+        elif word == 'eight':
+            return '8'
+        elif word == 'nine':
+            return '9'
         else:
             return word
 
@@ -68,7 +86,7 @@ class ThisGrammar(GrammarBase):
             self.firstWord += 1
             if len(words) > 1: self.gotResults_1(words[1:], fullResults)
         except Exception, e:
-            handle_error('ois.vcl', 4, '\'rotate\'', e)
+            handle_error('dllhost.vcl', 4, '\'rotate\'', e)
             self.firstWord = -1
 
 thisGrammar = ThisGrammar()
